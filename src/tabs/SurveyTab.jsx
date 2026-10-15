@@ -360,25 +360,28 @@ export default function SurveyTab() {
         </div>
 
         <div className="survey-toolbar-actions">
+          {/* Nút Làm mới dữ liệu tinh gọn cho học sinh / giáo viên */}
           <button 
-            className="config-link-btn"
+            className="btn-sync-refresh-pill"
             onClick={() => handleSyncCloud(sheetUrl, false)}
             disabled={isSyncingCloud}
-            title="Đồng bộ đánh giá thời gian thực từ Google Sheets"
-            style={{ marginRight: '8px' }}
+            title="Cập nhật kết quả mới nhất từ Google Sheets"
           >
-            <RefreshCw size={16} className={isSyncingCloud ? 'animate-spin' : ''} />
-            <span>{isSyncingCloud ? 'Đang đồng bộ...' : 'Đồng bộ Google Sheets'}</span>
+            <RefreshCw size={14} className={isSyncingCloud ? 'animate-spin' : ''} />
+            <span>{isSyncingCloud ? 'Đang tải...' : 'Làm mới'}</span>
           </button>
 
-          <button 
-            className="config-link-btn"
-            onClick={handleOpenConfig}
-            title="Cài đặt link Google Form, Google Sheet và Webhook"
-          >
-            <Settings size={16} />
-            <span>Cài đặt Link Form / Sheet</span>
-          </button>
+          {/* CHỈ HIỂN THỊ NÚT CÀI ĐẶT CHO ADMIN (ẨN HOÀN TOÀN KHỎI USER) */}
+          {isAdmin && (
+            <button 
+              className="config-link-btn"
+              onClick={handleOpenConfig}
+              title="Cài đặt link Google Form, Google Sheet và Webhook (Dành riêng cho Quản trị viên)"
+            >
+              <Settings size={14} />
+              <span>Cài đặt (Admin)</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -858,17 +861,6 @@ export default function SurveyTab() {
           ============================================================ */}
       {activeView === 'sheet' && (
         <div className="sheet-view-section">
-          {/* Thông báo đồng bộ dữ liệu */}
-          <div className="sheet-sync-banner card">
-            <div className="sync-icon-box"><Database size={20} className="text-gold" /></div>
-            <div className="sync-info-text">
-              <strong>Cơ Chế Đồng Bộ Google Form Sang Google Sheets</strong>
-              <p>
-                Khi bất kỳ ai điền biểu mẫu Google Form ở Tab 2, dữ liệu sẽ được tự động lưu trữ 100% vào Bảng tính Google Sheets của tác giả theo thời gian thực mà không bao giờ bị thất lạc dữ liệu.
-              </p>
-            </div>
-          </div>
-
           {/* Sub Navigation: Chọn chế độ xem Sổ Dữ Liệu hoặc Nhúng Trực Tiếp */}
           <div className="sheet-subnav-bar">
             <button 
@@ -876,7 +868,7 @@ export default function SurveyTab() {
               onClick={() => setSheetSubView('table')}
             >
               <Table size={15} />
-              <span>Sổ Dữ Liệu Đồng Bộ Trực Tiếp ({reviews.length} phiếu)</span>
+              <span>Sổ Dữ Liệu Đồng Bộ ({reviews.length} phiếu)</span>
             </button>
             <button 
               className={`sheet-subnav-btn ${sheetSubView === 'embed' ? 'active' : ''}`}
@@ -890,9 +882,13 @@ export default function SurveyTab() {
           <div className="survey-embed-container card">
             <div className="sheet-embed-wrapper">
               <div className="embed-header-bar">
-                <div className="embed-info">
-                  <strong>{sheetSubView === 'table' ? 'Bảng Dữ Liệu Khảo Sát Đồng Bộ Thời Gian Thực' : 'Bảng Tính Google Sheets Trực Tiếp'}</strong>
-                  <span>{sheetSubView === 'table' ? 'Đối chiếu kết quả đóng góp của học sinh & giáo viên' : 'Nhúng trực tiếp từ file Google Sheets của tác giả'}</span>
+                <div className="embed-info" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <strong style={{ fontSize: '0.98rem', color: '#F4D06F', letterSpacing: '0.3px' }}>
+                    {sheetSubView === 'table' ? 'Bảng Dữ Liệu Khảo Sát Thời Gian Thực' : 'Bảng Tính Google Sheets Trực Tiếp'}
+                  </strong>
+                  <span style={{ fontSize: '0.82rem', color: '#9CA3AF' }}>
+                    {sheetSubView === 'table' ? 'Đối chiếu kết quả đóng góp của học sinh & giáo viên' : 'Nhúng trực tiếp từ file Google Sheets của tác giả'}
+                  </span>
                 </div>
                 <div className="embed-actions-row">
                   {isAdmin && (
@@ -902,7 +898,7 @@ export default function SurveyTab() {
                       style={{ marginRight: '8px' }}
                     >
                       <Settings size={14} />
-                      <span>Cấu hình Link</span>
+                      <span>Cấu hình (Admin)</span>
                     </button>
                   )}
                   <a 

@@ -4331,6 +4331,72 @@ h2, h3 {
   background: rgba(201, 169, 97, 0.22);
 }
 
+/* Nút Làm mới tinh tế cho học sinh / người dùng thường */
+.btn-sync-refresh-pill {
+  background: rgba(229, 169, 60, 0.08);
+  border: 1px solid rgba(229, 169, 60, 0.35);
+  color: #F4D06F;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-sync-refresh-pill:hover {
+  background: rgba(229, 169, 60, 0.2);
+  border-color: #E5A93C;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.btn-sync-refresh-pill:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sub Navigation Bảng Tính Google Sheets */
+.sheet-subnav-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.sheet-subnav-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.sheet-subnav-btn:hover {
+  color: #FFFFFF;
+  border-color: rgba(229, 169, 60, 0.4);
+}
+
+.sheet-subnav-btn.active {
+  background: rgba(229, 169, 60, 0.15);
+  border-color: #E5A93C;
+  color: #F4D06F;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(229, 169, 60, 0.15);
+}
+
 /* Summary Card */
 .gmaps-summary-card {
   background: var(--bg-surface);
