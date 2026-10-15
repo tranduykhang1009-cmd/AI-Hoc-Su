@@ -65,6 +65,13 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
                 <span className="author-class">Học sinh Lớp 11A5 · THPT Nguyễn Huệ</span>
               </div>
             </div>
+            <div className="author-card" style={{ marginTop: '10px' }}>
+              <div className="author-avatar" style={{ background: 'linear-gradient(135deg, #0d9488, #0f766e)' }}>DK</div>
+              <div className="author-info">
+                <strong className="author-name">TRẦN DUY KHANG</strong>
+                <span className="author-class">Hỗ trợ &amp; Phát triển kỹ thuật hệ thống</span>
+              </div>
+            </div>
             <p className="author-quote" style={{ marginTop: '12px' }}>
               <em>"Khơi dậy ngọn lửa tự hào dân tộc và lòng biết ơn tiền nhân trong trái tim thế hệ trẻ bằng sức mạnh của công nghệ số."</em>
             </p>

@@ -19,17 +19,28 @@ import {
   ArrowRight,
   Trash2,
   RotateCcw,
-  Database
+  Database,
+  Cloud,
+  Check
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { playChime, playCorrectSound, playVictorySound } from '../utils/audio';
+import { 
+  DEFAULT_SURVEY_FORM_URL, 
+  DEFAULT_SURVEY_SHEET_URL, 
+  DEFAULT_SURVEY_SHEET_ID,
+  fetchReviewsFromCloud, 
+  sendReviewToCloud,
+  getSurveyWebhookUrl,
+  saveSurveyWebhookUrl
+} from '../services/surveySyncService';
 
 const STORAGE_FORM_URL = 'su_survey_google_form_url';
 const STORAGE_SHEET_URL = 'su_survey_google_sheet_url';
 const STORAGE_REVIEWS_KEY = 'su_community_reviews_v2';
 
-const DEFAULT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScX_sample_form/viewform?embedded=true';
-const DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1VGSKa__Ge1KRXKrvok5pihtK_mnQeW302tZffFFk3HE/edit?gid=1865148353#gid=1865148353';
+const DEFAULT_FORM_URL = DEFAULT_SURVEY_FORM_URL;
+const DEFAULT_SHEET_URL = DEFAULT_SURVEY_SHEET_URL;
 
 const DEFAULT_REVIEWS = [
   {
@@ -91,10 +102,14 @@ export default function SurveyTab() {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [inputFormUrl, setInputFormUrl] = useState('');
   const [inputSheetUrl, setInputSheetUrl] = useState('');
+  const [webhookUrl, setWebhookUrl] = useState(() => getSurveyWebhookUrl());
+  const [inputWebhookUrl, setInputWebhookUrl] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Trạng thái Đánh giá cộng đồng
+  // Trạng thái Đánh giá cộng đồng & Cloud Sync
   const [reviews, setReviews] = useState(DEFAULT_REVIEWS);
+  const [isSyncingCloud, setIsSyncingCloud] = useState(false);
+  const [cloudSyncMsg, setCloudSyncMsg] = useState('');
   const [isAddingReview, setIsAddingReview] = useState(false);
   const [newRating, setNewRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
@@ -103,18 +118,72 @@ export default function SurveyTab() {
   const [newComment, setNewComment] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
+  // Đồng bộ đánh giá từ Google Sheets / Webhook về máy
+  const handleSyncCloud = async (customSheetUrl = sheetUrl, silent = false) => {
+    setIsSyncingCloud(true);
+    if (!silent) setCloudSyncMsg('Đang kiểm tra dữ liệu từ Google Sheets...');
+    try {
+      const cloudData = await fetchReviewsFromCloud(customSheetUrl, webhookUrl);
+      if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
+        // Hợp nhất (Merge) tránh trùng ID
+        setReviews(prev => {
+          const map = new Map();
+          // Nạp dữ liệu hiện có
+          prev.forEach(r => map.set(r.id, r));
+          // Nạp dữ liệu từ Cloud đè lên
+          cloudData.forEach(r => map.set(r.id, { ...r, fromCloud: true }));
+          const merged = Array.from(map.values());
+          try {
+            localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(merged));
+          } catch (e) {}
+          return merged;
+        });
+        if (!silent) {
+          setCloudSyncMsg(`Đã đồng bộ ${cloudData.length} đánh giá thực tế từ Google Sheets!`);
+          playCorrectSound();
+          setTimeout(() => setCloudSyncMsg(''), 4000);
+        }
+      } else {
+        if (!silent) {
+          setCloudSyncMsg('Dữ liệu đã ở trạng thái mới nhất!');
+          setTimeout(() => setCloudSyncMsg(''), 3000);
+        }
+      }
+    } catch (e) {
+      if (!silent) setCloudSyncMsg('Tạm thời dùng dữ liệu cục bộ.');
+    } finally {
+      setIsSyncingCloud(false);
+    }
+  };
+
   useEffect(() => {
     try {
       const savedForm = localStorage.getItem(STORAGE_FORM_URL);
       const savedSheet = localStorage.getItem(STORAGE_SHEET_URL);
-      if (savedForm) setFormUrl(savedForm);
-      if (savedSheet) setSheetUrl(savedSheet);
+
+      // Nếu link cũ là link sample mặc định trước đây, tự động cập nhật sang link mới của người dùng
+      if (savedForm && !savedForm.includes('sample_form')) {
+        setFormUrl(savedForm);
+      } else {
+        setFormUrl(DEFAULT_FORM_URL);
+        localStorage.setItem(STORAGE_FORM_URL, DEFAULT_FORM_URL);
+      }
+
+      if (savedSheet && !savedSheet.includes('1VGSKa__Ge1KRXKrvok5pihtK_mnQeW302tZffFFk3HE')) {
+        setSheetUrl(savedSheet);
+      } else {
+        setSheetUrl(DEFAULT_SHEET_URL);
+        localStorage.setItem(STORAGE_SHEET_URL, DEFAULT_SHEET_URL);
+      }
 
       const savedReviews = localStorage.getItem(STORAGE_REVIEWS_KEY);
       if (savedReviews) {
         setReviews(JSON.parse(savedReviews));
       }
     } catch (e) {}
+
+    // Tự động kiểm tra đồng bộ dữ liệu Cloud ngầm khi vào tab
+    handleSyncCloud(DEFAULT_SHEET_URL, true);
   }, []);
 
   const handleDeleteReview = (id) => {
@@ -141,6 +210,7 @@ export default function SurveyTab() {
   const handleOpenConfig = () => {
     setInputFormUrl(formUrl);
     setInputSheetUrl(sheetUrl);
+    setInputWebhookUrl(webhookUrl);
     setIsConfigOpen(true);
     playChime(500, 'sine', 0.1);
   };
@@ -149,24 +219,28 @@ export default function SurveyTab() {
     e.preventDefault();
     const finalForm = inputFormUrl.trim() || DEFAULT_FORM_URL;
     const finalSheet = inputSheetUrl.trim() || DEFAULT_SHEET_URL;
+    const finalWebhook = inputWebhookUrl.trim();
 
     setFormUrl(finalForm);
     setSheetUrl(finalSheet);
+    setWebhookUrl(finalWebhook);
 
     try {
       localStorage.setItem(STORAGE_FORM_URL, finalForm);
       localStorage.setItem(STORAGE_SHEET_URL, finalSheet);
+      saveSurveyWebhookUrl(finalWebhook);
     } catch (e) {}
 
     playCorrectSound();
     setSaveSuccess(true);
+    handleSyncCloud(finalSheet, false);
     setTimeout(() => {
       setSaveSuccess(false);
       setIsConfigOpen(false);
     }, 1200);
   };
 
-  // Gửi đánh giá mới
+  // Gửi đánh giá mới (Lưu ngay trên máy + Tự động gửi lên Cloud / Google Sheets)
   const handleSubmitReview = (e) => {
     e.preventDefault();
     if (!newName.trim() || !newComment.trim()) {
@@ -192,6 +266,14 @@ export default function SurveyTab() {
     try {
       localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(updated));
     } catch (e) {}
+
+    // Bắn dữ liệu ngầm lên Google Sheets / Apps Script Webhook
+    sendReviewToCloud(reviewItem, webhookUrl).then(res => {
+      if (res && res.success) {
+        setCloudSyncMsg('Đánh giá của bạn đã được gửi thành công lên Google Sheets!');
+        setTimeout(() => setCloudSyncMsg(''), 4000);
+      }
+    });
 
     playVictorySound();
     try {
@@ -317,8 +399,19 @@ export default function SurveyTab() {
         <div className="survey-toolbar-actions">
           <button 
             className="config-link-btn"
+            onClick={() => handleSyncCloud(sheetUrl, false)}
+            disabled={isSyncingCloud}
+            title="Đồng bộ đánh giá thời gian thực từ Google Sheets"
+            style={{ marginRight: '8px' }}
+          >
+            <RefreshCw size={16} className={isSyncingCloud ? 'animate-spin' : ''} />
+            <span>{isSyncingCloud ? 'Đang đồng bộ...' : 'Đồng bộ Google Sheets'}</span>
+          </button>
+
+          <button 
+            className="config-link-btn"
             onClick={handleOpenConfig}
-            title="Cài đặt link Google Form và Google Sheet"
+            title="Cài đặt link Google Form, Google Sheet và Webhook"
           >
             <Settings size={16} />
             <span>Cài đặt Link Form / Sheet</span>
@@ -326,13 +419,31 @@ export default function SurveyTab() {
         </div>
       </div>
 
+      {cloudSyncMsg && (
+        <div className="cloud-sync-status-bar" style={{
+          margin: '0 0 16px 0',
+          padding: '10px 16px',
+          background: 'rgba(16, 185, 129, 0.15)',
+          border: '1px solid rgba(16, 185, 129, 0.4)',
+          borderRadius: '8px',
+          color: '#34D399',
+          fontSize: '0.88rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <CheckCircle size={16} />
+          <span>{cloudSyncMsg}</span>
+        </div>
+      )}
+
       {/* Modal Cài Đặt Link Google Form / Google Sheets */}
       {isConfigOpen && (
         <div className="modal-backdrop" onClick={() => setIsConfigOpen(false)}>
           <div className="modal-dialog-box card" onClick={e => e.stopPropagation()}>
             <h3>Cài Đặt Link Khảo Sát Google Form & Sheet</h3>
             <p className="dialog-desc">
-              Dán đường link Google Form (dành cho người làm khảo sát) và link Google Sheets (chứa dữ liệu câu trả lời tự động).
+              Hệ thống đã cố định đường link Google Form và Google Sheets của bạn. Bạn cũng có thể cấu hình Apps Script Webhook để đánh giá từ web bắn thẳng vào Google Sheets theo thời gian thực.
             </p>
 
             <form onSubmit={handleSaveConfig} className="dialog-form">
@@ -356,9 +467,22 @@ export default function SurveyTab() {
                 />
               </div>
 
+              <div className="dialog-group">
+                <label>3. Link Google Apps Script Webhook (Để nhận đánh giá trực tiếp từ web):</label>
+                <input 
+                  type="url"
+                  placeholder="https://script.google.com/macros/s/.../exec"
+                  value={inputWebhookUrl}
+                  onChange={e => setInputWebhookUrl(e.target.value)}
+                />
+                <small style={{ color: 'rgba(255,255,255,0.5)', marginTop: '4px', display: 'block' }}>
+                  Triển khai Web App từ Apps Script gắn với Google Sheet (Execute as: Me, Access: Anyone) để lưu realtime.
+                </small>
+              </div>
+
               {saveSuccess && (
                 <div className="dialog-success-msg">
-                  <CheckCircle size={16} /> Đã lưu thành công link khảo sát!
+                  <CheckCircle size={16} /> Đã lưu thành công link khảo sát & đồng bộ dữ liệu!
                 </div>
               )}
 
