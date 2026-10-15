@@ -1,9 +1,37 @@
 import { DEFAULT_KNOWLEDGE_BASE } from '../data/defaultKnowledgeBase.js';
 
-const GEMINI_API_KEY = "AQ.Ab8RN6KVY_X5n_CaZMGXEZ6OSngx6W5kUEE1iw6yPczaMywIEQ";
+export const DEFAULT_GEMINI_API_KEY = "AQ.Ab8RN6KVY_X5n_CaZMGXEZ6OSngx6W5kUEE1iw6yPczaMywIEQ";
+export const API_KEY_STORAGE_KEY = "su_gemini_api_key";
 const PRIMARY_MODEL = "gemini-2.5-flash";
-const FALLBACK_MODEL = "gemini-3.5-flash-lite";
+const FALLBACK_MODEL = "gemini-2.0-flash";
+const BACKUP_MODEL = "gemini-1.5-flash";
 const KB_STORAGE_KEY = "khkt_su_knowledge_base_v2";
+
+export function getGeminiApiKey() {
+  try {
+    const saved = localStorage.getItem(API_KEY_STORAGE_KEY);
+    if (saved && saved.trim()) return saved.trim();
+  } catch (e) {}
+
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GEMINI_API_KEY) {
+    return import.meta.env.VITE_GEMINI_API_KEY.trim();
+  }
+
+  return DEFAULT_GEMINI_API_KEY;
+}
+
+export function saveGeminiApiKey(key) {
+  try {
+    if (!key || !key.trim()) {
+      localStorage.removeItem(API_KEY_STORAGE_KEY);
+    } else {
+      localStorage.setItem(API_KEY_STORAGE_KEY, key.trim());
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 export const DEFAULT_GAS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzsgFMs-xMdTGE1wa0Bc9ycj0qEFz2Ga4EOqSrfKb6msLUv6WkoK1fzEmm1C-7xzp487g/exec";
 export const GAS_WEBHOOK_STORAGE_KEY = "su_gas_knowledge_webhook_url";
 export const DEFAULT_GOOGLE_DOC_ID = "1yWiKZdHJlovfvMzfBOaFTW3auEaKyKcEMBUOU68BPSE";
@@ -411,9 +439,10 @@ PHONG THÁI GIAO TIẾP:
     }
   };
 
-  // Hàm gọi API với cơ chế dự phòng Primary -> Fallback Model
+  // Hàm gọi API với cơ chế dự phòng Primary (2.5) -> Fallback (2.0) -> Backup (1.5)
   async function callApi(modelName) {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+    const apiKey = getGeminiApiKey();
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 18000);
 
@@ -441,8 +470,13 @@ PHONG THÁI GIAO TIẾP:
     try {
       data = await callApi(PRIMARY_MODEL);
     } catch (primaryErr) {
-      console.warn(`Lỗi gọi mô hình chính (${PRIMARY_MODEL}), chuyển sang dự phòng (${FALLBACK_MODEL}):`, primaryErr);
-      data = await callApi(FALLBACK_MODEL);
+      console.warn(`Lỗi gọi mô hình chính (${PRIMARY_MODEL}), thử sang (${FALLBACK_MODEL}):`, primaryErr);
+      try {
+        data = await callApi(FALLBACK_MODEL);
+      } catch (fallbackErr) {
+        console.warn(`Lỗi gọi (${FALLBACK_MODEL}), chuyển sang (${BACKUP_MODEL}):`, fallbackErr);
+        data = await callApi(BACKUP_MODEL);
+      }
     }
 
     if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {

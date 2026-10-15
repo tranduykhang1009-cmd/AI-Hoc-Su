@@ -108,6 +108,15 @@ export function generateCertificateCanvas({
   ctx.font = 'italic 20px "Times New Roman", serif';
   ctx.fillText(dateStr, canvas.width - 320, 770);
 
+  // Ban biên soạn góc trái
+  ctx.fillStyle = '#44403C';
+  ctx.font = 'bold 20px "Times New Roman", serif';
+  ctx.fillText('BAN BIÊN SOẠN DỰ ÁN', 320, 810);
+  ctx.font = '17px "Times New Roman", serif';
+  ctx.fillText('Lê Trường Thịnh (12A8) & Trần Ngọc Anh (11A5)', 320, 842);
+  ctx.font = 'italic 15px "Times New Roman", serif';
+  ctx.fillText('Trường THPT Nguyễn Huệ', 320, 868);
+
   ctx.font = 'bold 22px "Times New Roman", serif';
   ctx.fillText('BAN KHẢO CỨU SỬ HỌC', canvas.width - 320, 810);
   ctx.font = 'italic 18px "Times New Roman", serif';

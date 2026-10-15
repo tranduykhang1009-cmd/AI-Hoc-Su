@@ -715,7 +715,7 @@ export default function SurveyTab() {
               <div className="embed-header-bar">
                 <div className="embed-info">
                   <strong>Biểu Mẫu Khảo Sát Trực Tuyến</strong>
-                  <span>Mọi thông tin điền sẽ tự động lưu sang Bảng tính Google Sheets của tác giả Lê Trường Thịnh</span>
+                  <span>Mọi thông tin điền sẽ tự động lưu sang Bảng tính Google Sheets của nhóm tác giả Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5)</span>
                 </div>
                 <div className="embed-actions-row">
                   <a 

@@ -17,6 +17,7 @@ import {
 import { BATTLES_DATA } from '../data/battlesData';
 import { playChime } from '../utils/audio';
 import Toast from '../components/Toast';
+import BackgroundMusic from '../components/BackgroundMusic';
 
 const LUCIDE_ICONS = {
   Swords,
@@ -268,6 +269,11 @@ export default function BattleMapTab() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Nhạc nền sa bàn hào hùng Tây Sơn */}
+      <BackgroundMusic 
+        src="/audio/tay_son_epic_theme.mp3"
+        volume={0.25}
+      />
       {/* Leaflet map */}
       <div ref={mapContainerRef} className="leaflet-map-element" />
 

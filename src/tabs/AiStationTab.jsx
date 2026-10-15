@@ -10,10 +10,13 @@ import {
   Shield,
   User,
   Flame,
-  Award
+  Award,
+  Key,
+  X,
+  CheckCircle
 } from 'lucide-react';
-import { sendChatMessageToGemini, resetChatHistory, getKnowledgeBase } from '../services/geminiService';
-import { playChime } from '../utils/audio';
+import { sendChatMessageToGemini, resetChatHistory, getKnowledgeBase, getGeminiApiKey, saveGeminiApiKey } from '../services/geminiService';
+import { playChime, playCorrectSound } from '../utils/audio';
 import { useAdmin } from '../context/AdminContext';
 
 const STORAGE_CHAT_KEY = 'su_ai_chat_history_v2';
@@ -45,6 +48,26 @@ export default function AiStationTab() {
   });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showKeyModal, setShowKeyModal] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState(() => {
+    try {
+      return localStorage.getItem('su_gemini_api_key') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [keySavedMsg, setKeySavedMsg] = useState('');
+
+  const handleSaveKey = (e) => {
+    e?.preventDefault();
+    saveGeminiApiKey(apiKeyInput);
+    setKeySavedMsg('Đã lưu API Key thành công!');
+    playCorrectSound();
+    setTimeout(() => {
+      setKeySavedMsg('');
+      setShowKeyModal(false);
+    }, 1500);
+  };
 
   const messagesEndRef = useRef(null);
 
@@ -183,6 +206,20 @@ export default function AiStationTab() {
           </button>
           <button 
             className="btn-chat-header-action" 
+            onClick={() => {
+              try {
+                setApiKeyInput(localStorage.getItem('su_gemini_api_key') || '');
+              } catch (e) {}
+              setShowKeyModal(true);
+            }}
+            aria-label="Cài đặt Gemini API Key"
+            title="Cài đặt Gemini API Key để trò chuyện không giới hạn"
+          >
+            <Key size={15} />
+            <span className="kb-count-label">API Key</span>
+          </button>
+          <button 
+            className="btn-chat-header-action" 
             onClick={handleClearChat}
             aria-label="Xóa lịch sử trò chuyện"
             title="Làm mới cuộc trò chuyện"
@@ -309,6 +346,109 @@ export default function AiStationTab() {
           </button>
         </div>
       </div>
+
+      {/* Modal Cài Đặt Gemini API Key Nhanh */}
+      <AnimatePresence>
+        {showKeyModal && (
+          <div 
+            className="museum-modal-backdrop" 
+            onClick={() => setShowKeyModal(false)}
+            style={{ zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <motion.div 
+              className="card"
+              onClick={e => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              style={{
+                width: '90%',
+                maxWidth: '480px',
+                background: '#18181b',
+                border: '1px solid var(--gold-primary)',
+                borderRadius: '12px',
+                padding: '24px',
+                boxShadow: '0 20px 40px rgba(0,0,0,0.8)'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Key size={20} className="text-gold" />
+                  <h3 style={{ margin: 0, fontSize: '18px', color: '#FFD700', fontFamily: 'var(--font-serif)' }}>Cài Đặt Gemini API Key</h3>
+                </div>
+                <button 
+                  onClick={() => setShowKeyModal(false)} 
+                  style={{ background: 'transparent', border: 'none', color: '#a1a1aa', cursor: 'pointer' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <p style={{ fontSize: '13px', color: '#d4d4d8', lineHeight: 1.6, marginBottom: '16px' }}>
+                Dán mã Gemini API Key của bạn (bắt đầu bằng <code>AIzaSy...</code>) để kết nối trực tiếp với Sử Quan AI:
+              </p>
+
+              <form onSubmit={handleSaveKey}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <input 
+                    type="password"
+                    placeholder="Dán mã API Key (AIzaSy...)"
+                    value={apiKeyInput}
+                    onChange={e => setApiKeyInput(e.target.value)}
+                    autoFocus
+                    style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      background: '#09090b',
+                      border: '1px solid rgba(255,215,0,0.3)',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '14px',
+                      outline: 'none'
+                    }}
+                  />
+                  <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '6px' }}>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowKeyModal(false)}
+                      className="btn btn-secondary"
+                      style={{ padding: '8px 16px', fontSize: '13px' }}
+                    >
+                      Hủy
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="btn btn-primary"
+                      style={{ padding: '8px 20px', fontSize: '13px' }}
+                    >
+                      Lưu Khóa
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              {keySavedMsg && (
+                <div style={{ marginTop: '12px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px' }}>
+                  <CheckCircle size={15} />
+                  <span>{keySavedMsg}</span>
+                </div>
+              )}
+
+              <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '12px', color: '#a1a1aa' }}>
+                💡 <em>Chưa có mã Key?</em>{' '}
+                <a 
+                  href="https://aistudio.google.com/app/apikey" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  style={{ color: '#38bdf8', textDecoration: 'underline' }}
+                >
+                  Bấm vào đây để lấy mã miễn phí tại Google AI Studio ↗
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

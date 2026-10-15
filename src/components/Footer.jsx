@@ -51,15 +51,21 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
           {/* Cột 3: Tác giả chính thức */}
           <div className="footer-col author-col">
             <h4>Tác Giả Dự Án</h4>
-            <div className="author-card">
+            <div className="author-card" style={{ marginBottom: '10px' }}>
               <div className="author-avatar">TT</div>
               <div className="author-info">
                 <strong className="author-name">LÊ TRƯỜNG THỊNH</strong>
-                <span className="author-class">Học sinh Lớp 12A8</span>
-                <span className="author-school">Trường THPT Nguyễn Huệ</span>
+                <span className="author-class">Học sinh Lớp 12A8 · THPT Nguyễn Huệ</span>
               </div>
             </div>
-            <p className="author-quote">
+            <div className="author-card">
+              <div className="author-avatar" style={{ background: 'linear-gradient(135deg, #e11d48, #be123c)' }}>NA</div>
+              <div className="author-info">
+                <strong className="author-name">TRẦN NGỌC ANH</strong>
+                <span className="author-class">Học sinh Lớp 11A5 · THPT Nguyễn Huệ</span>
+              </div>
+            </div>
+            <p className="author-quote" style={{ marginTop: '12px' }}>
               <em>"Khơi dậy ngọn lửa tự hào dân tộc và lòng biết ơn tiền nhân trong trái tim thế hệ trẻ bằng sức mạnh của công nghệ số."</em>
             </p>
           </div>
@@ -67,26 +73,8 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
 
         {/* Dòng bản quyền đáy trang */}
         <div className="footer-bottom">
-          <div className="footer-copyright">
-            © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh – Lớp 12A8 – Trường THPT Nguyễn Huệ</strong>.
-          </div>
-          <div className="footer-tech-tag">
-            <span>Ứng dụng React & Google Gemini AI</span>
-            <span className="footer-dot-divider">·</span>
-            <button 
-              className="footer-link-btn" 
-              onClick={handleReplayIntro}
-            >
-              Xem lại mở đầu
-            </button>
-            <span className="footer-dot-divider">·</span>
-            <button 
-              className="footer-ds-link" 
-              onClick={() => onSelectTab('design-system')}
-              title="Khảo sát bảng mẫu Design System (Giai đoạn 2)"
-            >
-              Design System
-            </button>
+          <div className="footer-copyright" style={{ width: '100%', textAlign: 'center' }}>
+            © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THPT Nguyễn Huệ</strong>.
           </div>
         </div>
       </div>

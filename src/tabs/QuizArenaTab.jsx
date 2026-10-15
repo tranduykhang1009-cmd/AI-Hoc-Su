@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { 
@@ -17,7 +17,9 @@ import {
   Shield,
   Zap,
   Lock,
-  Unlock
+  Unlock,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { QUIZ_QUESTIONS } from '../data/quizData';
 import { playCorrectSound, playWrongSound, playVictorySound, playChime } from '../utils/audio';
@@ -150,6 +152,31 @@ export default function QuizArenaTab() {
   });
 
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+
+  // Nhạc nền "Dưới Cờ Chiến Trận" — chỉ phát khi bấm vào làm bài
+  const battleAudioRef = useRef(null);
+  const [battleMusicMuted, setBattleMusicMuted] = useState(false);
+
+  useEffect(() => {
+    const audio = battleAudioRef.current;
+    if (!audio) return;
+
+    if (isPlaying && !isFinished && !battleMusicMuted) {
+      audio.volume = 0.3;
+      audio.play().catch(err => {
+        console.log('Battle audio waiting for interaction:', err);
+      });
+    } else {
+      audio.pause();
+      if (!isPlaying) {
+        audio.currentTime = 0;
+      }
+    }
+
+    return () => {
+      audio.pause();
+    };
+  }, [isPlaying, isFinished, battleMusicMuted]);
 
   const questionsList = activeQuestions.length > 0 ? activeQuestions : (QUIZ_QUESTIONS[level] || QUIZ_QUESTIONS['co-ban']);
   const currentQ = questionsList[currentIndex] || questionsList[0] || {};
@@ -286,6 +313,14 @@ export default function QuizArenaTab() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Âm thanh chiến trận hào hùng — chỉ phát khi bấm vào làm bài */}
+      <audio 
+        ref={battleAudioRef} 
+        src="/audio/duoi_co_chien_tran.mp3" 
+        loop 
+        preload="auto" 
+        aria-hidden="true" 
+      />
       <div className="section-title-box">
         <span className="section-kicker">ĐẤU TRƯỜNG TRI THỨC GAMIFIED</span>
         <h2 className="section-heading">THỬ THÁCH SỬ HỌC TÂY SƠN</h2>
@@ -469,6 +504,27 @@ export default function QuizArenaTab() {
             </div>
 
             <div className="quiz-stats-group">
+              <button
+                type="button"
+                className="quiz-audio-toggle-btn"
+                onClick={() => setBattleMusicMuted(!battleMusicMuted)}
+                title={battleMusicMuted ? 'Bật nhạc chiến trận' : 'Tắt nhạc chiến trận'}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  background: 'rgba(255, 215, 0, 0.12)',
+                  border: '1px solid rgba(255, 215, 0, 0.35)',
+                  color: '#FFD700',
+                  borderRadius: '20px',
+                  padding: '4px 10px',
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                {battleMusicMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                <span>{battleMusicMuted ? 'Nhạc: Tắt' : 'Nhạc: Bật'}</span>
+              </button>
               <span className="quiz-score-pill"><Award size={14} /> Điểm: {score}</span>
               <span className={`quiz-streak-pill ${streak > 1 ? 'fire-streak' : ''}`}>
                 <Flame size={14} /> Chuỗi: {streak}

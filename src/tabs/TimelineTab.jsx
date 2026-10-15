@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { TIMELINE_EVENTS } from '../data/timelineData';
 import { playChime } from '../utils/audio';
+import BackgroundMusic from '../components/BackgroundMusic';
 
 // 4 phân kỳ lịch sử trực quan
 const ERAS = [
@@ -98,6 +99,11 @@ export default function TimelineTab({ onSelectTab }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Nhạc nền hào hùng Tây Sơn */}
+      <BackgroundMusic 
+        src="/audio/tay_son_epic_theme.mp3"
+        volume={0.25}
+      />
       {/* Tiêu đề & Lời dẫn nhập */}
       <div className="section-title-box">
         <span className="section-kicker">BIÊN NIÊN SỬ HÀO HÙNG</span>

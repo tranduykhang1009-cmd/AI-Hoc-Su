@@ -14,7 +14,8 @@ import {
   AlertCircle,
   RefreshCw,
   Cloud,
-  ExternalLink
+  ExternalLink,
+  Key
 } from 'lucide-react';
 import { 
   getKnowledgeBase, 
@@ -24,7 +25,9 @@ import {
   saveKnowledgeBase,
   fetchCloudKnowledgeBase,
   syncKnowledgeToCloud,
-  DEFAULT_GOOGLE_DOC_URL
+  DEFAULT_GOOGLE_DOC_URL,
+  getGeminiApiKey,
+  saveGeminiApiKey
 } from '../services/geminiService';
 import { playChime, playCorrectSound, playVictorySound } from '../utils/audio';
 import mammoth from 'mammoth';
@@ -49,15 +52,29 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
   const fileInputRef = useRef(null);
   const [uploadedFileName, setUploadedFileName] = useState('');
 
+  // Cấu hình Gemini API Key
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [apiKeySavedMsg, setApiKeySavedMsg] = useState('');
+
   useEffect(() => {
     if (isOpen) {
       setKnowledgeList(getKnowledgeBase());
+      const currentKey = localStorage.getItem('su_gemini_api_key') || '';
+      setApiKeyInput(currentKey);
       // Thử đồng bộ ngầm từ Google Cloud khi mở modal
       fetchCloudKnowledgeBase().then(updated => {
         if (updated && updated.length > 0) setKnowledgeList(updated);
       });
     }
   }, [isOpen]);
+
+  const handleSaveApiKey = (e) => {
+    e?.preventDefault();
+    saveGeminiApiKey(apiKeyInput);
+    setApiKeySavedMsg('Đã lưu Gemini API Key thành công!');
+    playCorrectSound();
+    setTimeout(() => setApiKeySavedMsg(''), 3000);
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -269,6 +286,47 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
               <div className="admin-content-layout">
                 {/* Cột trái: Thêm tài liệu */}
                 <div className="admin-add-col">
+                  {/* Khu vực Cấu hình Gemini API Key */}
+                  <div className="upload-file-card" style={{ marginBottom: '14px', border: '1px solid rgba(218, 165, 32, 0.45)', background: 'rgba(218, 165, 32, 0.05)' }}>
+                    <div className="upload-header">
+                      <Key size={18} className="upload-icon text-gold" />
+                      <strong>Cấu Hình Gemini API Key (Không Giới Hạn)</strong>
+                    </div>
+                    <p className="upload-desc" style={{ marginBottom: '10px' }}>
+                      Nhập mã API Key từ Google AI Studio (bắt đầu bằng <code>AIzaSy...</code>) để kết nối trực tiếp với Sử Quan AI:
+                    </p>
+
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input 
+                        type="password"
+                        placeholder="Dán mã Gemini API Key..."
+                        value={apiKeyInput}
+                        onChange={e => setApiKeyInput(e.target.value)}
+                        style={{
+                          flex: 1,
+                          padding: '8px 12px',
+                          background: 'rgba(0,0,0,0.5)',
+                          border: '1px solid rgba(255,215,0,0.35)',
+                          borderRadius: '6px',
+                          color: '#fff',
+                          fontSize: '13px'
+                        }}
+                      />
+                      <button 
+                        type="button" 
+                        onClick={handleSaveApiKey}
+                        className="btn-select-file"
+                        style={{ width: 'auto', padding: '8px 16px', background: 'var(--gold-primary)', color: '#000', fontWeight: 'bold' }}
+                      >
+                        Lưu Key
+                      </button>
+                    </div>
+                    {apiKeySavedMsg && <div style={{ color: '#10b981', fontSize: '12px', marginTop: '6px' }}>✓ {apiKeySavedMsg}</div>}
+                    <div style={{ marginTop: '8px', fontSize: '11px', color: 'rgba(255,255,255,0.65)' }}>
+                      Chưa có Key? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: '#38bdf8', textDecoration: 'underline' }}>Lấy mã miễn phí tại Google AI Studio ↗</a>
+                    </div>
+                  </div>
+
                   {/* Khu vực Upload File */}
                   <div className="upload-file-card">
                     <div className="upload-header">

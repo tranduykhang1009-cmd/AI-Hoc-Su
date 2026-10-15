@@ -234,7 +234,7 @@ export default function CinematicIntro({ onEnter, onComplete }) {
 
         {/* Footer học thuật */}
         <div className="intro-academic-badge">
-          <span>Biên soạn: <strong>Lê Trường Thịnh</strong> · Lớp 12A8 · THPT Nguyễn Huệ</span>
+          <span>Biên soạn: <strong>Lê Trường Thịnh</strong> (12A8) &amp; <strong>Trần Ngọc Anh</strong> (11A5) · THPT Nguyễn Huệ</span>
         </div>
       </div>
 

@@ -22,6 +22,7 @@ import {
   migrateFromLocalStorage 
 } from '../utils/museumImageStore';
 import Toast from '../components/Toast';
+import BackgroundMusic from '../components/BackgroundMusic';
 
 export function MuseumSkeleton() {
   return (
@@ -212,6 +213,11 @@ export default function MuseumTab() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
+      {/* Nhạc nền hào hùng Tây Sơn */}
+      <BackgroundMusic 
+        src="/audio/tay_son_epic_theme.mp3"
+        volume={0.25}
+      />
       <div className="section-title-box">
         <span className="section-kicker">KHÔNG GIAN DI SẢN QUỐC GIA</span>
         <h2 className="section-heading">BẢO TÀNG HIỆN VẬT THỜI TÂY SƠN</h2>
@@ -337,6 +343,12 @@ export default function MuseumTab() {
                     <MapPin size={13} className="provenance-pin-icon" />
                     <span className="provenance-text">{item.source}</span>
                   </div>
+
+                  {item.imageCredit && (
+                    <div className="museum-plaque-credit" style={{ fontSize: '11px', color: 'rgba(218, 165, 32, 0.85)', marginTop: '6px', fontStyle: 'italic' }}>
+                      {item.imageCredit}
+                    </div>
+                  )}
 
                   <footer className="museum-plaque-footer">
                     <button 
