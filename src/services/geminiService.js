@@ -508,18 +508,29 @@ PHONG THÁI GIAO TIẾP:
       throw new Error('Dữ liệu phản hồi không hợp lệ từ máy chủ AI');
     }
   } catch (err) {
-    console.warn('Lỗi gọi Gemini API, kích hoạt cơ chế dự phòng ngoại tuyến:', err);
-    // Dự phòng ngoại tuyến nếu có tư liệu Google Docs
+    console.warn('Lỗi gọi Gemini API, kích hoạt cơ chế dự phòng:', err);
+    const isAuthError = err && (err.message?.includes('401') || err.message?.includes('UNAUTHENTICATED'));
+
+    // Dự phòng ngoại tuyến nếu câu hỏi trùng khớp tư liệu có sẵn
     if (hasMatchedDoc) {
       return {
-        text: `📜 **Sử Quan AI Tây Sơn (Chế độ Ngoại tuyến):**\n\n${matchedDocs[0].content}\n\n📚 *Nguồn tư liệu:* ${matchedDocs[0].source} (Admin Lê Trường Thịnh phê duyệt - Ngoại tuyến)`,
+        text: `📜 **Sử Quan AI Tây Sơn (Tra cứu kho tư liệu có sẵn):**\n\n${matchedDocs[0].content}\n\n📚 *Nguồn tư liệu:* ${matchedDocs[0].source}`,
         sourceType: 'offline-admin',
         docTitle: matchedDocs[0].title,
         model: 'Offline Engine'
       };
     }
+
+    if (isAuthError) {
+      return {
+        text: `⚠️ **Chưa kích hoạt kết nối AI (Lỗi 401 - Khóa API chưa hợp lệ):**\n\nMáy chủ Google từ chối khóa API hiện tại. Để Sử Quan AI có thể trả lời trực tiếp và suy luận thông minh, bạn hãy bấm vào nút **[🔑 API Key]** ở góc trên bên phải thanh chat để dán mã khóa mới của bạn từ Google AI Studio (mã bắt đầu bằng \`AIzaSy...\`) nhé!`,
+        sourceType: 'auth-error',
+        model: 'Chưa cài đặt Key'
+      };
+    }
+
     return {
-      text: `📜 **Sử Quan AI Tây Sơn:** Hiện tại kết nối đến mạng tìm kiếm AI đang gặp chút gián đoạn. Bạn hãy thử gửi lại câu hỏi sau giây lát hoặc khám phá các tư liệu đã nạp sẵn trên website nhé!`,
+      text: `📜 **Sử Quan AI Tây Sơn:** Hiện tại kết nối đến máy chủ Google AI đang gặp chút gián đoạn (${err.message || 'Lỗi mạng'}). Bạn hãy thử gửi lại câu hỏi sau giây lát nhé!`,
       sourceType: 'offline',
       model: 'Offline Engine'
     };
