@@ -65,6 +65,10 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
                 <span className="author-class">Học sinh Lớp 11A5 · THPT Nguyễn Huệ</span>
               </div>
             </div>
+            <div className="author-support-line" style={{ marginTop: '10px', fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#F4D06F', fontSize: '0.9rem' }}>★</span>
+              <span>Hỗ trợ: <strong style={{ color: '#F4D06F' }}>Trần Duy Khang</strong></span>
+            </div>
             <p className="author-quote" style={{ marginTop: '12px' }}>
               <em>"Khơi dậy ngọn lửa tự hào dân tộc và lòng biết ơn tiền nhân trong trái tim thế hệ trẻ bằng sức mạnh của công nghệ số."</em>
             </p>
@@ -72,12 +76,9 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
         </div>
 
         {/* Dòng bản quyền đáy trang */}
-        <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+        <div className="footer-bottom">
           <div className="footer-copyright" style={{ width: '100%', textAlign: 'center' }}>
             © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THPT Nguyễn Huệ</strong>.
-          </div>
-          <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.45)', letterSpacing: '0.5px' }}>
-            Hỗ trợ: Trần Duy Khang
           </div>
         </div>
       </div>

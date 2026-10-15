@@ -2,47 +2,70 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
 /**
- * BackgroundMusic — Nhạc nền HomeTab với auto-play qua user gesture
+ * BackgroundMusic — Nhạc nền với auto-play qua user gesture và lặp vô tận (cắt 5s cuối)
  * 
  * Luồng hoạt động:
- * 1. Mount → nếu user đã từng bật (localStorage = 'true' hoặc chưa set) → attempt play
- * 2. Browser chặn → chờ user gesture đầu tiên (click/keydown/scroll/touch)
- * 3. Có gesture → tự động play (cảm giác như "auto")
- * 4. User click nút → toggle on/off, lưu preference
+ * 1. Mount → nếu user chưa tắt (localStorage !== 'false') → attempt auto play
+ * 2. Cắt 5 giây cuối của file audio: khi currentTime >= duration - 5s, tự động seek về 0s
+ *    và tiếp tục phát ngay lập tức, loại bỏ đoạn lặng cuối bài để lặp vô tận liền mạch.
+ * 3. Browser chặn autoplay ban đầu → lắng nghe user gesture đầu tiên (click, touch, keydown, scroll) để unlock
+ * 4. User bấm nút bật/tắt → lưu trạng thái vào localStorage
  * 5. Unmount (đổi tab) → pause ngay
  */
 export default function BackgroundMusic({
   src = '/audio/dawn_over_citadel.mp3',
   volume = 0.3,
+  trimEndSeconds = 5,
 }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasUnlocked, setHasUnlocked] = useState(false);
 
-  // Đọc preference — mặc định TRUE để auto play (user chưa tắt bao giờ)
+  // Đọc preference — mặc định TRUE để auto play (nếu user chưa từng bấm tắt)
   const [userPreference, setUserPreference] = useState(() => {
     try {
       const saved = localStorage.getItem('su_bg_music_enabled');
-      // Mặc định BẬT nếu chưa có preference (lần đầu truy cập)
       return saved === null ? true : saved === 'true';
     } catch {
       return true;
     }
   });
 
-  // Setup audio + cleanup
+  // Setup audio, volume và cơ chế cắt 5s cuối để loop vô tận mượt mà
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = volume;
 
+    // Khi phát đến (thời lượng - trimEndSeconds), tự động quay về 0s tiếp tục phát
+    const handleTimeUpdate = () => {
+      if (trimEndSeconds > 0 && audio.duration && !isNaN(audio.duration) && audio.duration > trimEndSeconds + 2) {
+        if (audio.currentTime >= audio.duration - trimEndSeconds) {
+          audio.currentTime = 0;
+          if (audio.paused) {
+            audio.play().catch(() => {});
+          }
+        }
+      }
+    };
+
+    const handleEnded = () => {
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+
     return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
       audio.pause();
       audio.currentTime = 0;
     };
-  }, [volume]);
+  }, [volume, trimEndSeconds]);
 
-  // Attempt play khi mount (nếu preference = true)
+  // Attempt play khi mount hoặc khi userPreference thay đổi
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !userPreference) return;
@@ -53,33 +76,29 @@ export default function BackgroundMusic({
         setHasUnlocked(true);
       })
       .catch(() => {
-        // Browser chặn → sẽ thử lại sau gesture
+        // Browser chặn khi chưa có gesture → sẽ kích hoạt ngay ở gesture đầu tiên
         setIsPlaying(false);
       });
-  }, [userPreference]);
+  }, [userPreference, src]);
 
-  // Unlock qua user gesture đầu tiên
+  // Unlock qua user gesture đầu tiên trên toàn trang
   useEffect(() => {
     if (hasUnlocked) return;
 
     const tryUnlock = () => {
       const audio = audioRef.current;
-      if (!audio) return;
-      if (!userPreference) return;
+      if (!audio || !userPreference) return;
 
       audio.play()
         .then(() => {
           setIsPlaying(true);
           setHasUnlocked(true);
-          // Remove listeners sau khi unlock thành công
           window.removeEventListener('click', tryUnlock);
           window.removeEventListener('keydown', tryUnlock);
           window.removeEventListener('scroll', tryUnlock);
           window.removeEventListener('touchstart', tryUnlock);
         })
-        .catch(() => {
-          // Vẫn bị chặn, đợi gesture khác
-        });
+        .catch(() => {});
     };
 
     window.addEventListener('click', tryUnlock, { passive: true });
@@ -119,7 +138,7 @@ export default function BackgroundMusic({
     }
   }, [isPlaying, volume]);
 
-  // Phím tắt M
+  // Phím tắt M bật/tắt nhanh
   useEffect(() => {
     const handleKey = (e) => {
       if ((e.key === 'm' || e.key === 'M') && !e.target.matches('input, textarea')) {
