@@ -72,9 +72,12 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
         </div>
 
         {/* Dòng bản quyền đáy trang */}
-        <div className="footer-bottom">
+        <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
           <div className="footer-copyright" style={{ width: '100%', textAlign: 'center' }}>
             © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THPT Nguyễn Huệ</strong>.
+          </div>
+          <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.45)', letterSpacing: '0.5px' }}>
+            Phát triển &amp; Kỹ thuật hệ thống: Trần Duy Khang
           </div>
         </div>
       </div>
