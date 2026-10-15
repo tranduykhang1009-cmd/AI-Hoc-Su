@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, MessageCircle, ExternalLink, Copy, Check } from 'lucide-react';
 import { playChime, playCorrectSound } from '../utils/audio';
@@ -139,11 +139,6 @@ export default function ContactBubbleWidget() {
                   {copiedEmail ? <Check size={14} color="#10B981" /> : <Copy size={14} color="#FFFFFF" />}
                 </button>
               </div>
-            </div>
-
-            {/* Dòng chữ phụ ở dưới cùng */}
-            <div className="contact-dark-footer">
-              <span>Trường THPT Nguyễn Huệ · Bình Định</span>
             </div>
           </motion.div>
         )}
