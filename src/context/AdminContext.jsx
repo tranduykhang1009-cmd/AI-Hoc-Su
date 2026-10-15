@@ -3,28 +3,39 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AdminContext = createContext(null);
 
 const ADMIN_STORAGE_KEY = 'su_admin_mode_active';
-const DEFAULT_PIN = '1234';
+const VALID_PINS = ['1789', '12a8', '1234', 'admin123', 'lequangtrung'];
 
 export function AdminProvider({ children, onOpenAdmin }) {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
-
-  useEffect(() => {
+  const [isAdmin, setIsAdmin] = useState(() => {
     try {
-      const saved = sessionStorage.getItem(ADMIN_STORAGE_KEY);
-      if (saved === 'true') {
-        setIsAdmin(true);
-      }
-    } catch (e) {}
-  }, []);
+      const saved = sessionStorage.getItem(ADMIN_STORAGE_KEY) || localStorage.getItem(ADMIN_STORAGE_KEY);
+      return saved === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [adminActiveTab, setAdminActiveTab] = useState('survey'); // 'survey' | 'ai' | 'museum' | 'system'
+
+  const openAdmin = (tab = 'survey') => {
+    setAdminActiveTab(tab);
+    setIsAdminModalOpen(true);
+    if (onOpenAdmin) onOpenAdmin(tab);
+  };
+
+  const closeAdmin = () => {
+    setIsAdminModalOpen(false);
+  };
 
   const loginAdmin = (pin) => {
-    if (pin === DEFAULT_PIN || pin === 'admin123' || pin === '12a8') {
+    const cleanPin = String(pin || '').trim().toLowerCase();
+    if (VALID_PINS.includes(cleanPin)) {
       setIsAdmin(true);
       try {
         sessionStorage.setItem(ADMIN_STORAGE_KEY, 'true');
+        localStorage.setItem(ADMIN_STORAGE_KEY, 'true');
       } catch (e) {}
-      setIsPinModalOpen(false);
       return true;
     }
     return false;
@@ -34,26 +45,31 @@ export function AdminProvider({ children, onOpenAdmin }) {
     setIsAdmin(false);
     try {
       sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+      localStorage.removeItem(ADMIN_STORAGE_KEY);
     } catch (e) {}
   };
 
-  const toggleAdminModal = () => {
-    if (isAdmin) {
-      logoutAdmin();
+  const toggleAdminModal = (tab = 'survey') => {
+    if (isAdminModalOpen) {
+      closeAdmin();
     } else {
-      setIsPinModalOpen(true);
+      openAdmin(tab);
     }
   };
 
   return (
     <AdminContext.Provider value={{
       isAdmin,
-      isPinModalOpen,
-      setIsPinModalOpen,
+      isAdminModalOpen,
+      setIsAdminModalOpen,
+      adminActiveTab,
+      setAdminActiveTab,
+      openAdmin,
+      closeAdmin,
       loginAdmin,
       logoutAdmin,
       toggleAdminModal,
-      onOpenAdmin
+      onOpenAdmin: openAdmin
     }}>
       {children}
     </AdminContext.Provider>

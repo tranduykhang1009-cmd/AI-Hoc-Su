@@ -46,7 +46,7 @@ const DEFAULT_SHEET_URL = DEFAULT_SURVEY_SHEET_URL;
 const DEFAULT_REVIEWS = [];
 
 export default function SurveyTab() {
-  const { isAdmin } = useAdmin();
+  const { isAdmin, openAdmin } = useAdmin();
   const [formUrl, setFormUrl] = useState(DEFAULT_FORM_URL);
   const [sheetUrl, setSheetUrl] = useState(DEFAULT_SHEET_URL);
   const [activeView, setActiveView] = useState('reviews'); // 'reviews' | 'form' | 'sheet'
@@ -149,6 +149,38 @@ export default function SurveyTab() {
     handleSyncCloud(DEFAULT_SHEET_URL, true);
   }, []);
 
+  // Tự động lắng nghe khi Admin cập nhật URL từ Bảng điều khiển Quản Trị
+  useEffect(() => {
+    const handleConfigUpdated = () => {
+      const f = localStorage.getItem(STORAGE_FORM_URL) || DEFAULT_FORM_URL;
+      const s = localStorage.getItem(STORAGE_SHEET_URL) || DEFAULT_SHEET_URL;
+      const w = getSurveyWebhookUrl();
+      setFormUrl(f);
+      setSheetUrl(s);
+      setWebhookUrl(w);
+      const saved = localStorage.getItem(STORAGE_REVIEWS_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) setReviews(parsed);
+        } catch (e) {}
+      }
+    };
+    window.addEventListener('su_config_updated', handleConfigUpdated);
+    window.addEventListener('storage', handleConfigUpdated);
+    return () => {
+      window.removeEventListener('su_config_updated', handleConfigUpdated);
+      window.removeEventListener('storage', handleConfigUpdated);
+    };
+  }, []);
+
+  // Nếu người dùng thông thường vô tình ở view 'sheet', tự động quay về 'reviews'
+  useEffect(() => {
+    if (!isAdmin && activeView === 'sheet') {
+      setActiveView('reviews');
+    }
+  }, [isAdmin, activeView]);
+
   const handleDeleteReview = (id) => {
     if (window.confirm('Quản trị viên: Bạn có chắc chắn muốn xóa đánh giá này?')) {
       const updated = reviews.filter(r => r.id !== id);
@@ -171,10 +203,7 @@ export default function SurveyTab() {
   };
 
   const handleOpenConfig = () => {
-    setInputFormUrl(formUrl);
-    setInputSheetUrl(sheetUrl);
-    setInputWebhookUrl(webhookUrl || DEFAULT_SURVEY_WEBHOOK_URL);
-    setIsConfigOpen(true);
+    openAdmin('survey');
     playChime(500, 'sine', 0.1);
   };
 
@@ -347,16 +376,19 @@ export default function SurveyTab() {
             <span>Biểu Mẫu Khảo Sát (Google Form)</span>
           </button>
 
-          <button 
-            className={`survey-toggle-btn ${activeView === 'sheet' ? 'active' : ''}`}
-            onClick={() => {
-              playChime(600, 'sine', 0.1);
-              setActiveView('sheet');
-            }}
-          >
-            <Table size={17} />
-            <span>Bảng Tính Excel Đồng Bộ (Google Sheets)</span>
-          </button>
+          {/* CHỈ HIỂN THỊ TAB BẢNG TÍNH GOOGLE SHEETS KHI Ở CHẾ ĐỘ ADMIN */}
+          {isAdmin && (
+            <button 
+              className={`survey-toggle-btn ${activeView === 'sheet' ? 'active' : ''}`}
+              onClick={() => {
+                playChime(600, 'sine', 0.1);
+                setActiveView('sheet');
+              }}
+            >
+              <Table size={17} />
+              <span>Bảng Tính Excel Đồng Bộ (Admin)</span>
+            </button>
+          )}
         </div>
 
         <div className="survey-toolbar-actions">
@@ -658,54 +690,60 @@ export default function SurveyTab() {
               </div>
             </div>
 
-            {/* Banner kết nối Bảng Tính Google Sheets chứa kết quả Google Form */}
-            <div 
-              className="google-sheet-sync-banner card" 
-              onClick={() => {
-                playChime(600, 'sine', 0.1);
-                setActiveView('sheet');
-              }} 
-              style={{ 
-                cursor: 'pointer', 
-                marginBottom: '20px', 
-                padding: '14px 18px', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'space-between', 
-                border: '1px solid rgba(229, 169, 60, 0.35)', 
-                borderRadius: '8px', 
-                background: 'var(--bg-card)',
-                flexWrap: 'wrap',
-                gap: '12px'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Table size={22} className="text-gold" />
-                <div>
-                  <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>Xem Kết Quả Đồng Bộ Từ Google Form</strong>
-                  <p style={{ margin: '3px 0 0', color: '#9CA3AF', fontSize: '0.82rem' }}>Toàn bộ phiếu khảo sát của học sinh &amp; giáo viên được tự động lưu 100% sang Bảng tính Google Sheets.</p>
+            {/* Banner kết nối Bảng Tính Google Sheets chứa kết quả Google Form (CHỈ HIỂN THỊ KHI Ở CHẾ ĐỘ ADMIN) */}
+            {isAdmin && (
+              <div 
+                className="google-sheet-sync-banner card" 
+                onClick={() => {
+                  playChime(600, 'sine', 0.1);
+                  setActiveView('sheet');
+                }} 
+                style={{ 
+                  cursor: 'pointer', 
+                  marginBottom: '20px', 
+                  padding: '14px 18px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  border: '1px solid rgba(229, 169, 60, 0.35)', 
+                  borderRadius: '8px', 
+                  background: 'var(--bg-card)',
+                  flexWrap: 'wrap',
+                  gap: '12px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Table size={22} className="text-gold" />
+                  <div>
+                    <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>Xem Kết Quả Đồng Bộ Từ Google Form (Quản Trị)</strong>
+                    <p style={{ margin: '3px 0 0', color: '#9CA3AF', fontSize: '0.82rem' }}>Toàn bộ phiếu khảo sát của học sinh &amp; giáo viên được tự động lưu 100% sang Bảng tính Google Sheets.</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <button 
+                    type="button"
+                    className="btn btn-secondary" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveView('sheet');
+                    }}
+                    style={{ padding: '7px 14px', fontSize: '0.82rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+                  >
+                    <span>Xem Bảng Dữ Liệu</span> <ArrowRight size={14} />
+                  </button>
+                  <a 
+                    href={sheetUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ padding: '7px 14px', fontSize: '0.82rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', background: 'rgba(229, 169, 60, 0.18)', borderColor: 'var(--accent-gold)', color: 'var(--accent-gold-light)' }}
+                  >
+                    <span>Mở Google Sheets</span> <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <button 
-                  type="button"
-                  className="btn btn-secondary" 
-                  onClick={() => setActiveSubTab('sheet')}
-                  style={{ padding: '7px 14px', fontSize: '0.82rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
-                >
-                  <span>Xem Bảng Dữ Liệu</span> <ArrowRight size={14} />
-                </button>
-                <a 
-                  href={sheetUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                  style={{ padding: '7px 14px', fontSize: '0.82rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none', background: 'rgba(229, 169, 60, 0.18)', borderColor: 'var(--accent-gold)', color: 'var(--accent-gold-light)' }}
-                >
-                  <span>Mở Google Sheets</span> <ExternalLink size={14} />
-                </a>
-              </div>
-            </div>
+            )}
 
             <div className="reviews-grid">
               {reviews.length === 0 ? (

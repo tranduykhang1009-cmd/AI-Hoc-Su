@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Volume2, VolumeX, Menu, X } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, ShieldCheck } from 'lucide-react';
 import { playChime, getSoundEnabled, setSoundEnabled } from '../utils/audio';
+import { useAdmin } from '../context/AdminContext';
 
 const NAV_ITEMS = [
   { id: 'home', label: 'Trang Chủ' },
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
+  const { isAdmin, openAdmin, logoutAdmin } = useAdmin();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [soundOn, setSoundOn] = useState(() => getSoundEnabled());
 
@@ -75,14 +77,59 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
 
         {/* Khu vực Actions bên phải: Nút text Admin + Icon Sound + Hamburger Mobile */}
         <div className="navbar-actions">
-          <button
-            type="button"
-            className="navbar-admin-btn"
-            onClick={onOpenAdmin}
-            aria-label="Mở quản trị"
-          >
-            Admin
-          </button>
+          {!isAdmin ? (
+            <button
+              type="button"
+              className="navbar-admin-btn"
+              onClick={() => openAdmin('survey')}
+              aria-label="Mở quản trị"
+            >
+              Admin
+            </button>
+          ) : (
+            <div className="navbar-admin-badge-group" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                className="navbar-admin-btn active-admin"
+                onClick={() => openAdmin('survey')}
+                title="Mở Bảng Điều Khiển Quản Trị Hệ Thống (Lê Trường Thịnh)"
+                style={{
+                  background: 'rgba(229, 169, 60, 0.2)',
+                  borderColor: '#E5A93C',
+                  color: '#F4D06F',
+                  fontWeight: '600',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  padding: '5px 10px'
+                }}
+              >
+                <ShieldCheck size={14} />
+                <span>Quản Trị</span>
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logoutAdmin();
+                  playChime(400, 'sine', 0.1);
+                }}
+                className="btn-admin-nav-logout"
+                title="Thoát chế độ Admin để kiểm tra góc nhìn học sinh thông thường"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: '#9CA3AF',
+                  borderRadius: '6px',
+                  padding: '5px 8px',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
+                }}
+              >
+                Thoát
+              </button>
+            </div>
+          )}
 
           <button
             type="button"
@@ -147,17 +194,61 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
             </nav>
 
             <div className="mobile-menu-footer">
-              <button
-                type="button"
-                className="navbar-admin-btn"
-                onClick={() => {
-                  setIsMobileOpen(false);
-                  onOpenAdmin?.();
-                }}
-                aria-label="Mở quản trị"
-              >
-                Admin
-              </button>
+              {!isAdmin ? (
+                <button
+                  type="button"
+                  className="navbar-admin-btn"
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    openAdmin('survey');
+                  }}
+                  aria-label="Mở quản trị"
+                >
+                  Admin
+                </button>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button
+                    type="button"
+                    className="navbar-admin-btn active-admin"
+                    onClick={() => {
+                      setIsMobileOpen(false);
+                      openAdmin('survey');
+                    }}
+                    style={{
+                      background: 'rgba(229, 169, 60, 0.2)',
+                      borderColor: '#E5A93C',
+                      color: '#F4D06F',
+                      fontWeight: '600',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                  >
+                    <ShieldCheck size={14} />
+                    <span>Quản Trị (Admin)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMobileOpen(false);
+                      logoutAdmin();
+                      playChime(400, 'sine', 0.1);
+                    }}
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#9CA3AF',
+                      borderRadius: '6px',
+                      padding: '8px 12px',
+                      fontSize: '0.82rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Thoát
+                  </button>
+                </div>
+              )}
 
               <button
                 type="button"

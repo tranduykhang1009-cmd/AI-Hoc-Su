@@ -139,14 +139,11 @@ export default function App() {
         {/* Bong bóng liên hệ Facebook & Gmail nổi cạnh phải màn hình */}
         <ContactBubbleWidget />
 
-        {/* Bảng điều khiển Quản trị RAG (Admin) */}
+        {/* Bảng điều khiển Quản trị Toàn diện (Admin Control Center) */}
         <AdminKnowledgeModal 
           isOpen={isAdminOpen} 
           onClose={() => setIsAdminOpen(false)} 
         />
-
-        {/* Modal nhập mã PIN Chế độ Admin */}
-        <AdminPinModal />
       </div>
     </AdminProvider>
   );
