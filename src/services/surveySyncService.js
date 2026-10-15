@@ -1,16 +1,17 @@
-﻿// Service đồng bộ Đánh Giá Khảo Sát hai chiều giữa Web và Google Sheets / Apps Script Webhook
+// Service đồng bộ Đánh Giá Khảo Sát hai chiều giữa Web và Google Sheets / Apps Script Webhook
 export const DEFAULT_SURVEY_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1s16mjYvhiHmsvJQwXeZpTZM616m_gxeRlsmGmnlIWfQ/edit?gid=0#gid=0';
 export const DEFAULT_SURVEY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc9n6kQYS_fA41RdPI6VP_hSy6aVpwsZ7WtpIXdFtX0FGH7wg/viewform?embedded=true';
 export const DEFAULT_SURVEY_SHEET_ID = '1s16mjYvhiHmsvJQwXeZpTZM616m_gxeRlsmGmnlIWfQ';
 
 export const STORAGE_SURVEY_WEBHOOK_KEY = 'su_survey_webhook_url';
+export const DEFAULT_SURVEY_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyqLle1qPYSQoT-yLrjBzbnNx263DEIeFwOaIyXDFRXmAUFijTrGyPRyV3ARiVE3gGRjA/exec';
 
 export function getSurveyWebhookUrl() {
   try {
-    return localStorage.getItem(STORAGE_SURVEY_WEBHOOK_KEY) || '';
-  } catch (e) {
-    return '';
-  }
+    const saved = localStorage.getItem(STORAGE_SURVEY_WEBHOOK_KEY);
+    if (saved && saved.trim()) return saved.trim();
+  } catch (e) {}
+  return DEFAULT_SURVEY_WEBHOOK_URL;
 }
 
 export function saveSurveyWebhookUrl(url) {

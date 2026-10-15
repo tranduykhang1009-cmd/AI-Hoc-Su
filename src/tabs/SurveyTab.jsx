@@ -29,6 +29,7 @@ import {
   DEFAULT_SURVEY_FORM_URL, 
   DEFAULT_SURVEY_SHEET_URL, 
   DEFAULT_SURVEY_SHEET_ID,
+  DEFAULT_SURVEY_WEBHOOK_URL,
   fetchReviewsFromCloud, 
   sendReviewToCloud,
   getSurveyWebhookUrl,
@@ -210,7 +211,7 @@ export default function SurveyTab() {
   const handleOpenConfig = () => {
     setInputFormUrl(formUrl);
     setInputSheetUrl(sheetUrl);
-    setInputWebhookUrl(webhookUrl);
+    setInputWebhookUrl(webhookUrl || DEFAULT_SURVEY_WEBHOOK_URL);
     setIsConfigOpen(true);
     playChime(500, 'sine', 0.1);
   };
