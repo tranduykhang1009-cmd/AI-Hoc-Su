@@ -43,56 +43,7 @@ const STORAGE_REVIEWS_KEY = 'su_community_reviews_v2';
 const DEFAULT_FORM_URL = DEFAULT_SURVEY_FORM_URL;
 const DEFAULT_SHEET_URL = DEFAULT_SURVEY_SHEET_URL;
 
-const DEFAULT_REVIEWS = [
-  {
-    id: 'rev-1',
-    name: 'Trần Minh Anh',
-    role: 'Học sinh Lớp 12A8',
-    school: 'THPT Nguyễn Huệ',
-    rating: 5,
-    date: '2 ngày trước',
-    comment: 'Trang web quá đẹp và cuốn hút! Phần sa bàn chiến trận Rạch Gầm – Xoài Mút có mô phỏng tiến trình 3 giai đoạn và giọng đọc AI rất sống động. Sử Quan AI trả lời nhanh và thông minh, giúp em ôn bài rất hiệu quả.',
-    likes: 34,
-    liked: false,
-    badge: 'Học sinh'
-  },
-  {
-    id: 'rev-2',
-    name: 'Thầy Lê Hoàng Nam',
-    role: 'Giáo viên Lịch Sử',
-    school: 'Tổ Sử - Địa - GDCD',
-    rating: 5,
-    date: '3 ngày trước',
-    comment: 'Một đề tài học tập xuất sắc của học sinh Nguyễn Huệ! Dự án kết hợp công nghệ AI và số hóa tư liệu một cách chuẩn mực, giao diện Awwwards mang đậm màu sắc sử thi hào hùng. Rất khuyến khích các em áp dụng vào học tập.',
-    likes: 51,
-    liked: false,
-    badge: 'Giáo viên'
-  },
-  {
-    id: 'rev-3',
-    name: 'Phạm Quỳnh Chi',
-    role: 'Học sinh Lớp 10A1',
-    school: 'THPT Nguyễn Huệ',
-    rating: 5,
-    date: '5 ngày trước',
-    comment: 'Thích nhất là Đấu Trường Tri Thức kiểu thẻ bài chiến tướng có hiệu ứng 3D và tia quét sáng! Trả lời đúng được thăng hàm Tướng quân và bắn pháo hoa cực kỳ hào hứng.',
-    likes: 27,
-    liked: false,
-    badge: 'Học sinh'
-  },
-  {
-    id: 'rev-4',
-    name: 'Nguyễn Thành Long',
-    role: 'Cựu học sinh',
-    school: 'Đại học Quốc gia',
-    rating: 5,
-    date: '1 tuần trước',
-    comment: 'Thiết kế tone màu Dark Obsidian với tàn tro lửa bay quá đỉnh, không hề thua kém các website đoạt giải quốc tế. Tự hào về đàn em trường Nguyễn Huệ!',
-    likes: 19,
-    liked: false,
-    badge: 'Khách tham quan'
-  }
-];
+const DEFAULT_REVIEWS = [];
 
 export default function SurveyTab() {
   const { isAdmin } = useAdmin();
@@ -107,8 +58,21 @@ export default function SurveyTab() {
   const [inputWebhookUrl, setInputWebhookUrl] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Trạng thái Đánh giá cộng đồng & Cloud Sync
-  const [reviews, setReviews] = useState(DEFAULT_REVIEWS);
+  // Trạng thái Đánh giá cộng đồng & Cloud Sync (Khởi tạo sạch từ Google Sheets)
+  const [reviews, setReviews] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_REVIEWS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Lọc bỏ sạch sẽ tất cả đánh giá mẫu cũ trước đây (rev-1, rev-2, rev-3, rev-4)
+          return parsed.filter(r => !['rev-1', 'rev-2', 'rev-3', 'rev-4'].includes(r.id));
+        }
+      }
+    } catch (e) {}
+    return [];
+  });
+
   const [isSyncingCloud, setIsSyncingCloud] = useState(false);
   const [cloudSyncMsg, setCloudSyncMsg] = useState('');
   const [isAddingReview, setIsAddingReview] = useState(false);
@@ -119,28 +83,20 @@ export default function SurveyTab() {
   const [newComment, setNewComment] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
-  // Đồng bộ đánh giá từ Google Sheets / Webhook về máy
+  // Đồng bộ đánh giá từ Google Sheets / Webhook về máy (Google Sheet là nguồn dữ liệu chuẩn)
   const handleSyncCloud = async (customSheetUrl = sheetUrl, silent = false) => {
     setIsSyncingCloud(true);
     if (!silent) setCloudSyncMsg('Đang kiểm tra dữ liệu từ Google Sheets...');
     try {
       const cloudData = await fetchReviewsFromCloud(customSheetUrl, webhookUrl);
-      if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
-        // Hợp nhất (Merge) tránh trùng ID
-        setReviews(prev => {
-          const map = new Map();
-          // Nạp dữ liệu hiện có
-          prev.forEach(r => map.set(r.id, r));
-          // Nạp dữ liệu từ Cloud đè lên
-          cloudData.forEach(r => map.set(r.id, { ...r, fromCloud: true }));
-          const merged = Array.from(map.values());
-          try {
-            localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(merged));
-          } catch (e) {}
-          return merged;
-        });
+      if (cloudData && Array.isArray(cloudData)) {
+        // Dữ liệu trên web cập nhật 100% theo Google Sheets (xóa trên Sheet thì web cũng mất theo)
+        setReviews(cloudData);
+        try {
+          localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(cloudData));
+        } catch (e) {}
         if (!silent) {
-          setCloudSyncMsg(`Đã đồng bộ ${cloudData.length} đánh giá thực tế từ Google Sheets!`);
+          setCloudSyncMsg(`Đã đồng bộ ${cloudData.length} đánh giá từ Google Sheets!`);
           playCorrectSound();
           setTimeout(() => setCloudSyncMsg(''), 4000);
         }
@@ -177,9 +133,15 @@ export default function SurveyTab() {
         localStorage.setItem(STORAGE_SHEET_URL, DEFAULT_SHEET_URL);
       }
 
+      // Làm sạch cache đánh giá mẫu cũ nếu còn tồn tại
       const savedReviews = localStorage.getItem(STORAGE_REVIEWS_KEY);
       if (savedReviews) {
-        setReviews(JSON.parse(savedReviews));
+        const parsed = JSON.parse(savedReviews);
+        if (Array.isArray(parsed)) {
+          const clean = parsed.filter(r => !['rev-1', 'rev-2', 'rev-3', 'rev-4'].includes(r.id));
+          localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(clean));
+          setReviews(clean);
+        }
       }
     } catch (e) {}
 
@@ -743,7 +705,23 @@ export default function SurveyTab() {
             </div>
 
             <div className="reviews-grid">
-              {reviews.map((rev) => (
+              {reviews.length === 0 ? (
+                <div className="empty-reviews-card card" style={{
+                  gridColumn: '1 / -1',
+                  textAlign: 'center',
+                  padding: '48px 24px',
+                  border: '1px dashed rgba(229, 169, 60, 0.3)',
+                  borderRadius: '12px',
+                  background: 'rgba(25, 23, 20, 0.4)'
+                }}>
+                  <Star size={36} className="text-gold" style={{ margin: '0 auto 12px', opacity: 0.6 }} />
+                  <h4 style={{ color: '#F4D06F', margin: '0 0 8px', fontSize: '1.08rem' }}>Chưa Có Đánh Giá Nào</h4>
+                  <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.88rem', maxWidth: '500px', marginInline: 'auto' }}>
+                    Dữ liệu được làm sạch 100% để đồng bộ trực tiếp từ Google Sheets của bạn. Hãy bấm <strong>"Viết Đánh Giá Của Bạn"</strong> ở trên để gửi nhận xét đầu tiên nhé!
+                  </p>
+                </div>
+              ) : (
+                reviews.map((rev) => (
                 <div key={rev.id} className="review-card card">
                   <div className="review-card-top">
                     {/* Avatar tròn với ký tự viết tắt */}
@@ -793,7 +771,7 @@ export default function SurveyTab() {
                     )}
                   </div>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
         </div>

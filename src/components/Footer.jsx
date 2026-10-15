@@ -77,7 +77,7 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
             © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THPT Nguyễn Huệ</strong>.
           </div>
           <div style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.45)', letterSpacing: '0.5px' }}>
-            Hỗ trợ phát triển &amp; kỹ thuật hệ thống: Trần Duy Khang
+            Hỗ trợ: Trần Duy Khang
           </div>
         </div>
       </div>
