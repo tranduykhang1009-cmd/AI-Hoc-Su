@@ -6796,3 +6796,363 @@ h2, h3 {
   }
 }
 
+/* ==========================================================================
+   FLOATING CONTACT BUBBLE WIDGET (Facebook & Gmail)
+   ========================================================================== */
+.contact-bubble-wrapper {
+  position: fixed;
+  right: 20px;
+  top: 54%;
+  transform: translateY(-50%);
+  z-index: 985;
+  display: flex;
+  align-items: center;
+  transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.contact-bubble-wrapper.is-docked {
+  right: 0;
+}
+
+/* 1. Nút khi bị thụt vào mép phải (Docked) */
+.docked-edge-btn {
+  background: linear-gradient(135deg, #1877F2 0%, #2563EB 60%, #DC2626 100%);
+  width: 32px;
+  height: 52px;
+  border-top-left-radius: 26px;
+  border-bottom-left-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-right: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -4px 0 16px rgba(24, 119, 242, 0.45);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: visible;
+}
+
+.docked-edge-btn:hover {
+  width: 42px;
+  box-shadow: -6px 0 22px rgba(24, 119, 242, 0.65);
+}
+
+.docked-inner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+}
+
+.docked-label-hint {
+  position: absolute;
+  right: 100%;
+  margin-right: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #F8FAFC;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.docked-edge-btn:hover .docked-label-hint {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 2. Container trạng thái mở đầy đủ */
+.contact-full-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Bong bóng chữ trắng nhọn đầu */
+.contact-speech-bubble {
+  background: #FFFFFF;
+  color: #1E293B;
+  border-radius: 30px;
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  margin-right: 14px;
+  position: relative;
+  letter-spacing: 0.2px;
+  user-select: none;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-speech-bubble:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.speech-arrow-right {
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 8px solid #FFFFFF;
+}
+
+/* Nút tròn chính */
+.contact-trigger-wrapper {
+  position: relative;
+}
+
+/* Dấu x nhỏ ở góc trên */
+.contact-close-corner-btn {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  z-index: 10;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #475569;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contact-close-corner-btn:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+  transform: scale(1.12);
+}
+
+.contact-main-circle-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1877F2 0%, #2563EB 55%, #DC2626 100%);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact-main-circle-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 28px rgba(24, 119, 242, 0.65);
+}
+
+.contact-main-circle-btn.is-active {
+  background: linear-gradient(135deg, #E11D48, #9F1239);
+  border-color: #FDA4AF;
+}
+
+.circle-inner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3. Popup Menu 2 nền tảng: Facebook & Gmail */
+.contact-popup-menu {
+  position: absolute;
+  right: 72px;
+  bottom: -20px;
+  width: 290px;
+  background: rgba(20, 18, 16, 0.96) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 169, 60, 0.4) !important;
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  padding: 14px;
+  z-index: 990;
+}
+
+.contact-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-menu-header strong {
+  color: #F4D06F;
+  font-size: 0.9rem;
+  letter-spacing: 0.3px;
+}
+
+.menu-close-btn {
+  background: transparent;
+  border: none;
+  color: #9CA3AF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.menu-close-btn:hover {
+  color: #FFFFFF;
+}
+
+.contact-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-item-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.contact-item-btn.fb-item {
+  background: rgba(24, 119, 242, 0.14);
+  border-color: rgba(24, 119, 242, 0.35);
+}
+
+.contact-item-btn.fb-item:hover {
+  background: rgba(24, 119, 242, 0.25);
+  border-color: #1877F2;
+  transform: translateX(-2px);
+}
+
+.contact-item-btn.gmail-item {
+  background: rgba(234, 67, 53, 0.12);
+  border-color: rgba(234, 67, 53, 0.32);
+  justify-content: space-between;
+}
+
+.contact-item-btn.gmail-item:hover {
+  background: rgba(234, 67, 53, 0.22);
+  border-color: #EA4335;
+}
+
+.gmail-direct-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.item-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fb-box {
+  background: #1877F2;
+}
+
+.gmail-box {
+  background: #EA4335;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.item-title {
+  color: #FFFFFF;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.item-sub {
+  color: #9CA3AF;
+  font-size: 0.74rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-copy-mail {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #D1D5DB;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-mail:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.contact-menu-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.contact-menu-footer span {
+  font-size: 0.72rem;
+  color: #6B7280;
+}
+
+@media (max-width: 768px) {
+  .contact-bubble-wrapper {
+    top: auto;
+    bottom: 90px;
+    transform: none;
+  }
+  .contact-speech-bubble {
+    display: none;
+  }
+  .contact-popup-menu {
+    right: 64px;
+    bottom: 0;
+    width: 260px;
+  }
+}
+
+

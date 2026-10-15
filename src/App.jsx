@@ -14,6 +14,7 @@ import SurveyTab from './tabs/SurveyTab';
 
 import AmbientEmbersCanvas from './components/AmbientEmbersCanvas';
 import FloatingAiWidget from './components/FloatingAiWidget';
+import ContactBubbleWidget from './components/ContactBubbleWidget';
 import AdminPinModal from './components/AdminPinModal';
 import CinematicIntro from './components/CinematicIntro';
 import DesignSystemPreview from './components/DesignSystemPreview';
@@ -134,6 +135,9 @@ export default function App() {
           activeTab={activeTab} 
           onSelectTab={handleSelectTab} 
         />
+
+        {/* Bong bóng liên hệ Facebook & Gmail nổi cạnh phải màn hình */}
+        <ContactBubbleWidget />
 
         {/* Bảng điều khiển Quản trị RAG (Admin) */}
         <AdminKnowledgeModal 
