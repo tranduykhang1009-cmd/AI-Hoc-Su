@@ -145,6 +145,12 @@ export default function BattleMapTab() {
             ${zone.type === 'friendly' ? 'Quân Tây Sơn' : zone.type === 'enemy' ? 'Đối Phương' : 'Chiến Địa'}
           </span>
           <h4 class="popup-zone-title">${zone.title}</h4>
+          ${zone.modernLocation ? `
+            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.12); border-left: 2px solid #E5A93C; border-radius: 4px;">
+              <span style="font-size: 11px; color: #F4D06F; font-weight: 600; display: block;">📍 Đơn vị hành chính hiện nay:</span>
+              <span style="font-size: 11px; color: #E5E7EB; line-height: 1.35;">${zone.modernLocation}</span>
+            </div>
+          ` : ''}
           <p class="popup-zone-desc">${zone.desc}</p>
         </div>
       `;
@@ -182,6 +188,12 @@ export default function BattleMapTab() {
             ${flow.type === 'friendly' ? 'Hướng Tiến Công Tây Sơn' : 'Hướng Di Chuyển Đối Phương'}
           </span>
           <h4 class="popup-zone-title">${flow.title}</h4>
+          ${flow.modernLocation ? `
+            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.12); border-left: 2px solid #E5A93C; border-radius: 4px;">
+              <span style="font-size: 11px; color: #F4D06F; font-weight: 600; display: block;">📍 Tuyến đường theo địa giới ngày nay:</span>
+              <span style="font-size: 11px; color: #E5E7EB; line-height: 1.35;">${flow.modernLocation}</span>
+            </div>
+          ` : ''}
           <p class="popup-zone-desc">${flow.desc}</p>
         </div>
       `;
@@ -291,6 +303,10 @@ export default function BattleMapTab() {
         >
           Ngọc Hồi – Đống Đa (1789)
         </button>
+        <div className="battle-gis-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(18, 16, 14, 0.85)', border: '1px solid rgba(229, 169, 60, 0.4)', borderRadius: '20px', color: '#F4D06F', fontSize: '0.75rem', fontWeight: 500, backdropFilter: 'blur(8px)', boxShadow: '0 2px 10px rgba(0,0,0,0.4)' }}>
+          <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10B981', display: 'inline-block', boxShadow: '0 0 6px #10B981' }}></span>
+          <span>Bản đồ GIS Vệ Tinh chuẩn GPS</span>
+        </div>
       </div>
 
       {/* Fun Facts Panel - top left */}
@@ -408,6 +424,22 @@ export default function BattleMapTab() {
             <span className="meta-label">Thời gian</span>
             <strong>{battle.time}</strong>
           </div>
+          {battle.gpsCoordinates && (
+            <div className="meta-item">
+              <span className="meta-label">Tọa độ GPS thực tế</span>
+              <strong style={{ color: '#34D399', fontSize: '0.8rem' }}>{battle.gpsCoordinates}</strong>
+            </div>
+          )}
+          {battle.modernLocation && (
+            <div className="meta-item" style={{ gridColumn: '1 / -1', background: 'rgba(229, 169, 60, 0.08)', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid #E5A93C', margin: '4px 0' }}>
+              <span className="meta-label" style={{ color: '#F4D06F', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                📍 Đơn vị hành chính hiện nay:
+              </span>
+              <strong style={{ color: '#FFFFFF', fontSize: '0.84rem', fontWeight: 500, lineHeight: 1.45, display: 'block', marginTop: '2px' }}>
+                {battle.modernLocation}
+              </strong>
+            </div>
+          )}
         </div>
 
         <div className="drawer-summary">
@@ -419,6 +451,12 @@ export default function BattleMapTab() {
           <div className="drawer-phase-detail">
             <span className="kicker">GIAI ĐOẠN {activePhaseIndex + 1}</span>
             <h3>{phasesList[activePhaseIndex].phase}</h3>
+            {phasesList[activePhaseIndex].modernLocation && (
+              <div style={{ margin: '6px 0 10px', padding: '6px 10px', background: 'rgba(229, 169, 60, 0.1)', borderLeft: '3px solid #E5A93C', borderRadius: '4px', fontSize: '0.8rem' }}>
+                <span style={{ color: '#F4D06F', fontWeight: 600 }}>📍 Địa bàn hiện nay: </span>
+                <span style={{ color: '#E5E7EB' }}>{phasesList[activePhaseIndex].modernLocation}</span>
+              </div>
+            )}
             <p>{phasesList[activePhaseIndex].desc}</p>
             {phasesList[activePhaseIndex].miniQuiz && (
               <button 
