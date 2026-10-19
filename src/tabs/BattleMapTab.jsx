@@ -12,7 +12,8 @@ import {
   Trophy, 
   HelpCircle, 
   ChevronDown, 
-  ChevronUp 
+  ChevronUp,
+  ExternalLink
 } from 'lucide-react';
 import { BATTLES_DATA } from '../data/battlesData';
 import { playChime } from '../utils/audio';
@@ -29,7 +30,7 @@ const LUCIDE_ICONS = {
 
 export default function BattleMapTab() {
   const [activeBattleId, setActiveBattleId] = useState('rach-gam');
-  const [mapLayerType, setMapLayerType] = useState('satellite'); // 'satellite' | 'osm'
+  const [mapLayerType, setMapLayerType] = useState('google-hybrid'); // 'google-hybrid' | 'google-roadmap' | 'google-terrain' | 'satellite' | 'osm'
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   const [isFunFactsOpen, setIsFunFactsOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 1024 : true);
@@ -108,13 +109,41 @@ export default function BattleMapTab() {
     }
 
     let url = '';
-    if (type === 'satellite') {
+    let options = { maxZoom: 20 };
+
+    if (type === 'google-hybrid') {
+      // Live Google Maps Satellite Imagery with street and place names
+      url = 'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}';
+      options = {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '&copy; Google Maps'
+      };
+    } else if (type === 'google-roadmap') {
+      // Live Google Maps Street / Administrative boundaries & road network
+      url = 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
+      options = {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '&copy; Google Maps'
+      };
+    } else if (type === 'google-terrain') {
+      // Live Google Maps Terrain
+      url = 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}';
+      options = {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '&copy; Google Maps'
+      };
+    } else if (type === 'satellite') {
       url = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+      options = { maxZoom: 18, attribution: '&copy; Esri' };
     } else {
       url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      options = { maxZoom: 19, attribution: '&copy; OpenStreetMap' };
     }
 
-    tileLayerRef.current = L.tileLayer(url, { maxZoom: 18 }).addTo(map);
+    tileLayerRef.current = L.tileLayer(url, options).addTo(map);
   };
 
   const handleLayerChange = (type) => {
@@ -298,6 +327,12 @@ export default function BattleMapTab() {
           Rạch Gầm – Xoài Mút (1785)
         </button>
         <button 
+          className={`battle-selector-btn ${activeBattleId === 'phu-xuan-hue' ? 'active' : ''}`}
+          onClick={() => handleSwitchBattle('phu-xuan-hue')}
+        >
+          Phú Xuân – Núi Bân (1788)
+        </button>
+        <button 
           className={`battle-selector-btn ${activeBattleId === 'ngoc-hoi-dong-da' ? 'active' : ''}`}
           onClick={() => handleSwitchBattle('ngoc-hoi-dong-da')}
         >
@@ -305,7 +340,7 @@ export default function BattleMapTab() {
         </button>
         <div className="battle-gis-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(18, 16, 14, 0.85)', border: '1px solid rgba(229, 169, 60, 0.4)', borderRadius: '20px', color: '#F4D06F', fontSize: '0.75rem', fontWeight: 500, backdropFilter: 'blur(8px)', boxShadow: '0 2px 10px rgba(0,0,0,0.4)' }}>
           <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10B981', display: 'inline-block', boxShadow: '0 0 6px #10B981' }}></span>
-          <span>Bản đồ GIS Vệ Tinh chuẩn GPS</span>
+          <span>Google Maps Trực Tuyến · Địa Giới Mới Nhất</span>
         </div>
       </div>
 
@@ -380,16 +415,25 @@ export default function BattleMapTab() {
       {/* Layer control - bottom right */}
       <div className="battle-layer-control">
         <button 
-          className={`battle-layer-btn ${mapLayerType === 'satellite' ? 'active' : ''}`}
-          onClick={() => handleLayerChange('satellite')}
+          className={`battle-layer-btn ${mapLayerType === 'google-hybrid' ? 'active' : ''}`}
+          onClick={() => handleLayerChange('google-hybrid')}
+          title="Google Maps ảnh vệ tinh trực tiếp kèm địa danh và đường bộ"
         >
-          Vệ tinh
+          🛰️ Google Vệ Tinh
         </button>
         <button 
-          className={`battle-layer-btn ${mapLayerType === 'osm' ? 'active' : ''}`}
-          onClick={() => handleLayerChange('osm')}
+          className={`battle-layer-btn ${mapLayerType === 'google-roadmap' ? 'active' : ''}`}
+          onClick={() => handleLayerChange('google-roadmap')}
+          title="Google Maps bản đồ giao thông và địa giới hành chính mới"
         >
-          Địa hình
+          🗺️ Google Bản Đồ
+        </button>
+        <button 
+          className={`battle-layer-btn ${mapLayerType === 'google-terrain' ? 'active' : ''}`}
+          onClick={() => handleLayerChange('google-terrain')}
+          title="Google Maps địa hình đồi núi"
+        >
+          ⛰️ Địa Hình
         </button>
       </div>
 
@@ -440,6 +484,33 @@ export default function BattleMapTab() {
               </strong>
             </div>
           )}
+          <div style={{ gridColumn: '1 / -1', marginTop: '4px' }}>
+            <a 
+              href={`https://www.google.com/maps/search/?api=1&query=${(activePhaseIndex !== null && phasesList[activePhaseIndex]?.center) ? phasesList[activePhaseIndex].center.join(',') : battle.center.join(',')}`}
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '9px 12px',
+                background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(30, 58, 138, 0.45) 100%)',
+                border: '1px solid rgba(59, 130, 246, 0.45)',
+                borderRadius: '8px',
+                color: '#93C5FD',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+                transition: 'all 0.2s'
+              }}
+            >
+              <ExternalLink size={14} />
+              <span>Xem vị trí thực tế trên Google Maps ↗</span>
+            </a>
+          </div>
         </div>
 
         <div className="drawer-summary">

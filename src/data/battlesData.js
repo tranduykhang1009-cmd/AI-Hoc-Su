@@ -474,5 +474,207 @@ export const BATTLES_DATA = {
         desc: 'Tôn Sĩ Nghị cùng tàn quân hoảng sợ vượt cầu phao sông Nhị chạy thục mạng về phương Bắc.'
       }
     ]
+  },
+
+  'phu-xuan-hue': {
+    id: 'phu-xuan-hue',
+    title: 'Kinh Đô Phú Xuân – Núi Bân Lên Ngôi & Xuất Quân (1786 – 1788)',
+    subtitle: 'Hạ thành Phú Xuân, lập đàn Nam Giao đăng quang Hoàng đế & tiến quân thần tốc ra Bắc',
+    center: [16.442, 107.585],
+    zoom: 12,
+    time: 'Tháng 6/1786 (Hạ thành Phú Xuân) & 22/12/1788 (Lên ngôi Hoàng đế)',
+    modernLocation: 'Thành phố Huế (Thành phố trực thuộc Trung ương) — Quần thể Di tích Cố đô Huế & Di tích Lịch sử Núi Bân (phường An Tây, TP. Huế)',
+    gpsCoordinates: '16°26\'18"B 107°35\'30"Đ (Khu Di tích Núi Bân, TP. Huế)',
+    commander: 'Bắc Bình Vương Nguyễn Huệ — Hoàng đế Quang Trung',
+    enemyCommander: 'Tướng Trịnh Phạm Ngô Cầu (1786) / Tổng đốc Mãn Thanh Tôn Sĩ Nghị (1788)',
+    enemyForce: 'Hàng vạn quân Trịnh đồn trú (1786) / 29 vạn quân xâm lược Mãn Thanh tràn ngập Thăng Long (1788)',
+    ourForce: 'Hơn 6 vạn nghĩa quân Tây Sơn tinh nhuệ hội tụ tại Phú Xuân cùng hàng trăm thớt voi chiến',
+    summary: 'Kinh đô Phú Xuân (nay là trung tâm TP. Huế trực thuộc Trung ương) là bàn đạp chiến lược vĩ đại của nhà Tây Sơn. Tháng 6/1786, Nguyễn Huệ vượt ải Hải Vân hạ thành Phú Xuân, giải phóng toàn bộ Đàng Trong. Ngày 22/12/1788, khi hay tin 29 vạn quân Thanh xâm chiếm Thăng Long, Nguyễn Huệ cho đắp đàn Nam Giao tại Núi Bân (phường An Tây, TP. Huế), tế cáo Trời Đất, lên ngôi Hoàng đế lấy niên hiệu Quang Trung. Tại đây, Người dõng dạc tuyên đọc lời Hịch xuất quân thần thánh "Đánh cho để dài tóc, đánh cho để đen răng..." rồi chỉ huy toàn quân tiến thẳng ra Bắc đại phá quân giặc làm nên chiến thắng Kỷ Dậu 1789.',
+    forcesComparison: {
+      ourForces: {
+        name: 'Nghĩa Quân Tây Sơn tại Phú Xuân',
+        count: 'Hơn 6 vạn quân & thớt voi chiến',
+        percent: 60,
+        color: '#10B981',
+        details: 'Hạm đội thuyền chiến sông Hương, voi chiến chiến lược, tinh thần quật khởi cứu quốc'
+      },
+      enemyForces: {
+        name: 'Quân Xâm Lược & Cát Cứ Cũ',
+        count: '29 vạn quân giặc Thanh (Bắc Hà)',
+        percent: 40,
+        color: '#EF4444',
+        details: 'Thế lực chiếm đóng ngạo mạn đóng giữ các ngả đường thủy bộ'
+      },
+      ratioNote: 'Từ Kinh đô Phú Xuân (TP. Huế), toàn dân quy thuận dưới ngọn cờ Hoàng đế Quang Trung xuất quân cứu nước'
+    },
+    funFacts: [
+      {
+        icon: 'Sparkles',
+        title: 'Đàn Nam Giao tại Núi Bân',
+        desc: 'Được đắp thành 3 tầng hình tròn và vuông tượng trưng cho Trời và Đất, là nơi Hoàng đế Quang Trung chính vị hiệu triệu quốc dân.'
+      },
+      {
+        icon: 'Swords',
+        title: 'Lời hịch cứu quốc bất hủ',
+        desc: '"Đánh cho để dài tóc / Đánh cho để đen răng / Đánh cho nó chích luân bất phản / Đánh cho nó phiến giáp bất hoàn...".'
+      },
+      {
+        icon: 'Shield',
+        title: 'Đô thị Di sản - TP. Huế',
+        desc: 'Thành phố Huế (Thành phố trực thuộc Trung ương) lưu giữ trọn vẹn Di tích Quốc gia Núi Bân và Kinh thành Phú Xuân lịch sử.'
+      }
+    ],
+    phases: [
+      {
+        label: 'Hạ thành Phú Xuân (1786)',
+        phase: 'Giai đoạn 1: Vượt Hải Vân & Hạ thành Phú Xuân (1786)',
+        tag: 'Giải phóng Đàng Trong',
+        icon: '🏰',
+        center: [16.470, 107.575],
+        zoom: 13,
+        modernLocation: 'Hoàng thành Phú Xuân (nay là Kinh thành Huế, sông Hương và cửa biển Thuận An, TP. Huế)',
+        desc: 'Tháng 6/1786, Nguyễn Huệ bất ngờ chỉ huy quân thủy bộ vượt đèo Hải Vân đánh úp phòng tuyến quân Trịnh. Thủy quân Tây Sơn tiến thẳng vào cửa Thuận An, áp sát công phá thành Phú Xuân, bắt sống chủ tướng giặc, thu hồi toàn bộ đất cũ Đàng Trong.',
+        miniQuiz: {
+          question: 'Năm 1786, tướng quân Nguyễn Huệ đã giải phóng thành Phú Xuân khỏi thế lực nào?',
+          options: ['Quân Mãn Thanh', 'Quân Trịnh (do Phạm Ngô Cầu giữ)', 'Quân Xiêm La', 'Quân Pháp'],
+          correct: 1,
+          explain: 'Năm 1786, Nguyễn Huệ thần tốc vượt Hải Vân đánh tan quân Trịnh do Phạm Ngô Cầu chỉ huy, thu hồi toàn bộ Phú Xuân.'
+        }
+      },
+      {
+        label: 'Lên ngôi tại Núi Bân (1788)',
+        phase: 'Giai đoạn 2: Lập đàn Nam Giao đăng quang Hoàng đế (22/12/1788)',
+        tag: 'Chính vị hiệu triệu non sông',
+        icon: '👑',
+        center: [16.4385, 107.5919],
+        zoom: 14.5,
+        modernLocation: 'Di tích Lịch sử cấp Quốc gia Núi Bân, phường An Tây, Thành phố Huế (trực thuộc Trung ương)',
+        desc: 'Ngày 22/12/1788 (25 tháng 11 năm Mậu Thân), Nguyễn Huệ cho đắp đàn tế trời đất ở Núi Bân, làm lễ đăng quang Hoàng đế, lấy niên hiệu Quang Trung, danh chính ngôn thuận thống nhất lòng dân trước hiểm họa 29 vạn quân Mãn Thanh.',
+        miniQuiz: {
+          question: 'Ngọn núi lịch sử nào tại TP. Huế là nơi Nguyễn Huệ đắp đàn tế trời đất và lên ngôi Hoàng đế Quang Trung?',
+          options: ['Núi Bân (Ba Tầng)', 'Núi Ngự Bình', 'Núi Bạch Mã', 'Đồi Vọng Cảnh'],
+          correct: 0,
+          explain: 'Núi Bân (nay thuộc phường An Tây, TP. Huế) là nơi Nguyễn Huệ đắp đàn 3 tầng đăng quang Hoàng đế trước ngày xuất quân ra Bắc.'
+        }
+      },
+      {
+        label: 'Hịch xuất quân thần tốc',
+        phase: 'Giai đoạn 3: Tuyên thệ Hịch cứu quốc & Tiến quân ra Bắc',
+        tag: 'Hành quân sấm sét',
+        icon: '⚡',
+        center: [16.455, 107.580],
+        zoom: 12,
+        modernLocation: 'Từ Kinh đô Phú Xuân (TP. Huế) vượt sông Gianh tiến ra Nghệ An, Thanh Hóa hội quân Tam Điệp',
+        desc: 'Hoàng đế Quang Trung đích thân duyệt binh, đọc bài Hịch xuất quân hào hùng làm nức lòng tướng sĩ. Toàn quân lập tức nhổ trại, hành quân thần tốc đêm ngày ra Bắc, luân phiên 2 người cáng 1 người ngủ, chuẩn bị đại phá quân Thanh tại Thăng Long.',
+        miniQuiz: {
+          question: 'Bài Hịch xuất quân của vua Quang Trung tại Phú Xuân có câu nói nổi tiếng nào?',
+          options: ['Đánh cho để dài tóc, đánh cho để đen răng', 'Nam quốc sơn hà nam đế cư', 'Bình Ngô đại cáo', 'Hịch tướng sĩ'],
+          correct: 0,
+          explain: 'Câu nói bất hủ "Đánh cho để dài tóc, đánh cho để đen răng, đánh cho nó chích luân bất phản..." thể hiện quyết tâm giữ gìn bản sắc và chủ quyền dân tộc.'
+        }
+      }
+    ],
+    tactics: [
+      {
+        id: 1,
+        label: 'Hạ thành Phú Xuân (1786)',
+        phase: 'Giai đoạn 1: Vượt Hải Vân & Hạ thành Phú Xuân (1786)',
+        tag: 'Giải phóng Đàng Trong',
+        icon: '🏰',
+        center: [16.470, 107.575],
+        zoom: 13,
+        modernLocation: 'Hoàng thành Phú Xuân (nay là Kinh thành Huế, sông Hương và cửa biển Thuận An, TP. Huế)',
+        desc: 'Tháng 6/1786, Nguyễn Huệ bất ngờ chỉ huy quân thủy bộ vượt đèo Hải Vân đánh úp phòng tuyến quân Trịnh. Thủy quân Tây Sơn tiến thẳng vào cửa Thuận An, áp sát công phá thành Phú Xuân, bắt sống chủ tướng giặc, thu hồi toàn bộ đất cũ Đàng Trong.',
+        miniQuiz: {
+          question: 'Năm 1786, tướng quân Nguyễn Huệ đã giải phóng thành Phú Xuân khỏi thế lực nào?',
+          options: ['Quân Mãn Thanh', 'Quân Trịnh (do Phạm Ngô Cầu giữ)', 'Quân Xiêm La', 'Quân Pháp'],
+          correct: 1,
+          explain: 'Năm 1786, Nguyễn Huệ thần tốc vượt Hải Vân đánh tan quân Trịnh do Phạm Ngô Cầu chỉ huy, thu hồi toàn bộ Phú Xuân.'
+        }
+      },
+      {
+        id: 2,
+        label: 'Lên ngôi tại Núi Bân (1788)',
+        phase: 'Giai đoạn 2: Lập đàn Nam Giao đăng quang Hoàng đế (22/12/1788)',
+        tag: 'Chính vị hiệu triệu non sông',
+        icon: '👑',
+        center: [16.4385, 107.5919],
+        zoom: 14.5,
+        modernLocation: 'Di tích Lịch sử cấp Quốc gia Núi Bân, phường An Tây, Thành phố Huế (trực thuộc Trung ương)',
+        desc: 'Ngày 22/12/1788 (25 tháng 11 năm Mậu Thân), Nguyễn Huệ cho đắp đàn tế trời đất ở Núi Bân, làm lễ đăng quang Hoàng đế, lấy niên hiệu Quang Trung, danh chính ngôn thuận thống nhất lòng dân trước hiểm họa 29 vạn quân Mãn Thanh.',
+        miniQuiz: {
+          question: 'Ngọn núi lịch sử nào tại TP. Huế là nơi Nguyễn Huệ đắp đàn tế trời đất và lên ngôi Hoàng đế Quang Trung?',
+          options: ['Núi Bân (Ba Tầng)', 'Núi Ngự Bình', 'Núi Bạch Mã', 'Đồi Vọng Cảnh'],
+          correct: 0,
+          explain: 'Núi Bân (nay thuộc phường An Tây, TP. Huế) là nơi Nguyễn Huệ đắp đàn 3 tầng đăng quang Hoàng đế trước ngày xuất quân ra Bắc.'
+        }
+      },
+      {
+        id: 3,
+        label: 'Hịch xuất quân thần tốc',
+        phase: 'Giai đoạn 3: Tuyên thệ Hịch cứu quốc & Tiến quân ra Bắc',
+        tag: 'Hành quân sấm sét',
+        icon: '⚡',
+        center: [16.455, 107.580],
+        zoom: 12,
+        modernLocation: 'Từ Kinh đô Phú Xuân (TP. Huế) vượt sông Gianh tiến ra Nghệ An, Thanh Hóa hội quân Tam Điệp',
+        desc: 'Hoàng đế Quang Trung đích thân duyệt binh, đọc bài Hịch xuất quân hào hùng làm nức lòng tướng sĩ. Toàn quân lập tức nhổ trại, hành quân thần tốc đêm ngày ra Bắc, luân phiên 2 người cáng 1 người ngủ, chuẩn bị đại phá quân Thanh tại Thăng Long.',
+        miniQuiz: {
+          question: 'Bài Hịch xuất quân của vua Quang Trung tại Phú Xuân có câu nói nổi tiếng nào?',
+          options: ['Đánh cho để dài tóc, đánh cho để đen răng', 'Nam quốc sơn hà nam đế cư', 'Bình Ngô đại cáo', 'Hịch tướng sĩ'],
+          correct: 0,
+          explain: 'Câu nói bất hủ "Đánh cho để dài tóc, đánh cho để đen răng, đánh cho nó chích luân bất phản..." thể hiện quyết tâm giữ gìn bản sắc và chủ quyền dân tộc.'
+        }
+      }
+    ],
+    zones: [
+      {
+        id: 'zone-nui-ban',
+        title: 'Khu Di tích Đàn tế Núi Bân (Nơi đăng quang Hoàng đế)',
+        type: 'friendly',
+        color: '#D4AF37',
+        coords: [
+          [16.442, 107.588],
+          [16.442, 107.596],
+          [16.434, 107.596],
+          [16.434, 107.588],
+          [16.442, 107.588]
+        ],
+        modernLocation: 'Di tích Lịch sử Quốc gia Núi Bân, phường An Tây, Thành phố Huế (trực thuộc Trung ương)',
+        desc: 'Ngọn núi lịch sử nơi Nguyễn Huệ lập đàn 3 tầng tế Trời Đất, chính vị Hoàng đế Quang Trung ngày 22/12/1788.'
+      },
+      {
+        id: 'zone-phu-xuan-citadel',
+        title: 'Kinh thành Phú Xuân (Đại bản doanh Tây Sơn)',
+        type: 'friendly',
+        color: '#10B981',
+        coords: [
+          [16.478, 107.568],
+          [16.480, 107.586],
+          [16.464, 107.588],
+          [16.462, 107.570],
+          [16.478, 107.568]
+        ],
+        modernLocation: 'Khu vực Kinh thành Huế, bờ bắc sông Hương, TP. Huế',
+        desc: 'Trung tâm chính trị, quân sự đầu não của triều đại Tây Sơn tại miền Trung, nơi hội tụ binh thuyền và đại bác.'
+      }
+    ],
+    flows: [
+      {
+        id: 'flow-phuxuan-to-north',
+        title: 'Tuyến hành quân thần tốc từ Kinh đô Phú Xuân ra Nghệ An – Tam Điệp',
+        type: 'friendly',
+        color: '#F59E0B',
+        points: [
+          [16.440, 107.590],
+          [16.470, 107.575],
+          [16.800, 107.100],
+          [17.500, 106.600],
+          [18.670, 105.680]
+        ],
+        modernLocation: 'Tuyến Quốc lộ 1A từ TP. Huế qua Quảng Trị, Quảng Bình đến TP. Vinh (Nghệ An)',
+        desc: 'Đại quân Tây Sơn ngày đêm hành quân vượt hàng trăm cây số từ Huế ra Bắc với tốc độ sấm sét chưa từng có.'
+      }
+    ]
   }
 };
