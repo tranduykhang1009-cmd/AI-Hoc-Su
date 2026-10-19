@@ -87,7 +87,7 @@ export function generateCertificateCanvas({
 
   ctx.fillStyle = '#1C1917';
   ctx.font = 'bold 22px "Times New Roman", serif';
-  ctx.fillText('Lớp 12A8 — Trường THPT Nguyễn Huệ', canvas.width / 2, 470);
+  ctx.fillText('Lớp 12A8 — Trường THCS và THPT Nguyễn Huệ', canvas.width / 2, 470);
 
   ctx.fillStyle = '#44403C';
   ctx.font = '22px "Times New Roman", serif';
@@ -115,7 +115,7 @@ export function generateCertificateCanvas({
   ctx.font = '17px "Times New Roman", serif';
   ctx.fillText('Lê Trường Thịnh (12A8) & Trần Ngọc Anh (11A5)', 320, 842);
   ctx.font = 'italic 15px "Times New Roman", serif';
-  ctx.fillText('Trường THPT Nguyễn Huệ', 320, 868);
+  ctx.fillText('Trường THCS và THPT Nguyễn Huệ', 320, 868);
 
   ctx.font = 'bold 22px "Times New Roman", serif';
   ctx.fillText('BAN KHẢO CỨU SỬ HỌC', canvas.width - 320, 810);

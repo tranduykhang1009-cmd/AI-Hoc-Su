@@ -99,7 +99,7 @@ export async function fetchReviewsFromCloud(sheetId = DEFAULT_SURVEY_SHEET_ID, w
         date: String(val(0) || 'Gần đây'),
         name: rawName,
         role: String(val(2) || 'Học sinh'),
-        school: String(val(3) || 'THPT Nguyễn Huệ'),
+        school: String(val(3) || 'Trường THCS và THPT Nguyễn Huệ'),
         rating: Math.max(1, Math.min(5, rawRating)),
         comment: String(val(5) || 'Trải nghiệm tuyệt vời!'),
         likes: Number(val(6)) || 1,

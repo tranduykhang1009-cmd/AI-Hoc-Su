@@ -34,7 +34,7 @@ export default function DesignSystemPreview({ onSelectTab }) {
           <span className="section-kicker">GIAI ĐOẠN 2 — HỆ THỐNG THIẾT KẾ</span>
           <h1 className="ds-main-title">CINEMATIC HERITAGE DESIGN SYSTEM</h1>
           <p className="ds-main-sub">
-            Ngôn ngữ thị giác di sản lịch sử chuẩn mực cho đề tài KHKT · THPT Nguyễn Huệ
+            Ngôn ngữ thị giác di sản lịch sử chuẩn mực cho đề tài KHKT · Trường THCS và THPT Nguyễn Huệ
           </p>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default function DesignSystemPreview({ onSelectTab }) {
               <label className="ds-field-label">Khung Đóng Góp Ý Kiến (Textarea)</label>
               <textarea 
                 rows="3" 
-                placeholder="Nhập cảm nghĩ về công trình số hóa lịch sử THPT Nguyễn Huệ..." 
+                placeholder="Nhập cảm nghĩ về công trình số hóa lịch sử Trường THCS và THPT Nguyễn Huệ..." 
                 defaultValue="Một nền tảng học sử vô cùng trực quan, bố cục nghiêm cẩn và chất chứa lòng tự hào dân tộc sâu sắc."
               />
             </div>

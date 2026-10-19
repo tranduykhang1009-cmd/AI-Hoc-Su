@@ -31,7 +31,7 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
             </p>
             <div className="footer-award-badge">
               <Award size={16} className="badge-icon" />
-              <span>Dự án Học tập Lịch sử – THPT Nguyễn Huệ</span>
+              <span>Dự án Học tập Lịch sử – Trường THCS và THPT Nguyễn Huệ</span>
             </div>
           </div>
 
@@ -55,14 +55,14 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
               <div className="author-avatar">TT</div>
               <div className="author-info">
                 <strong className="author-name">LÊ TRƯỜNG THỊNH</strong>
-                <span className="author-class">Học sinh Lớp 12A8 · THPT Nguyễn Huệ</span>
+                <span className="author-class">Học sinh Lớp 12A8 · Trường THCS và THPT Nguyễn Huệ</span>
               </div>
             </div>
             <div className="author-card">
               <div className="author-avatar" style={{ background: 'linear-gradient(135deg, #e11d48, #be123c)' }}>NA</div>
               <div className="author-info">
                 <strong className="author-name">TRẦN NGỌC ANH</strong>
-                <span className="author-class">Học sinh Lớp 11A5 · THPT Nguyễn Huệ</span>
+                <span className="author-class">Học sinh Lớp 11A5 · Trường THCS và THPT Nguyễn Huệ</span>
               </div>
             </div>
             <div className="author-support-line" style={{ marginTop: '10px', fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.75)', display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -78,7 +78,7 @@ export default function Footer({ onSelectTab, onReplayIntro }) {
         {/* Dòng bản quyền đáy trang */}
         <div className="footer-bottom">
           <div className="footer-copyright" style={{ width: '100%', textAlign: 'center' }}>
-            © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THPT Nguyễn Huệ</strong>.
+            © 2026 <strong>Bản quyền dự án: Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5) — Trường THCS và THPT Nguyễn Huệ</strong>.
           </div>
         </div>
       </div>

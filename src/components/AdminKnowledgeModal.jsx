@@ -253,7 +253,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
               id: 'kb-' + Date.now() + '-' + idx,
               title: item.title || `Tư liệu ${idx + 1}`,
               category: item.category || 'Tư liệu bổ sung',
-              authorApproved: 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+              authorApproved: 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
               source: item.source || fileName,
               content: item.content || ''
             }));
@@ -439,7 +439,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                   Trung Tâm Quản Trị Hệ Thống
                 </h3>
                 <span style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>
-                  Tác giả: <strong>Lê Trường Thịnh</strong> (12A8 THPT Nguyễn Huệ)
+                  Tác giả: <strong>Lê Trường Thịnh</strong> (12A8 - Trường THCS và THPT Nguyễn Huệ)
                 </span>
               </div>
             </div>
@@ -995,13 +995,13 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                         <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
                           <span style={{ fontSize: '0.78rem', color: '#9CA3AF', display: 'block' }}>Tác giả đại diện:</span>
                           <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>LÊ TRƯỜNG THỊNH</strong>
-                          <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Học sinh Lớp 12A8 · THPT Nguyễn Huệ</span>
+                          <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Học sinh Lớp 12A8 · Trường THCS và THPT Nguyễn Huệ</span>
                         </div>
 
                         <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
                           <span style={{ fontSize: '0.78rem', color: '#9CA3AF', display: 'block' }}>Đồng tác giả:</span>
                           <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>TRẦN NGỌC ANH</strong>
-                          <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Học sinh Lớp 11A5 · THPT Nguyễn Huệ</span>
+                          <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Học sinh Lớp 11A5 · Trường THCS và THPT Nguyễn Huệ</span>
                         </div>
 
                         <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>

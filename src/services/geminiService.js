@@ -84,7 +84,7 @@ export async function syncKnowledgeToCloud(item) {
       category: item.category || 'Tư liệu bổ sung',
       source: item.source || 'Tư liệu khảo cứu (Lê Trường Thịnh)',
       content: item.content,
-      authorApproved: item.authorApproved || 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)'
+      authorApproved: item.authorApproved || 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)'
     };
 
     await fetch(url, {
@@ -122,8 +122,8 @@ export function parseGoogleDocTextToKnowledge(rawText) {
           id: `gdoc-${i}`,
           title: title,
           category: 'Tư liệu Google Docs',
-          source: 'Google Docs - Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
-          authorApproved: 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+          source: 'Google Docs - Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
+          authorApproved: 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
           content: content
         });
       }
@@ -142,8 +142,8 @@ export function parseGoogleDocTextToKnowledge(rawText) {
         id: `gdoc-p-${idx + 1}`,
         title: titleCandidate || `Tư liệu Google Docs mục ${idx + 1}`,
         category: 'Tư liệu Google Docs',
-        source: 'Google Docs - Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
-        authorApproved: 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+        source: 'Google Docs - Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
+        authorApproved: 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
         content: p
       });
     });
@@ -155,8 +155,8 @@ export function parseGoogleDocTextToKnowledge(rawText) {
     id: 'gdoc-full',
     title: 'Kho Sử Liệu Tây Sơn (Google Docs)',
     category: 'Tư liệu tổng hợp',
-    source: 'Google Docs - Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
-    authorApproved: 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+    source: 'Google Docs - Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
+    authorApproved: 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
     content: rawText.trim()
   }];
 }
@@ -230,7 +230,7 @@ export function addKnowledgeItem(item) {
     id: 'kb-' + Date.now(),
     title: item.title,
     category: item.category || 'Tư liệu bổ sung',
-    authorApproved: 'Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+    authorApproved: 'Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
     source: item.source || 'Sử liệu kiểm định (Lê Trường Thịnh)',
     content: item.content
   };
@@ -363,7 +363,7 @@ function searchRelevantKnowledge(query) {
             item: {
               id: 'gdoc-raw-matched',
               title: 'Trích lục Google Docs của tác giả Lê Trường Thịnh',
-              source: 'Google Docs - Lê Trường Thịnh (12A8 THPT Nguyễn Huệ)',
+              source: 'Google Docs - Lê Trường Thịnh (12A8 - Trường THCS và THPT Nguyễn Huệ)',
               content: p.trim()
             },
             score
@@ -406,12 +406,12 @@ export async function sendChatMessageToGemini(userQuestion) {
 
   let ragContextPrompt = '';
   if (hasMatchedDoc) {
-    ragContextPrompt = `\n\n[KỊCH BẢN ƯU TIÊN BẬC 1: TƯ LIỆU CHÍNH THỐNG TỪ GOOGLE DOCS DO TÁC GIẢ (Lê Trường Thịnh - 12A8 THPT Nguyễn Huệ) BIÊN SOẠN]:\n` +
+    ragContextPrompt = `\n\n[KỊCH BẢN ƯU TIÊN BẬC 1: TƯ LIỆU CHÍNH THỐNG TỪ GOOGLE DOCS DO TÁC GIẢ (Lê Trường Thịnh - 12A8, Trường THCS và THPT Nguyễn Huệ) BIÊN SOẠN]:\n` +
       matchedDocs.map(d => `✦ Tiêu đề: ${d.title}\n✦ Nguồn: ${d.source}\n✦ Nội dung: ${d.content}`).join('\n\n') +
       `\n\nQUY TẮC BẮT BUỘC:
 - NẾU câu hỏi của người dùng có dữ liệu giải đáp trong nội dung Google Docs trên: Bạn BẮT BUỘC ưu tiên trả lời theo thông tin từ Google Docs này.
 Ở cuối câu trả lời, hãy đính kèm đúng cú pháp nguồn:
-"\n\n📚 *Nguồn tư liệu:* Trích xuất từ Google Docs (Biên soạn: Lê Trường Thịnh - Lớp 12A8 THPT Nguyễn Huệ)"
+"\n\n📚 *Nguồn tư liệu:* Trích xuất từ Google Docs (Biên soạn: Lê Trường Thịnh - Lớp 12A8, Trường THCS và THPT Nguyễn Huệ)"
 - NẾU câu hỏi của người dùng hỏi về khía cạnh KHÔNG CÓ trong Google Docs trên: Bạn HÃY VẬN DỤNG TRI THỨC LỊCH SỬ CHUYÊN SÂU của Google Gemini AI để giải đáp chuẩn xác, đầy đủ nhất cho người dùng.
 Ở cuối câu trả lời, hãy đính kèm đúng cú pháp nguồn:
 "\n\n🌐 *Nguồn tư liệu:* Tri thức Lịch sử Google Gemini AI (Chưa có trong Google Docs của tác giả)"`;
@@ -419,7 +419,7 @@ export async function sendChatMessageToGemini(userQuestion) {
     ragContextPrompt = `\n\n[KỊCH BẢN BẬC 2: TRI THỨC LỊCH SỬ CHUYÊN SÂU CỦA GOOGLE GEMINI AI]:\nThông tin cho câu hỏi này HIỆN CHƯA CÓ trong file Google Docs của tác giả Lê Trường Thịnh.\nTheo kịch bản của tác giả: Bạn HÃY VẬN DỤNG TRI THỨC LỊCH SỬ SÂU RỘNG của Google Gemini AI để giải đáp đầy đủ, chính xác, khách quan cho người dùng (ví dụ: về các sự kiện lịch sử khác, nhân vật thời nay, chủ tịch nước, văn hóa xã hội...).\n\nQUY TẮC BẮT BUỘC ĐỂ TRÁNH NHẦM LẪN: Ở cuối câu trả lời, bạn BẮT BUỘC đính kèm đúng cú pháp nguồn sau để người đọc phân biệt rõ ràng:\n"\n\n🌐 *Nguồn tư liệu:* Tri thức Lịch sử Google Gemini AI (Chưa có trong Google Docs của tác giả)"`;
   }
 
-  const systemInstruction = `Bạn là "Sử Quan AI Tây Sơn" - Trợ lý thông minh, am tường sử sách và tin cậy của nền tảng Học Sử Số Hóa (Dự án của tác giả Lê Trường Thịnh, lớp 12A8, Trường THPT Nguyễn Huệ).
+  const systemInstruction = `Bạn là "Sử Quan AI Tây Sơn" - Trợ lý thông minh, am tường sử sách và tin cậy của nền tảng Học Sử Số Hóa (Dự án của tác giả Lê Trường Thịnh, lớp 12A8, Trường THCS và THPT Nguyễn Huệ).
 
 PHONG THÁI GIAO TIẾP:
 1. THÂN THIỆN & CỞI MỞ: Khi người dùng chào hỏi hoặc tự giới thiệu, hãy niềm nở chào lại và gọi đúng tên người dùng.
@@ -490,7 +490,7 @@ PHONG THÁI GIAO TIẾP:
 
       if (isGDocAnswer) {
         if (!replyText.includes('Trích xuất từ Google Docs') && !replyText.includes('Nguồn tư liệu')) {
-          replyText += `\n\n📚 *Nguồn tư liệu:* Trích xuất từ Google Docs (Biên soạn: Lê Trường Thịnh - Lớp 12A8 THPT Nguyễn Huệ)`;
+          replyText += `\n\n📚 *Nguồn tư liệu:* Trích xuất từ Google Docs (Biên soạn: Lê Trường Thịnh - Lớp 12A8, Trường THCS và THPT Nguyễn Huệ)`;
         }
       } else {
         if (!replyText.includes('Tri thức Lịch sử') && !replyText.includes('Google Gemini AI') && !replyText.includes('Nguồn tư liệu')) {

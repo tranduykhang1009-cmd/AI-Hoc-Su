@@ -57,7 +57,7 @@ export default function HomeTab({ onSelectTab }) {
         <div className="hero-grid">
           {/* LEFT: text column */}
           <header className="hero-text-col">
-            <p className="hero-kicker">CÔNG TRÌNH SỐ HÓA DI SẢN · THPT NGUYỄN HUỆ</p>
+            <p className="hero-kicker">CÔNG TRÌNH SỐ HÓA DI SẢN · TRƯỜNG THCS VÀ THPT NGUYỄN HUỆ</p>
             
             <h1 id="hero-title" className="hero-title-gold-3d">HÀO KHÍ TÂY SƠN</h1>
             

@@ -244,7 +244,7 @@ export default function SurveyTab() {
       id: 'rev-' + Date.now(),
       name: newName.trim(),
       role: newRole.trim() || 'Học sinh',
-      school: 'THPT Nguyễn Huệ',
+      school: 'Trường THCS và THPT Nguyễn Huệ',
       rating: newRating,
       date: 'Vừa xong',
       comment: newComment.trim(),

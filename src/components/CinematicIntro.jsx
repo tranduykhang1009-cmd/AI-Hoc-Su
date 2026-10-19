@@ -192,7 +192,7 @@ export default function CinematicIntro({ onEnter, onComplete }) {
         }}
       >
         <div className="intro-brand-header">
-          <span className="intro-kicker">CÔNG TRÌNH SỐ HÓA DI SẢN · THPT NGUYỄN HUỆ</span>
+          <span className="intro-kicker">CÔNG TRÌNH SỐ HÓA DI SẢN · TRƯỜNG THCS VÀ THPT NGUYỄN HUỆ</span>
           <h1 className="intro-hero-title">HÀO KHÍ TÂY SƠN</h1>
           <p className="intro-sub-title">BẮC BÌNH VƯƠNG · ĐẠI PHÁ QUÂN THANH</p>
         </div>
@@ -234,7 +234,7 @@ export default function CinematicIntro({ onEnter, onComplete }) {
 
         {/* Footer học thuật */}
         <div className="intro-academic-badge">
-          <span>Biên soạn: <strong>Lê Trường Thịnh</strong> (12A8) &amp; <strong>Trần Ngọc Anh</strong> (11A5) · THPT Nguyễn Huệ</span>
+          <span>Biên soạn: <strong>Lê Trường Thịnh</strong> (12A8) &amp; <strong>Trần Ngọc Anh</strong> (11A5) · Trường THCS và THPT Nguyễn Huệ</span>
         </div>
       </div>
 
