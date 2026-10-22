@@ -1003,12 +1003,6 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                           <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>TRẦN NGỌC ANH</strong>
                           <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Học sinh Lớp 11A5 · Trường THCS và THPT Nguyễn Huệ</span>
                         </div>
-
-                        <div style={{ padding: '12px', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                          <span style={{ fontSize: '0.78rem', color: '#9CA3AF', display: 'block' }}>Hỗ trợ kỹ thuật:</span>
-                          <strong style={{ color: '#F4D06F', fontSize: '0.94rem' }}>TRẦN DUY KHANG</strong>
-                          <span style={{ fontSize: '0.8rem', color: '#D1D5DB', display: 'block' }}>Phát triển hạ tầng đồng bộ Google Sheets</span>
-                        </div>
                       </div>
                     </div>
 
