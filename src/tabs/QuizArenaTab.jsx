@@ -322,7 +322,6 @@ export default function QuizArenaTab() {
         aria-hidden="true" 
       />
       <div className="section-title-box">
-        <span className="section-kicker">ĐẤU TRƯỜNG TRI THỨC GAMIFIED</span>
         <h2 className="section-heading">THỬ THÁCH SỬ HỌC TÂY SƠN</h2>
         <p className="section-subtext">
           Hệ thống 90 câu hỏi trắc nghiệm tương tác 3 cấp độ (mỗi lượt tự động đổi 10 câu mới). Hoàn thành cả 3 cấp độ để nhận Giấy Chứng Nhận vinh danh.

@@ -31,7 +31,6 @@ export default function DesignSystemPreview({ onSelectTab }) {
           <span>Trở về Trang Chủ</span>
         </button>
         <div className="ds-header-titles">
-          <span className="section-kicker">GIAI ĐOẠN 2 — HỆ THỐNG THIẾT KẾ</span>
           <h1 className="ds-main-title">CINEMATIC HERITAGE DESIGN SYSTEM</h1>
           <p className="ds-main-sub">
             Ngôn ngữ thị giác di sản lịch sử chuẩn mực cho đề tài KHKT · Trường THCS và THPT Nguyễn Huệ

@@ -126,7 +126,6 @@ export default function HomeTab({ onSelectTab }) {
       {/* Bento Grid: 4 Trải Nghiệm Học Sử Trực Quan */}
       <section className="highlights-section">
         <motion.div className="section-header-centered" variants={itemVariants}>
-          <span className="section-kicker-centered">CHƯƠNG MỤC KHẢO CỨU</span>
           <h2 className="section-title-centered">4 TRẢI NGHIỆM HỌC SỬ TRỰC QUAN</h2>
         </motion.div>
 

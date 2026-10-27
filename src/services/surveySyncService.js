@@ -47,7 +47,10 @@ export async function fetchReviewsFromCloud(sheetId = DEFAULT_SURVEY_SHEET_ID, w
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          return data;
+          return data.filter(r => {
+            const name = String(r.name || r.author || '').toLowerCase();
+            return !name.includes('khang');
+          });
         }
       }
     } catch (err) {
@@ -90,6 +93,9 @@ export async function fetchReviewsFromCloud(sheetId = DEFAULT_SURVEY_SHEET_ID, w
       // Kiểm tra xem dòng này có phải header không
       const rawName = String(val(1) || val(0)).trim();
       if (!rawName || rawName.toLowerCase() === 'họ và tên' || rawName.toLowerCase() === 'timestamp') {
+        return;
+      }
+      if (rawName.toLowerCase().includes('khang') || rawName.toLowerCase().includes('duy khang')) {
         return;
       }
 

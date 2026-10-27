@@ -219,7 +219,6 @@ export default function MuseumTab() {
         volume={0.25}
       />
       <div className="section-title-box">
-        <span className="section-kicker">KHÔNG GIAN DI SẢN QUỐC GIA</span>
         <h2 className="section-heading">BẢO TÀNG HIỆN VẬT THỜI TÂY SƠN</h2>
         <p className="section-subtext">
           Khảo cứu các cổ vật quân sự, hỏa lực pháo binh và châu bản sắc chỉ minh chứng cho khí phách của phong trào Tây Sơn.

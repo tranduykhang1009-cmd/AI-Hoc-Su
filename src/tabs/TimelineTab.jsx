@@ -106,7 +106,6 @@ export default function TimelineTab({ onSelectTab }) {
       />
       {/* Tiêu đề & Lời dẫn nhập */}
       <div className="section-title-box">
-        <span className="section-kicker">BIÊN NIÊN SỬ HÀO HÙNG</span>
         <h2 className="section-heading">HÀNH TRÌNH BÁCH CHIẾN BÁCH THẮNG (1753 – 1792)</h2>
         <p className="section-subtext">
           Theo dõi 10 bước ngoặt vĩ đại tái định hình lịch sử dân tộc thế kỷ XVIII — từ thủ lĩnh áo vải làng Kiên Mỹ đến vị Hoàng đế bách chiến bách thắng.

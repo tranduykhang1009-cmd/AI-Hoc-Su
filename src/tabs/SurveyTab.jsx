@@ -45,6 +45,15 @@ const DEFAULT_SHEET_URL = DEFAULT_SURVEY_SHEET_URL;
 
 const DEFAULT_REVIEWS = [];
 
+const isAllowedReview = (r) => {
+  if (!r) return false;
+  if (['rev-1', 'rev-2', 'rev-3', 'rev-4'].includes(r.id)) return false;
+  const name = String(r.name || r.author || '').toLowerCase();
+  const avatar = String(r.avatar || '').toUpperCase();
+  if (name.includes('khang') || name.includes('duy khang') || avatar === 'DK') return false;
+  return true;
+};
+
 export default function SurveyTab() {
   const { isAdmin, openAdmin } = useAdmin();
   const [formUrl, setFormUrl] = useState(DEFAULT_FORM_URL);
@@ -65,8 +74,7 @@ export default function SurveyTab() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          // Lọc bỏ sạch sẽ tất cả đánh giá mẫu cũ trước đây (rev-1, rev-2, rev-3, rev-4)
-          return parsed.filter(r => !['rev-1', 'rev-2', 'rev-3', 'rev-4'].includes(r.id));
+          return parsed.filter(isAllowedReview);
         }
       }
     } catch (e) {}
@@ -91,12 +99,13 @@ export default function SurveyTab() {
       const cloudData = await fetchReviewsFromCloud(customSheetUrl, webhookUrl);
       if (cloudData && Array.isArray(cloudData)) {
         // Dữ liệu trên web cập nhật 100% theo Google Sheets (xóa trên Sheet thì web cũng mất theo)
-        setReviews(cloudData);
+        const cleanData = cloudData.filter(isAllowedReview);
+        setReviews(cleanData);
         try {
-          localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(cloudData));
+          localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(cleanData));
         } catch (e) {}
         if (!silent) {
-          setCloudSyncMsg(`Đã đồng bộ ${cloudData.length} đánh giá từ Google Sheets!`);
+          setCloudSyncMsg(`Đã đồng bộ ${cleanData.length} đánh giá từ Google Sheets!`);
           playCorrectSound();
           setTimeout(() => setCloudSyncMsg(''), 4000);
         }
@@ -138,7 +147,7 @@ export default function SurveyTab() {
       if (savedReviews) {
         const parsed = JSON.parse(savedReviews);
         if (Array.isArray(parsed)) {
-          const clean = parsed.filter(r => !['rev-1', 'rev-2', 'rev-3', 'rev-4'].includes(r.id));
+          const clean = parsed.filter(isAllowedReview);
           localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(clean));
           setReviews(clean);
         }
@@ -162,7 +171,7 @@ export default function SurveyTab() {
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed)) setReviews(parsed);
+          if (Array.isArray(parsed)) setReviews(parsed.filter(isAllowedReview));
         } catch (e) {}
       }
     };
@@ -343,7 +352,6 @@ export default function SurveyTab() {
       transition={{ duration: 0.3 }}
     >
       <div className="section-title-box">
-        <span className="section-kicker">Ý KIẾN ĐÓNG GÓP HỌC SINH & GIÁO VIÊN</span>
         <h2 className="section-heading">KHẢO SÁT & ĐÁNH GIÁ TRẢI NGHIỆM</h2>
         <p className="section-subtext">
           Đánh giá cộng đồng kết hợp thu thập ý kiến qua Google Form & đồng bộ Google Sheets theo thời gian thực.
@@ -534,8 +542,7 @@ export default function SurveyTab() {
                     <div 
                       className="bar-fill" 
                       style={{ 
-                        width: `${starPercentages[s]}%`,
-                        transition: 'width 0.4s ease'
+                        width: `${starPercentages[s]}%`
                       }} 
                     />
                   </div>
@@ -746,7 +753,7 @@ export default function SurveyTab() {
             )}
 
             <div className="reviews-grid">
-              {reviews.length === 0 ? (
+              {reviews.filter(isAllowedReview).length === 0 ? (
                 <div className="empty-reviews-card card" style={{
                   gridColumn: '1 / -1',
                   textAlign: 'center',
@@ -757,12 +764,12 @@ export default function SurveyTab() {
                 }}>
                   <Star size={36} className="text-gold" style={{ margin: '0 auto 12px', opacity: 0.6 }} />
                   <h4 style={{ color: '#F4D06F', margin: '0 0 8px', fontSize: '1.08rem' }}>Chưa Có Đánh Giá Nào</h4>
-                  <p style={{ color: '#9CA3AF', margin: 0, fontSize: '0.88rem', maxWidth: '500px', marginInline: 'auto' }}>
+                  <p style={{ color: '#D1D5DB', margin: 0, fontSize: '0.88rem', maxWidth: '500px', marginInline: 'auto' }}>
                     Dữ liệu được làm sạch 100% để đồng bộ trực tiếp từ Google Sheets của bạn. Hãy bấm <strong>"Viết Đánh Giá Của Bạn"</strong> ở trên để gửi nhận xét đầu tiên nhé!
                   </p>
                 </div>
               ) : (
-                reviews.map((rev) => (
+                reviews.filter(isAllowedReview).map((rev) => (
                 <div key={rev.id} className="review-card card">
                   <div className="review-card-top">
                     {/* Avatar tròn với ký tự viết tắt */}

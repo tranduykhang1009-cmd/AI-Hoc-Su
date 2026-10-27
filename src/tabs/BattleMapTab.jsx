@@ -175,7 +175,7 @@ export default function BattleMapTab() {
           </span>
           <h4 class="popup-zone-title">${zone.title}</h4>
           ${zone.modernLocation ? `
-            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.12); border-left: 2px solid #E5A93C; border-radius: 4px;">
+            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.08); border: 1px solid rgba(229, 169, 60, 0.25); border-radius: 6px;">
               <span style="font-size: 11px; color: #F4D06F; font-weight: 600; display: block;">📍 Đơn vị hành chính hiện nay:</span>
               <span style="font-size: 11px; color: #E5E7EB; line-height: 1.35;">${zone.modernLocation}</span>
             </div>
@@ -218,7 +218,7 @@ export default function BattleMapTab() {
           </span>
           <h4 class="popup-zone-title">${flow.title}</h4>
           ${flow.modernLocation ? `
-            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.12); border-left: 2px solid #E5A93C; border-radius: 4px;">
+            <div style="margin: 4px 0 6px; padding: 4px 8px; background: rgba(229, 169, 60, 0.08); border: 1px solid rgba(229, 169, 60, 0.25); border-radius: 6px;">
               <span style="font-size: 11px; color: #F4D06F; font-weight: 600; display: block;">📍 Tuyến đường theo địa giới ngày nay:</span>
               <span style="font-size: 11px; color: #E5E7EB; line-height: 1.35;">${flow.modernLocation}</span>
             </div>
@@ -450,7 +450,6 @@ export default function BattleMapTab() {
         </button>
         
         <div className="drawer-header">
-          <span className="kicker">CHIẾN DỊCH TIÊU BIỂU</span>
           <h2 className="drawer-title">{battle.title}</h2>
           <p className="drawer-subtitle">{battle.subtitle}</p>
         </div>
@@ -475,7 +474,7 @@ export default function BattleMapTab() {
             </div>
           )}
           {battle.modernLocation && (
-            <div className="meta-item" style={{ gridColumn: '1 / -1', background: 'rgba(229, 169, 60, 0.08)', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid #E5A93C', margin: '4px 0' }}>
+            <div className="meta-item" style={{ gridColumn: '1 / -1', background: 'rgba(229, 169, 60, 0.08)', padding: '10px 12px', borderRadius: '8px', border: '1px solid rgba(229, 169, 60, 0.25)', margin: '4px 0' }}>
               <span className="meta-label" style={{ color: '#F4D06F', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
                 📍 Đơn vị hành chính hiện nay:
               </span>
@@ -520,10 +519,9 @@ export default function BattleMapTab() {
         {/* Phase details khi user click vào phase pill hoặc kéo timeline */}
         {activePhaseIndex !== null && phasesList[activePhaseIndex] && (
           <div className="drawer-phase-detail">
-            <span className="kicker">GIAI ĐOẠN {activePhaseIndex + 1}</span>
-            <h3>{phasesList[activePhaseIndex].phase}</h3>
+            <h3>Giai đoạn {activePhaseIndex + 1}: {phasesList[activePhaseIndex].phase}</h3>
             {phasesList[activePhaseIndex].modernLocation && (
-              <div style={{ margin: '6px 0 10px', padding: '6px 10px', background: 'rgba(229, 169, 60, 0.1)', borderLeft: '3px solid #E5A93C', borderRadius: '4px', fontSize: '0.8rem' }}>
+              <div style={{ margin: '6px 0 10px', padding: '6px 10px', background: 'rgba(229, 169, 60, 0.08)', border: '1px solid rgba(229, 169, 60, 0.25)', borderRadius: '6px', fontSize: '0.8rem' }}>
                 <span style={{ color: '#F4D06F', fontWeight: 600 }}>📍 Địa bàn hiện nay: </span>
                 <span style={{ color: '#E5E7EB' }}>{phasesList[activePhaseIndex].modernLocation}</span>
               </div>
