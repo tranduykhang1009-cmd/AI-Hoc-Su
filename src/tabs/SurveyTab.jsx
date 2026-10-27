@@ -911,43 +911,11 @@ export default function SurveyTab() {
           ============================================================ */}
       {activeView === 'form' && (
         <div className="form-view-section">
-          {/* Khối giới thiệu quy trình đồng bộ */}
-          <div className="survey-flow-overview card">
-            <div className="flow-step-item">
-              <span className="flow-num">01</span>
-              <div className="flow-text">
-                <strong>Điền Khảo Sát</strong>
-                <p>Học sinh & thầy cô hoàn thành phiếu đánh giá trực tuyến</p>
-              </div>
-            </div>
-            <div className="flow-divider-arrow" aria-hidden="true">
-              <ArrowRight size={18} />
-            </div>
-            <div className="flow-step-item">
-              <span className="flow-num">02</span>
-              <div className="flow-text">
-                <strong>Tự Động Lưu Dữ Liệu</strong>
-                <p>Toàn bộ thông tin điền được lưu an toàn sang Google Sheets</p>
-              </div>
-            </div>
-            <div className="flow-divider-arrow" aria-hidden="true">
-              <ArrowRight size={18} />
-            </div>
-            <div className="flow-step-item">
-              <span className="flow-num">03</span>
-              <div className="flow-text">
-                <strong>Đồng Bộ Google Sheets</strong>
-                <p>Số liệu trực quan hóa theo thời gian thực trên bảng tính</p>
-              </div>
-            </div>
-          </div>
-
           <div className="survey-embed-container card">
             <div className="form-embed-wrapper">
               <div className="embed-header-bar">
                 <div className="embed-info">
                   <strong>Biểu Mẫu Khảo Sát Trực Tuyến</strong>
-                  <span>Mọi thông tin điền sẽ tự động lưu sang Bảng tính Google Sheets của nhóm tác giả Lê Trường Thịnh (12A8) &amp; Trần Ngọc Anh (11A5)</span>
                 </div>
                 <div className="embed-actions-row">
                   <a 

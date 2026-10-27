@@ -13,11 +13,7 @@ import {
   HelpCircle, 
   ChevronDown, 
   ChevronUp,
-  ExternalLink,
-  Play,
-  Pause,
-  SkipBack,
-  SkipForward
+  ExternalLink
 } from 'lucide-react';
 import { BATTLES_DATA } from '../data/battlesData';
 import { playChime } from '../utils/audio';
@@ -34,8 +30,7 @@ const LUCIDE_ICONS = {
 
 export default function BattleMapTab() {
   const [activeBattleId, setActiveBattleId] = useState('rach-gam');
-  const [mapLayerType, setMapLayerType] = useState('military-dark'); // 'military-dark' | 'satellite-clean' | 'google-hybrid' | 'google-roadmap'
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [mapLayerType, setMapLayerType] = useState('google-hybrid'); // 'google-hybrid' | 'google-roadmap' | 'google-terrain'
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
   const [isFunFactsOpen, setIsFunFactsOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth > 1024 : true);
@@ -116,23 +111,7 @@ export default function BattleMapTab() {
     let url = '';
     let options = { maxZoom: 20 };
 
-    if (type === 'military-dark') {
-      // CartoDB Dark Matter — Chuẩn sa bàn quân sự đêm, tôn vinh chiến thuật và mũi tiến công
-      url = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-      options = {
-        maxZoom: 20,
-        subdomains: ['a', 'b', 'c', 'd'],
-        attribution: '&copy; CARTO &copy; OpenStreetMap'
-      };
-    } else if (type === 'satellite-clean') {
-      // Google Satellite nguyên bản — ảnh thực địa sạch không chứa POI quán xá thương mại
-      url = 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}';
-      options = {
-        maxZoom: 20,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-        attribution: '&copy; Google Maps'
-      };
-    } else if (type === 'google-hybrid') {
+    if (type === 'google-hybrid') {
       // Live Google Maps Satellite Imagery with street and place names
       url = 'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}';
       options = {
@@ -143,6 +122,14 @@ export default function BattleMapTab() {
     } else if (type === 'google-roadmap') {
       // Live Google Maps Street / Administrative boundaries & road network
       url = 'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
+      options = {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: '&copy; Google Maps'
+      };
+    } else if (type === 'google-terrain') {
+      // Live Google Maps Terrain
+      url = 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}';
       options = {
         maxZoom: 20,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
@@ -250,46 +237,12 @@ export default function BattleMapTab() {
   };
 
   const handleSwitchBattle = (id) => {
-    setIsPlaying(false);
     setActivePhaseIndex(0);
     viewedPhasesRef.current = new Set([0]);
     setIsDrawerOpen(false);
     setActiveQuizPhase(null);
     playChime(600, 'sine', 0.15);
     setActiveBattleId(id);
-  };
-
-  // Tự động phát diễn biến sa bàn (Auto-play timeline)
-  useEffect(() => {
-    if (!isPlaying) return;
-    const phases = activeBattle.phases || activeBattle.tactics;
-    const timer = setInterval(() => {
-      setActivePhaseIndex((prev) => {
-        const nextIdx = (prev + 1) % phases.length;
-        if (phases[nextIdx]) {
-          handleSelectPhase(phases[nextIdx], nextIdx);
-        }
-        return nextIdx;
-      });
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [isPlaying, activeBattleId]);
-
-  const handlePrevPhase = () => {
-    const phases = activeBattle.phases || activeBattle.tactics;
-    const prevIdx = (currentPhaseIndex - 1 + phases.length) % phases.length;
-    handlePhaseChange(prevIdx);
-  };
-
-  const handleNextPhase = () => {
-    const phases = activeBattle.phases || activeBattle.tactics;
-    const nextIdx = (currentPhaseIndex + 1) % phases.length;
-    handlePhaseChange(nextIdx);
-  };
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-    playChime(isPlaying ? 450 : 650, 'sine', 0.1);
   };
 
   const handleSelectPhase = (tac, idx) => {
@@ -418,95 +371,46 @@ export default function BattleMapTab() {
         })}
       </div>
 
-      {/* Cụm điều khiển tiến trình trận đánh (Unified Player Timeline Control Bar) */}
-      <aside className="battle-player-timeline-bar" aria-label="Điều khiển diễn biến trận đánh">
-        {/* Playback action controls */}
-        <div className="timeline-playback-actions">
-          <button 
+      {/* Phase selector pills - bottom center */}
+      <div className="battle-phase-pills" role="tablist" aria-label="Giai đoạn trận đánh">
+        {phasesList.map((tac, idx) => (
+          <button
+            key={idx}
             type="button"
-            className="timeline-control-btn"
-            onClick={handlePrevPhase}
-            title="Lùi về mốc trước"
-            aria-label="Lùi về mốc trước"
+            className={`battle-phase-pill ${activePhaseIndex === idx ? 'active' : ''}`}
+            onClick={() => handleSelectPhase(tac, idx)}
+            aria-selected={activePhaseIndex === idx}
           >
-            <SkipBack size={15} />
+            {tac.label || `Giai đoạn ${idx + 1}`}
           </button>
-          
-          <button 
-            type="button"
-            className={`timeline-control-btn play-pause-btn ${isPlaying ? 'playing' : ''}`}
-            onClick={togglePlay}
-            title={isPlaying ? "Tạm dừng tự động trình chiếu" : "Tự động phát diễn biến sa bàn"}
-            aria-label={isPlaying ? "Tạm dừng" : "Tự động phát"}
-          >
-            {isPlaying ? <Pause size={15} /> : <Play size={15} />}
-          </button>
-          
-          <button 
-            type="button"
-            className="timeline-control-btn"
-            onClick={handleNextPhase}
-            title="Tiến sang mốc sau"
-            aria-label="Tiến sang mốc sau"
-          >
-            <SkipForward size={15} />
-          </button>
-        </div>
-
-        {/* Phase selector pills row */}
-        <div className="timeline-phase-pills-row">
-          {phasesList.map((tac, idx) => {
-            const isActive = currentPhaseIndex === idx;
-            return (
-              <button
-                key={idx}
-                type="button"
-                className={`timeline-step-pill ${isActive ? 'active' : ''}`}
-                onClick={() => {
-                  if (isPlaying) setIsPlaying(false);
-                  handleSelectPhase(tac, idx);
-                }}
-                aria-current={isActive ? 'step' : undefined}
-              >
-                <span className="step-pill-number">0{idx + 1}</span>
-                <span className="step-pill-name">{tac.label || tac.title || `Giai đoạn ${idx + 1}`}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Current phase indicator badge */}
-        <div className="timeline-current-phase-badge">
-          <span className="phase-badge-counter">{currentPhaseIndex + 1}/{phasesList.length}</span>
-          <span className="phase-badge-text">{phasesList[currentPhaseIndex]?.label || phasesList[currentPhaseIndex]?.title}</span>
-        </div>
-      </aside>
+        ))}
+      </div>
 
       {/* Layer control - bottom right */}
-      <div className="battle-layer-control" role="group" aria-label="Tùy chọn nền sa bàn">
-        <button 
-          type="button"
-          className={`battle-layer-btn ${mapLayerType === 'military-dark' ? 'active' : ''}`}
-          onClick={() => handleLayerChange('military-dark')}
-          title="Sa bàn quân sự đêm — chuẩn chiến địa sử thi, lọc bỏ POI hiện đại"
-        >
-          ⚔️ Sa Bàn Quân Sự
-        </button>
-        <button 
-          type="button"
-          className={`battle-layer-btn ${mapLayerType === 'satellite-clean' ? 'active' : ''}`}
-          onClick={() => handleLayerChange('satellite-clean')}
-          title="Ảnh vệ tinh nguyên bản sạch — không nhãn quán xá thương mại"
-        >
-          🛰️ Vệ Tinh Chiến Địa
-        </button>
+      <div className="battle-layer-control" role="group" aria-label="Tùy chọn bản đồ">
         <button 
           type="button"
           className={`battle-layer-btn ${mapLayerType === 'google-hybrid' ? 'active' : ''}`}
           onClick={() => handleLayerChange('google-hybrid')}
-          title="Google Maps vệ tinh kèm ranh giới và địa danh mới nhất"
+          title="Google Maps ảnh vệ tinh trực tiếp kèm địa danh và đường bộ"
         >
-          🗺️ Địa Danh Mới Nhất
+          🛰️ Google Vệ Tinh
+        </button>
+        <button 
+          type="button"
+          className={`battle-layer-btn ${mapLayerType === 'google-roadmap' ? 'active' : ''}`}
+          onClick={() => handleLayerChange('google-roadmap')}
+          title="Google Maps bản đồ giao thông và địa giới hành chính mới"
+        >
+          🗺️ Google Bản Đồ
+        </button>
+        <button 
+          type="button"
+          className={`battle-layer-btn ${mapLayerType === 'google-terrain' ? 'active' : ''}`}
+          onClick={() => handleLayerChange('google-terrain')}
+          title="Google Maps địa hình đồi núi"
+        >
+          ⛰️ Địa Hình
         </button>
       </div>
 
