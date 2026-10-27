@@ -17,10 +17,23 @@ function getAudioContext() {
 }
 
 export function setSoundEnabled(val) {
-  isSoundEnabled = val;
+  isSoundEnabled = Boolean(val);
+  try {
+    localStorage.setItem('su_sound_enabled', isSoundEnabled ? 'true' : 'false');
+    localStorage.setItem('su_bg_music_enabled', isSoundEnabled ? 'true' : 'false');
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('su_sound_change', { detail: isSoundEnabled }));
+    }
+  } catch (e) {}
 }
 
 export function getSoundEnabled() {
+  try {
+    const saved = localStorage.getItem('su_sound_enabled');
+    if (saved !== null) {
+      isSoundEnabled = saved === 'true';
+    }
+  } catch (e) {}
   return isSoundEnabled;
 }
 

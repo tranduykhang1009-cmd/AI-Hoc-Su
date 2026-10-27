@@ -427,7 +427,7 @@ export default function QuizArenaTab() {
                   </span>
                 </div>
 
-                {/* Nút Tham Chiến phát sáng */}
+                {/* Nút Bắt đầu thử thách */}
                 <button 
                   type="button" 
                   className="quiz-card-launch-btn"
@@ -437,7 +437,7 @@ export default function QuizArenaTab() {
                   }}
                 >
                   <Swords size={16} />
-                  <span>Tham Chiến</span>
+                  <span>Bắt đầu thử thách</span>
                   <ArrowRight size={16} />
                 </button>
               </motion.div>

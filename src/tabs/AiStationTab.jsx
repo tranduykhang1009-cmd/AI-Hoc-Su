@@ -33,7 +33,7 @@ const INITIAL_BOT_MESSAGE = {
 };
 
 export default function AiStationTab() {
-  const { onOpenAdmin } = useAdmin();
+  const { isAdmin, onOpenAdmin } = useAdmin();
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_CHAT_KEY);
@@ -204,20 +204,22 @@ export default function AiStationTab() {
             <Database size={15} />
             <span className="kb-count-label">{kbCount} tư liệu</span>
           </button>
-          <button 
-            className="btn-chat-header-action" 
-            onClick={() => {
-              try {
-                setApiKeyInput(localStorage.getItem('su_gemini_api_key') || '');
-              } catch (e) {}
-              setShowKeyModal(true);
-            }}
-            aria-label="Cài đặt Gemini API Key"
-            title="Cài đặt Gemini API Key để trò chuyện không giới hạn"
-          >
-            <Key size={15} />
-            <span className="kb-count-label">API Key</span>
-          </button>
+          {isAdmin && (
+            <button 
+              className="btn-chat-header-action" 
+              onClick={() => {
+                try {
+                  setApiKeyInput(localStorage.getItem('su_gemini_api_key') || '');
+                } catch (e) {}
+                setShowKeyModal(true);
+              }}
+              aria-label="Cài đặt Gemini API Key (Quản trị)"
+              title="Cài đặt Gemini API Key (Quản trị)"
+            >
+              <Key size={15} />
+              <span className="kb-count-label">API Key</span>
+            </button>
+          )}
           <button 
             className="btn-chat-header-action" 
             onClick={handleClearChat}
@@ -347,9 +349,9 @@ export default function AiStationTab() {
         </div>
       </div>
 
-      {/* Modal Cài Đặt Gemini API Key Nhanh */}
+      {/* Modal Cài Đặt Gemini API Key Nhanh (Chỉ Quản Trị Viên) */}
       <AnimatePresence>
-        {showKeyModal && (
+        {isAdmin && showKeyModal && (
           <div 
             className="museum-modal-backdrop" 
             onClick={() => setShowKeyModal(false)}

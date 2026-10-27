@@ -21,7 +21,8 @@ import {
   RotateCcw,
   Database,
   Cloud,
-  Check
+  Check,
+  Copy
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { playChime, playCorrectSound, playVictorySound } from '../utils/audio';
@@ -66,6 +67,17 @@ export default function SurveyTab() {
   const [webhookUrl, setWebhookUrl] = useState(() => getSurveyWebhookUrl());
   const [inputWebhookUrl, setInputWebhookUrl] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  const handleCopyUrl = (url, key) => {
+    if (!url) return;
+    try {
+      navigator.clipboard.writeText(url);
+      setCopiedKey(key);
+      playChime(700, 'sine', 0.1);
+      setTimeout(() => setCopiedKey(null), 2000);
+    } catch (e) {}
+  };
 
   // Trạng thái Đánh giá cộng đồng & Cloud Sync (Khởi tạo sạch từ Google Sheets)
   const [reviews, setReviews] = useState(() => {
@@ -455,32 +467,95 @@ export default function SurveyTab() {
             <form onSubmit={handleSaveConfig} className="dialog-form">
               <div className="dialog-group">
                 <label>1. Link Google Form (Để người dùng điền):</label>
-                <input 
-                  type="url"
-                  placeholder="https://docs.google.com/forms/d/e/.../viewform"
-                  value={inputFormUrl}
-                  onChange={e => setInputFormUrl(e.target.value)}
-                />
+                <div className="url-action-input-row">
+                  <input 
+                    type="url"
+                    placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                    value={inputFormUrl}
+                    onChange={e => setInputFormUrl(e.target.value)}
+                  />
+                  <button 
+                    type="button" 
+                    className="btn-url-copy" 
+                    title="Sao chép link"
+                    onClick={() => handleCopyUrl(inputFormUrl, 'form')}
+                  >
+                    {copiedKey === 'form' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                  </button>
+                  {inputFormUrl && (
+                    <a 
+                      href={inputFormUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-url-open"
+                      title="Mở liên kết"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
               </div>
 
               <div className="dialog-group">
                 <label>2. Link Google Sheets (Chứa kết quả đồng bộ):</label>
-                <input 
-                  type="url"
-                  placeholder="https://docs.google.com/spreadsheets/d/.../edit"
-                  value={inputSheetUrl}
-                  onChange={e => setInputSheetUrl(e.target.value)}
-                />
+                <div className="url-action-input-row">
+                  <input 
+                    type="url"
+                    placeholder="https://docs.google.com/spreadsheets/d/.../edit"
+                    value={inputSheetUrl}
+                    onChange={e => setInputSheetUrl(e.target.value)}
+                  />
+                  <button 
+                    type="button" 
+                    className="btn-url-copy" 
+                    title="Sao chép link"
+                    onClick={() => handleCopyUrl(inputSheetUrl, 'sheet')}
+                  >
+                    {copiedKey === 'sheet' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                  </button>
+                  {inputSheetUrl && (
+                    <a 
+                      href={inputSheetUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-url-open"
+                      title="Mở liên kết"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
               </div>
 
               <div className="dialog-group">
                 <label>3. Link Google Apps Script Webhook (Để nhận đánh giá trực tiếp từ web):</label>
-                <input 
-                  type="url"
-                  placeholder="https://script.google.com/macros/s/.../exec"
-                  value={inputWebhookUrl}
-                  onChange={e => setInputWebhookUrl(e.target.value)}
-                />
+                <div className="url-action-input-row">
+                  <input 
+                    type="url"
+                    placeholder="https://script.google.com/macros/s/.../exec"
+                    value={inputWebhookUrl}
+                    onChange={e => setInputWebhookUrl(e.target.value)}
+                  />
+                  <button 
+                    type="button" 
+                    className="btn-url-copy" 
+                    title="Sao chép link"
+                    onClick={() => handleCopyUrl(inputWebhookUrl, 'webhook')}
+                  >
+                    {copiedKey === 'webhook' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                  </button>
+                  {inputWebhookUrl && (
+                    <a 
+                      href={inputWebhookUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-url-open"
+                      title="Mở liên kết"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
+                </div>
                 <small style={{ color: 'rgba(255,255,255,0.5)', marginTop: '4px', display: 'block' }}>
                   Triển khai Web App từ Apps Script gắn với Google Sheet (Execute as: Me, Access: Anyone) để lưu realtime.
                 </small>
@@ -513,59 +588,64 @@ export default function SurveyTab() {
           VIEW 1: ĐÁNH GIÁ & NHẬN XÉT CỘNG ĐỒNG
           ============================================================ */}
       {activeView === 'reviews' && (
-        <div className="reviews-section-wrapper">
-          {/* Header Tổng Quan Điểm Số Cộng Đồng */}
-          <div className="gmaps-summary-card card">
-            <div className="gmaps-score-col">
-              <span className="big-rating-number">{avgRating}</span>
-              <div className="stars-row gold-stars">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <Star 
-                    key={s} 
-                    size={20} 
-                    fill={parseFloat(avgRating) >= s ? "#F4D06F" : (parseFloat(avgRating) >= s - 0.5 ? "#E5A93C88" : "transparent")} 
-                    color="#E5A93C" 
-                  />
+        <div className="survey-editorial-grid">
+          {/* CỘT TRÁI (1/3): TỔNG QUAN ĐIỂM SỐ & NÚT VIẾT ĐÁNH GIÁ */}
+          <aside className="survey-overview-sidebar">
+            <div className="gmaps-summary-card card">
+              <div className="gmaps-score-col">
+                <span className="big-rating-number">{avgRating}</span>
+                <div className="stars-row gold-stars">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star 
+                      key={s} 
+                      size={20} 
+                      fill={parseFloat(avgRating) >= s ? "#F4D06F" : (parseFloat(avgRating) >= s - 0.5 ? "#E5A93C88" : "transparent")} 
+                      color="#E5A93C" 
+                    />
+                  ))}
+                </div>
+                <span className="total-reviews-count">
+                  Dựa trên {totalReviewsCount} lượt đánh giá thực tế từ cộng đồng
+                </span>
+              </div>
+
+              {/* Cột Thanh Phân Bổ Sao Thời Gian Thực */}
+              <div className="gmaps-breakdown-col">
+                {[5, 4, 3, 2, 1].map((s) => (
+                  <div key={s} className="breakdown-row">
+                    <span className="star-num">{s} sao</span>
+                    <div className="bar-track">
+                      <div 
+                        className="bar-fill" 
+                        style={{ 
+                          width: `${starPercentages[s]}%`
+                        }} 
+                      />
+                    </div>
+                    <span className="bar-pct">{starPercentages[s]}% ({starCounts[s]})</span>
+                  </div>
                 ))}
               </div>
-              <span className="total-reviews-count">
-                Dựa trên {totalReviewsCount} lượt đánh giá thực tế từ cộng đồng
-              </span>
-            </div>
 
-            {/* Cột Thanh Phân Bổ Sao Thời Gian Thực */}
-            <div className="gmaps-breakdown-col">
-              {[5, 4, 3, 2, 1].map((s) => (
-                <div key={s} className="breakdown-row">
-                  <span className="star-num">{s} sao</span>
-                  <div className="bar-track">
-                    <div 
-                      className="bar-fill" 
-                      style={{ 
-                        width: `${starPercentages[s]}%`
-                      }} 
-                    />
-                  </div>
-                  <span className="bar-pct">{starPercentages[s]}% ({starCounts[s]})</span>
-                </div>
-              ))}
+              {/* Nút Kêu Gọi Viết Đánh Giá */}
+              <div className="gmaps-action-col">
+                <button 
+                  className="btn-write-review"
+                  onClick={() => {
+                    playChime(680, 'triangle', 0.12);
+                    setIsAddingReview(prev => !prev);
+                  }}
+                >
+                  <PlusCircle size={18} />
+                  <span>{isAddingReview ? 'Đóng Biểu Mẫu' : 'Viết Đánh Giá Của Bạn'}</span>
+                </button>
+                <span className="action-hint">Đánh giá lưu ngay vào cơ sở dữ liệu trên web</span>
+              </div>
             </div>
+          </aside>
 
-            {/* Nút Kêu Gọi Viết Đánh Giá */}
-            <div className="gmaps-action-col">
-              <button 
-                className="btn-write-review"
-                onClick={() => {
-                  playChime(680, 'triangle', 0.12);
-                  setIsAddingReview(prev => !prev);
-                }}
-              >
-                <PlusCircle size={18} />
-                <span>{isAddingReview ? 'Đóng Biểu Mẫu' : 'Viết Đánh Giá Của Bạn'}</span>
-              </button>
-              <span className="action-hint">Đánh giá lưu ngay vào cơ sở dữ liệu trên web</span>
-            </div>
-          </div>
+          {/* CỘT PHẢI (2/3): FORM NHẬP & BẢNG TIN NHẬN XÉT */}
+          <section className="survey-feed-main">
 
           {/* Form Nhập Đánh Giá Mới (Ẩn/Hiện) */}
           <AnimatePresence>
@@ -822,8 +902,9 @@ export default function SurveyTab() {
               )))}
             </div>
           </div>
-        </div>
-      )}
+        </section>
+      </div>
+    )}
 
       {/* ============================================================
           VIEW 2: BIỂU MẪU KHẢO SÁT CHI TIẾT (GOOGLE FORM)

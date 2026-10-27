@@ -2995,25 +2995,27 @@ h2, h3 {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-visible);
+  background: linear-gradient(135deg, #7F1D1D 0%, #450A0A 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
   border-radius: var(--radius-full);
   padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
   cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.7), 0 0 16px rgba(127, 29, 29, 0.35);
+  transition: all 0.25s ease;
 }
 
 .floating-ai-bubble-btn:hover {
-  border-color: var(--accent);
-  background: var(--bg-elevated);
+  border-color: #D4AF37;
+  background: linear-gradient(135deg, #991B1B 0%, #5B0D0D 100%);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.25);
+  transform: translateY(-2px);
 }
 
 .bubble-pulse-ring {
   position: absolute;
   inset: -3px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(212, 175, 55, 0.35);
   opacity: 0;
   pointer-events: none;
 }
@@ -5051,7 +5053,7 @@ h2, h3 {
   height: clamp(750px, 58vw, 1050px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.85;
+  opacity: 0.1;
 }
 
 .drum-solar-corona {
@@ -5061,13 +5063,14 @@ h2, h3 {
   background: conic-gradient(
     from 35deg at 50% 50%,
     transparent 0deg,
-    rgba(245, 176, 65, 0.2) 60deg,
-    rgba(255, 242, 178, 0.4) 105deg,
-    rgba(234, 88, 12, 0.25) 155deg,
+    rgba(212, 175, 55, 0.12) 60deg,
+    rgba(255, 242, 178, 0.18) 105deg,
+    rgba(234, 88, 12, 0.1) 155deg,
     transparent 210deg,
     transparent 360deg
   );
-  filter: blur(28px);
+  filter: blur(36px);
+  opacity: 0.4;
   animation: rotateDrum 140s linear infinite;
 }
 
@@ -5153,7 +5156,60 @@ h2, h3 {
   margin-bottom: var(--space-6);
 }
 
-/* Khung gỗ đỏ cho quote */
+/* Khung trích dẫn thanh lịch (Editorial Proclamation) */
+.hero-editorial-proclamation {
+  position: relative;
+  margin: var(--space-6) 0;
+  padding: var(--space-5) var(--space-6) var(--space-5) var(--space-8);
+  background: rgba(18, 18, 22, 0.65);
+  border-left: 3px solid rgba(212, 175, 55, 0.65);
+  border-radius: 0 8px 8px 0;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-editorial-proclamation .proclamation-mark {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: rgba(212, 175, 55, 0.22);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-editorial-proclamation .proclamation-quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-editorial-proclamation p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #F1F5F9;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.hero-editorial-proclamation cite {
+  display: block;
+  margin-top: var(--space-3);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.8125rem;
+  color: #C5A059;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* Khung gỗ đỏ cho quote (Legacy fallback) */
 .hero-quote-frame {
   position: relative;
   background: radial-gradient(circle at center, #2E1509 0%, #170B04 75%, #0B0401 100%);
@@ -5258,6 +5314,90 @@ h2, h3 {
   z-index: 2;
   width: 100%;
   max-width: 440px;
+}
+
+/* Khung tượng đài trang trọng (Museum Editorial Plinth Frame) */
+.hero-statue-frame-editorial {
+  position: relative;
+  background: linear-gradient(165deg, #18181B 0%, #0F0F12 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 
+    0 24px 48px -12px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(212, 175, 55, 0.06);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.statue-image-container-editorial {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.statue-image-container-editorial img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 3 / 4;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.statue-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.45) 100%),
+              linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 30%);
+  pointer-events: none;
+}
+
+.statue-corner-accent {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(212, 175, 55, 0.6);
+  pointer-events: none;
+  z-index: 3;
+}
+.statue-corner-accent.tl { top: 4px; left: 4px; border-top: 1.5px solid; border-left: 1.5px solid; }
+.statue-corner-accent.tr { top: 4px; right: 4px; border-top: 1.5px solid; border-right: 1.5px solid; }
+.statue-corner-accent.bl { bottom: 48px; left: 4px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+.statue-corner-accent.br { bottom: 48px; right: 4px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+.hero-statue-plinth-editorial {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(10, 10, 12, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.hero-statue-caption-editorial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.statue-title-line {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #FDE68A;
+}
+
+.statue-era-line {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  text-transform: uppercase;
 }
 
 .hero-statue-frame {
@@ -5500,7 +5640,7 @@ h2, h3 {
   }
   .drum-bg-wrapper {
     width: 600px; height: 600px;
-    opacity: 0.45;
+    opacity: 0.08;
   }
 }
 
@@ -6217,9 +6357,9 @@ h2, h3 {
 
 .quiz-card-3d {
   position: relative;
-  background: linear-gradient(165deg, rgba(26, 26, 36, 0.88) 0%, rgba(14, 14, 20, 0.96) 100%);
+  background: rgba(24, 24, 27, 0.88);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(218, 165, 32, 0.32);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   border-radius: 18px;
   padding: var(--space-8) var(--space-6);
   overflow: hidden;
@@ -6233,12 +6373,12 @@ h2, h3 {
 }
 
 .quiz-card-3d:hover {
-  border-color: rgba(255, 215, 0, 0.7);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65), 0 0 28px rgba(255, 215, 0, 0.25);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 16px rgba(212, 175, 55, 0.12);
 }
 
 .quiz-card-3d.card-completed {
-  border-color: rgba(255, 215, 0, 0.5);
+  border-color: rgba(212, 175, 55, 0.45);
 }
 
 /* Metallic Shimmer Sweep */
@@ -6248,7 +6388,7 @@ h2, h3 {
   left: 0;
   width: 60%;
   height: 100%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 215, 0, 0.14) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.06) 50%, transparent 100%);
   pointer-events: none;
   animation: sweep 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
@@ -6703,65 +6843,218 @@ h2, h3 {
    SA BÀN ENHANCEMENTS (Timeline Slider, FunFacts Panel, Mini Quiz)
    ========================================================================== */
 
-.battle-timeline-slider {
+/* Unified Player Timeline Control Bar */
+.battle-player-timeline-bar {
   position: absolute;
   bottom: var(--space-6);
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  max-width: 500px;
-  background: rgba(15, 13, 11, 0.95);
-  border: 1px solid var(--border-visible);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-6);
-  z-index: 10;
-  backdrop-filter: blur(12px);
-}
-
-.timeline-labels {
+  z-index: 1001;
   display: flex;
-  justify-content: space-between;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-3);
+  align-items: center;
+  gap: var(--space-3);
+  background: rgba(18, 16, 14, 0.92);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: var(--radius-full);
+  padding: 6px 14px 6px 8px;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.8), 0 0 16px rgba(212, 175, 55, 0.08);
+  backdrop-filter: blur(12px);
+  max-width: 90vw;
 }
 
-.timeline-labels span.active {
-  color: var(--gold);
+.timeline-playback-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeline-control-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #E2E8F0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timeline-control-btn:hover {
+  background: rgba(212, 175, 55, 0.2);
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #FDE68A;
+}
+
+.timeline-control-btn.play-pause-btn {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #7F1D1D 0%, #450A0A 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  color: #FDE68A;
+}
+
+.timeline-control-btn.play-pause-btn:hover {
+  background: linear-gradient(135deg, #991B1B 0%, #5B0D0D 100%);
+  border-color: #D4AF37;
+}
+
+.timeline-phase-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  max-width: 520px;
+  scrollbar-width: none;
+}
+.timeline-phase-pills-row::-webkit-scrollbar {
+  display: none;
+}
+
+.timeline-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: #94A3B8;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.timeline-step-pill:hover {
+  color: #F1F5F9;
+  border-color: rgba(212, 175, 55, 0.35);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.timeline-step-pill.active {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: rgba(212, 175, 55, 0.65);
+  color: #FDE68A;
   font-weight: 600;
 }
 
-.timeline-range {
+.step-pill-number {
+  font-size: 0.7rem;
+  opacity: 0.75;
+  font-family: monospace;
+}
+
+.timeline-current-phase-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.phase-badge-counter {
+  background: rgba(212, 175, 55, 0.2);
+  color: #FDE68A;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.phase-badge-text {
+  color: #CBD5E1;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Survey Two-Column Editorial Layout */
+.survey-editorial-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .survey-editorial-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.survey-overview-sidebar {
+  position: sticky;
+  top: 84px;
+}
+
+.survey-overview-sidebar .gmaps-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  margin-bottom: 0;
+}
+
+.survey-overview-sidebar .gmaps-score-col {
   width: 100%;
-  height: 4px;
-  appearance: none;
-  background: var(--bg-elevated);
-  border-radius: 9999px;
-  outline: none;
+}
+
+.survey-overview-sidebar .gmaps-breakdown-col {
+  width: 100%;
+}
+
+.survey-overview-sidebar .gmaps-action-col {
+  width: 100%;
+}
+
+.survey-overview-sidebar .btn-write-review {
+  width: 100%;
+  justify-content: center;
+}
+
+.url-action-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.url-action-input-row input {
+  flex: 1;
+}
+
+.btn-url-copy,
+.btn-url-open {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #CBD5E1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.timeline-range::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: var(--accent);
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  cursor: grab;
-  box-shadow: 0 0 12px rgba(201, 169, 97, 0.6);
-}
-
-.timeline-range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: var(--accent);
-  border: 2px solid var(--gold);
-  border-radius: 50%;
-  cursor: grab;
+.btn-url-copy:hover,
+.btn-url-open:hover {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: rgba(212, 175, 55, 0.45);
+  color: #FDE68A;
 }
 
 .battle-funfacts-panel {

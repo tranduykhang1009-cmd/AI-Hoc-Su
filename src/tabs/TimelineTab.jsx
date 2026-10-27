@@ -189,7 +189,7 @@ export default function TimelineTab({ onSelectTab }) {
                     }}
                   >
                     <img 
-                      src={event.img || './images/artifacts/hoa_ho_tay_son.jpg'} 
+                      src={event.imageUrl || event.img || './images/artifacts/hoa_ho_tay_son.jpg'} 
                       alt={event.title}
                       className="timeline-card-thumb-img"
                       loading="lazy"
@@ -311,7 +311,7 @@ export default function TimelineTab({ onSelectTab }) {
 
               <div className="timeline-modal-hero-img-wrap">
                 <img 
-                  src={selectedEvent.img || './images/artifacts/hoa_ho_tay_son.jpg'} 
+                  src={selectedEvent.imageUrl || selectedEvent.img || './images/artifacts/hoa_ho_tay_son.jpg'} 
                   alt={selectedEvent.title}
                   className="timeline-modal-hero-img"
                   onError={(e) => {

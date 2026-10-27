@@ -5,9 +5,9 @@ export const DEFAULT_GEMINI_API_KEY = (typeof import.meta !== 'undefined' && imp
   ? import.meta.env.VITE_GEMINI_API_KEY.trim()
   : ["AQ", "Ab8RN6JFGw7xL41BV0RieFYGT8TmgFDeErYV9bcfQrCf3DZuDQ"].join(".");
 export const API_KEY_STORAGE_KEY = "su_gemini_api_key";
-const PRIMARY_MODEL = "gemini-3.5-flash-lite";
-const FALLBACK_MODEL = "gemini-3.5-flash";
-const BACKUP_MODEL = "gemini-2.5-flash";
+const PRIMARY_MODEL = "gemini-1.5-flash";
+const FALLBACK_MODEL = "gemini-2.0-flash";
+const BACKUP_MODEL = "gemini-1.5-pro";
 const KB_STORAGE_KEY = "khkt_su_knowledge_base_v2";
 
 export function getGeminiApiKey() {
@@ -524,10 +524,13 @@ PHONG THÁI GIAO TIẾP:
     }
 
     if (isAuthError) {
+      const isAdminMode = typeof window !== 'undefined' && (sessionStorage.getItem('su_admin_mode_active') === 'true' || localStorage.getItem('su_admin_mode_active') === 'true');
       return {
-        text: `⚠️ **Chưa kích hoạt kết nối AI (Lỗi 401 - Khóa API chưa hợp lệ):**\n\nMáy chủ Google từ chối khóa API hiện tại. Để Sử Quan AI có thể trả lời trực tiếp và suy luận thông minh, bạn hãy bấm vào nút **[🔑 API Key]** ở góc trên bên phải thanh chat để dán mã khóa mới của bạn từ Google AI Studio (mã bắt đầu bằng \`AIzaSy...\`) nhé!`,
+        text: isAdminMode 
+          ? `⚠️ **Quản Trị Viên: Khóa API hiện tại chưa hợp lệ hoặc đã hết hạn (Lỗi 401).**\n\nBạn hãy mở Bảng Điều Khiển Quản Trị hoặc bấm nút **[🔑 API Key]** ở góc trên thanh chat để cập nhật khóa Google Gemini API Key mới.`
+          : `📜 **Sử Quan AI Tây Sơn:** Kết nối tới máy chủ Google AI hiện đang được bảo trì hoặc chờ quản trị viên cập nhật khóa bảo mật. Bạn vui lòng quay lại sau ít phút hoặc tra cứu các tư liệu lịch sử có sẵn trên trang nhé!`,
         sourceType: 'auth-error',
-        model: 'Chưa cài đặt Key'
+        model: 'Chưa kích hoạt Key'
       };
     }
 

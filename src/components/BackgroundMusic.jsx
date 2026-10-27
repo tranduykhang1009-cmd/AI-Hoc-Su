@@ -16,6 +16,7 @@ export default function BackgroundMusic({
   src = '/audio/dawn_over_citadel.mp3',
   volume = 0.3,
   trimEndSeconds = 5,
+  showToggle = false
 }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -30,6 +31,28 @@ export default function BackgroundMusic({
       return true;
     }
   });
+
+  // Lắng nghe sự kiện su_sound_change từ Navbar hoặc các trang khác
+  useEffect(() => {
+    const handleSoundChange = (e) => {
+      const enabled = e?.detail !== undefined 
+        ? Boolean(e.detail) 
+        : (localStorage.getItem('su_bg_music_enabled') !== 'false');
+      setUserPreference(enabled);
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (enabled) {
+        audio.volume = volume;
+        audio.play().then(() => setIsPlaying(true)).catch(() => {});
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+    };
+
+    window.addEventListener('su_sound_change', handleSoundChange);
+    return () => window.removeEventListener('su_sound_change', handleSoundChange);
+  }, [volume]);
 
   // Setup audio, volume và cơ chế cắt 5s cuối để loop vô tận mượt mà
   useEffect(() => {
@@ -152,19 +175,21 @@ export default function BackgroundMusic({
   return (
     <>
       <audio ref={audioRef} src={src} loop preload="auto" aria-hidden="true" />
-      <button
-        type="button"
-        className={`bg-music-toggle ${isPlaying ? 'is-playing' : ''}`}
-        onClick={togglePlay}
-        aria-label={isPlaying ? 'Tắt nhạc nền' : 'Bật nhạc nền'}
-        aria-pressed={isPlaying}
-        title={isPlaying ? 'Tắt nhạc nền (M)' : 'Bật nhạc nền (M)'}
-      >
-        {isPlaying ? <Volume2 size={18} /> : <VolumeX size={18} />}
-        <span className="bg-music-toggle-label">
-          {isPlaying ? 'Nhạc nền: Bật' : 'Nhạc nền: Tắt'}
-        </span>
-      </button>
+      {showToggle && (
+        <button
+          type="button"
+          className={`bg-music-toggle ${isPlaying ? 'is-playing' : ''}`}
+          onClick={togglePlay}
+          aria-label={isPlaying ? 'Tắt nhạc nền' : 'Bật nhạc nền'}
+          aria-pressed={isPlaying}
+          title={isPlaying ? 'Tắt nhạc nền (M)' : 'Bật nhạc nền (M)'}
+        >
+          {isPlaying ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          <span className="bg-music-toggle-label">
+            {isPlaying ? 'Nhạc nền: Bật' : 'Nhạc nền: Tắt'}
+          </span>
+        </button>
+      )}
     </>
   );
 }

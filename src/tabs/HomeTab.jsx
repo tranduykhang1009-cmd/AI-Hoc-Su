@@ -4,7 +4,6 @@ import { MapPin, Landmark, Clock, Bot, Trophy, ArrowRight } from 'lucide-react';
 import { playChime } from '../utils/audio';
 import EmberCanvas from '../components/EmberCanvas';
 import DrumBackground from '../components/DrumBackground';
-import HeroQuoteFrame from '../components/HeroQuoteFrame';
 import HeroStatueFrame from '../components/HeroStatueFrame';
 import BackgroundMusic from '../components/BackgroundMusic';
 
@@ -38,7 +37,7 @@ export default function HomeTab({ onSelectTab }) {
       <BackgroundMusic 
         src="/audio/dawn_over_citadel.mp3"
         volume={0.3}
-        showToggle={true}
+        showToggle={false}
       />
 
       {/* Cinematic Hero Section (Reference: Ornate Golden Dragon & Bronze Drum) */}
@@ -68,17 +67,18 @@ export default function HomeTab({ onSelectTab }) {
               Bảo tàng hiện vật khảo cứu và Trí tuệ nhân tạo đối thoại lịch sử.
             </p>
 
-            <HeroQuoteFrame>
-              <blockquote>
+            <div className="hero-editorial-proclamation">
+              <span className="proclamation-mark" aria-hidden="true">“</span>
+              <blockquote className="proclamation-quote">
                 <p>
-                  “Đánh cho để dài tóc / Đánh cho để đen răng<br />
+                  Đánh cho để dài tóc / Đánh cho để đen răng<br />
                   Đánh cho nó chích luân bất phản<br />
                   Đánh cho nó phiến giáp bất hoàn<br />
-                  Đánh cho sử tri nam quốc anh hùng chi hữu chủ!”
+                  Đánh cho sử tri nam quốc anh hùng chi hữu chủ!
                 </p>
-                <cite>Lời Hiểu Dụ Xuất Quân Thần Tốc (1788)</cite>
+                <cite className="proclamation-cite">— Lời Hiểu Dụ Xuất Quân Thần Tốc (1788)</cite>
               </blockquote>
-            </HeroQuoteFrame>
+            </div>
 
             <nav className="hero-cta-row" aria-label="Hành động chính">
               <button 
@@ -109,10 +109,7 @@ export default function HomeTab({ onSelectTab }) {
 
           {/* RIGHT: statue column */}
           <figure className="hero-statue-col">
-            <HeroStatueFrame
-              badgeTop="3 Chiến Dịch Thần Tốc"
-              badgeBottom="10 Mốc Sơn Lịch Sử"
-            >
+            <HeroStatueFrame>
               <img 
                 src="./images/quang_trung_statue.jpg" 
                 alt="Tượng đài Hoàng đế Quang Trung tại Bảo tàng Quang Trung, Bình Định" 

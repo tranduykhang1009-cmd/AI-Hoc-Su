@@ -23,7 +23,8 @@ import {
   Check,
   Star,
   Settings,
-  Link as LinkIcon
+  Link as LinkIcon,
+  Copy
 } from 'lucide-react';
 import { 
   getKnowledgeBase, 
@@ -86,6 +87,18 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
   const [surveySheetUrl, setSurveySheetUrl] = useState(() => localStorage.getItem(STORAGE_SHEET_URL) || DEFAULT_SURVEY_SHEET_URL);
   const [surveyWebhookUrl, setSurveyWebhookUrl] = useState(() => getSurveyWebhookUrl());
   const [surveySaveSuccess, setSurveySaveSuccess] = useState(false);
+  const [adminCopiedKey, setAdminCopiedKey] = useState(null);
+
+  const handleCopyUrl = (url, key) => {
+    if (!url) return;
+    try {
+      navigator.clipboard.writeText(url);
+      setAdminCopiedKey(key);
+      playChime(700, 'sine', 0.1);
+      setTimeout(() => setAdminCopiedKey(null), 2000);
+    } catch (e) {}
+  };
+
   const [isSyncingSurvey, setIsSyncingSurvey] = useState(false);
   const [surveySyncMsg, setSurveySyncMsg] = useState('');
   const [surveyReviews, setSurveyReviews] = useState([]);
@@ -620,39 +633,102 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                           <label style={{ display: 'block', fontSize: '0.84rem', color: '#D1D5DB', marginBottom: '5px' }}>
                             1. Link Google Form (Để học sinh &amp; giáo viên gửi khảo sát):
                           </label>
-                          <input 
-                            type="url"
-                            value={surveyFormUrl}
-                            onChange={e => setSurveyFormUrl(e.target.value)}
-                            placeholder="https://docs.google.com/forms/d/e/.../viewform"
-                            style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
-                          />
+                          <div className="url-action-input-row">
+                            <input 
+                              type="url"
+                              value={surveyFormUrl}
+                              onChange={e => setSurveyFormUrl(e.target.value)}
+                              placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                              style={{ flex: 1, padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
+                            />
+                            <button 
+                              type="button" 
+                              className="btn-url-copy" 
+                              title="Sao chép link"
+                              onClick={() => handleCopyUrl(surveyFormUrl, 'adm-form')}
+                            >
+                              {adminCopiedKey === 'adm-form' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                            </button>
+                            {surveyFormUrl && (
+                              <a 
+                                href={surveyFormUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn-url-open"
+                                title="Mở liên kết"
+                              >
+                                <ExternalLink size={14} />
+                              </a>
+                            )}
+                          </div>
                         </div>
 
                         <div style={{ marginBottom: '14px' }}>
                           <label style={{ display: 'block', fontSize: '0.84rem', color: '#D1D5DB', marginBottom: '5px' }}>
                             2. Link Google Sheets (File bảng tính chứa kết quả đồng bộ của tác giả):
                           </label>
-                          <input 
-                            type="url"
-                            value={surveySheetUrl}
-                            onChange={e => setSurveySheetUrl(e.target.value)}
-                            placeholder="https://docs.google.com/spreadsheets/d/.../edit"
-                            style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
-                          />
+                          <div className="url-action-input-row">
+                            <input 
+                              type="url"
+                              value={surveySheetUrl}
+                              onChange={e => setSurveySheetUrl(e.target.value)}
+                              placeholder="https://docs.google.com/spreadsheets/d/.../edit"
+                              style={{ flex: 1, padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
+                            />
+                            <button 
+                              type="button" 
+                              className="btn-url-copy" 
+                              title="Sao chép link"
+                              onClick={() => handleCopyUrl(surveySheetUrl, 'adm-sheet')}
+                            >
+                              {adminCopiedKey === 'adm-sheet' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                            </button>
+                            {surveySheetUrl && (
+                              <a 
+                                href={surveySheetUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn-url-open"
+                                title="Mở liên kết"
+                              >
+                                <ExternalLink size={14} />
+                              </a>
+                            )}
+                          </div>
                         </div>
 
                         <div style={{ marginBottom: '16px' }}>
                           <label style={{ display: 'block', fontSize: '0.84rem', color: '#D1D5DB', marginBottom: '5px' }}>
                             3. Link Google Apps Script Webhook (Để nhận đánh giá trực tiếp từ web theo thời gian thực):
                           </label>
-                          <input 
-                            type="url"
-                            value={surveyWebhookUrl}
-                            onChange={e => setSurveyWebhookUrl(e.target.value)}
-                            placeholder="https://script.google.com/macros/s/.../exec"
-                            style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
-                          />
+                          <div className="url-action-input-row">
+                            <input 
+                              type="url"
+                              value={surveyWebhookUrl}
+                              onChange={e => setSurveyWebhookUrl(e.target.value)}
+                              placeholder="https://script.google.com/macros/s/.../exec"
+                              style={{ flex: 1, padding: '9px 12px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '6px', color: '#fff', fontSize: '0.88rem' }}
+                            />
+                            <button 
+                              type="button" 
+                              className="btn-url-copy" 
+                              title="Sao chép link"
+                              onClick={() => handleCopyUrl(surveyWebhookUrl, 'adm-webhook')}
+                            >
+                              {adminCopiedKey === 'adm-webhook' ? <Check size={14} style={{ color: '#34D399' }} /> : <Copy size={14} />}
+                            </button>
+                            {surveyWebhookUrl && (
+                              <a 
+                                href={surveyWebhookUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn-url-open"
+                                title="Mở liên kết"
+                              >
+                                <ExternalLink size={14} />
+                              </a>
+                            )}
+                          </div>
                           <small style={{ color: '#9CA3AF', fontSize: '0.78rem', display: 'block', marginTop: '4px' }}>
                             Dữ liệu khi người dùng gửi đánh giá trên website sẽ được Webhook đẩy thẳng 100% vào Google Sheets mà không cần qua bên thứ ba.
                           </small>
