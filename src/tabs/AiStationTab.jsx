@@ -192,13 +192,13 @@ export default function AiStationTab() {
           </div>
           <span className="ai-chat-header-title">Sử Quan Tây Sơn</span>
           <span className="ai-chat-header-divider">·</span>
-          <span className="ai-chat-header-meta">Mô hình Google Gemini RAG</span>
+          <span className="ai-chat-header-meta">Mô hình Google Gemini 2.0</span>
         </div>
         <div className="ai-chat-header-right">
           <button 
             className="btn-chat-header-action" 
             onClick={onOpenAdmin}
-            aria-label="Mở kho sử liệu đối soát RAG"
+            aria-label="Mở kho sử liệu đối soát"
             title="Đối soát kho sử liệu gốc"
           >
             <Database size={15} />

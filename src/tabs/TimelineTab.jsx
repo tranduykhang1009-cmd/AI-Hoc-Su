@@ -350,7 +350,7 @@ export default function TimelineTab({ onSelectTab }) {
 
                 <div className="timeline-modal-section">
                   <h4 className="timeline-modal-sec-heading">
-                    <ShieldCheck size={16} /> Ý Nghĩa Chiến Lược (Chuẩn KHKT)
+                    <ShieldCheck size={16} /> Ý Nghĩa Chiến Lược
                   </h4>
                   <p className="timeline-modal-text">
                     {selectedEvent.significance || 'Khẳng định tài năng quân sự và tầm vóc văn hóa của phong trào Tây Sơn.'}

@@ -187,7 +187,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
   };
 
   // ==========================================================
-  // TAB 2: TRI THỨC RAG & GEMINI AI
+  // TAB 2: TRI THỨC SỬ LIỆU & GEMINI AI
   // ==========================================================
   const [knowledgeList, setKnowledgeList] = useState([]);
   const [isSyncingCloud, setIsSyncingCloud] = useState(false);
@@ -316,7 +316,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
     setSource('');
     setContent('');
     setUploadedFileName('');
-    setSuccessMsg('Đã lưu thành công tư liệu mới vào hệ thống RAG!');
+    setSuccessMsg('Đã lưu thành công tư liệu mới vào kho tri thức AI!');
     playCorrectSound();
     setTimeout(() => setSuccessMsg(''), 3000);
   };
@@ -524,11 +524,11 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
             ) : (
               // BẢNG ĐIỀU KHIỂN QUẢN TRỊ TOÀN DIỆN (FULL ADMIN CONTROL CENTER)
               <div>
-                {/* Thanh điều hướng 4 Tab Quản Trị */}
-                <div className="admin-nav-tabs" style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(229, 169, 60, 0.2)', paddingBottom: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                {/* Thanh điều hướng 4 Tab Quản Trị - Modern Segmented Control */}
+                <div className="admin-segmented-nav">
                   <button 
                     type="button" 
-                    className={`sheet-subnav-btn ${activeTab === 'survey' ? 'active' : ''}`}
+                    className={`admin-segmented-tab ${activeTab === 'survey' ? 'active' : ''}`}
                     onClick={() => setActiveTab('survey')}
                   >
                     <Table size={15} />
@@ -536,15 +536,15 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                   </button>
                   <button 
                     type="button" 
-                    className={`sheet-subnav-btn ${activeTab === 'ai' ? 'active' : ''}`}
+                    className={`admin-segmented-tab ${activeTab === 'ai' ? 'active' : ''}`}
                     onClick={() => setActiveTab('ai')}
                   >
                     <BookOpen size={15} />
-                    <span>Kho Tri Thức AI &amp; RAG</span>
+                    <span>Kho Tri Thức Sử Liệu AI</span>
                   </button>
                   <button 
                     type="button" 
-                    className={`sheet-subnav-btn ${activeTab === 'museum' ? 'active' : ''}`}
+                    className={`admin-segmented-tab ${activeTab === 'museum' ? 'active' : ''}`}
                     onClick={() => setActiveTab('museum')}
                   >
                     <ImageIcon size={15} />
@@ -552,7 +552,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                   </button>
                   <button 
                     type="button" 
-                    className={`sheet-subnav-btn ${activeTab === 'system' ? 'active' : ''}`}
+                    className={`admin-segmented-tab ${activeTab === 'system' ? 'active' : ''}`}
                     onClick={() => setActiveTab('system')}
                   >
                     <Settings size={15} />
@@ -798,7 +798,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                 )}
 
                 {/* ======================================================== */}
-                {/* TAB 2: TRI THỨC RAG & GEMINI AI                         */}
+                {/* TAB 2: TRI THỨC SỬ LIỆU & GEMINI AI                     */}
                 {/* ======================================================== */}
                 {activeTab === 'ai' && (
                   <div className="admin-content-layout">
@@ -843,7 +843,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                           <strong>Tải File Word (.docx), Văn Bản (.txt) hoặc Dữ Liệu (.json)</strong>
                         </div>
                         <p className="upload-desc">
-                          Tự động trích xuất nội dung văn bản để nạp vào kho tri thức RAG của Sử Quan AI.
+                          Tự động trích xuất nội dung văn bản để nạp vào kho tri thức sử liệu của Sử Quan AI.
                         </p>
 
                         <input 
@@ -1064,7 +1064,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                         Thông Tin Đề Tài &amp; Bản Quyền Dự Án
                       </h4>
                       <p style={{ color: '#D1D5DB', fontSize: '0.88rem', lineHeight: '1.6', margin: '0 0 16px' }}>
-                        Dự án <strong>"Hào Khí Tây Sơn"</strong> là giải pháp số hóa di sản và học tập Lịch sử trực quan về Hoàng đế Quang Trung – Nguyễn Huệ, tích hợp bản đồ sa bàn 3D, trí tuệ nhân tạo Google Gemini RAG và hệ thống khảo sát đồng bộ đám mây.
+                        Dự án <strong>"Hào Khí Tây Sơn"</strong> là giải pháp số hóa di sản và học tập Lịch sử trực quan về Hoàng đế Quang Trung – Nguyễn Huệ, tích hợp bản đồ sa bàn 3D, trí tuệ nhân tạo Google Gemini và hệ thống khảo sát đồng bộ đám mây.
                       </p>
 
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
@@ -1101,7 +1101,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', borderRadius: '6px' }}>
                           <span style={{ color: '#E5E7EB', fontSize: '0.86rem' }}>Sử Quan AI (Google Gemini):</span>
-                          <span style={{ color: '#34D399', fontSize: '0.82rem', fontWeight: 'bold' }}>✓ Sẵn sàng (Kho tri thức RAG {knowledgeList.length} tài liệu)</span>
+                          <span style={{ color: '#34D399', fontSize: '0.82rem', fontWeight: 'bold' }}>✓ Sẵn sàng (Kho tri thức {knowledgeList.length} tài liệu)</span>
                         </div>
                       </div>
                     </div>

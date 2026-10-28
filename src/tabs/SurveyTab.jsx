@@ -598,9 +598,9 @@ export default function SurveyTab() {
                   {[1, 2, 3, 4, 5].map((s) => (
                     <Star 
                       key={s} 
-                      size={20} 
-                      fill={parseFloat(avgRating) >= s ? "#F4D06F" : (parseFloat(avgRating) >= s - 0.5 ? "#E5A93C88" : "transparent")} 
-                      color="#E5A93C" 
+                      size={22} 
+                      fill={parseFloat(avgRating) >= s ? "#F59E0B" : (parseFloat(avgRating) >= s - 0.5 ? "#F59E0B88" : "transparent")} 
+                      color="#F59E0B" 
                     />
                   ))}
                 </div>
@@ -871,7 +871,7 @@ export default function SurveyTab() {
                     {/* Dãy sao vàng */}
                     <div className="review-stars-badge">
                       {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} size={14} fill="#F4D06F" color="#E5A93C" />
+                        <Star key={i} size={15} fill="#F59E0B" color="#F59E0B" />
                       ))}
                     </div>
                   </div>
