@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { 
   FileText, 
@@ -75,8 +76,11 @@ export default function SurveyTab() {
       navigator.clipboard.writeText(url);
       setCopiedKey(key);
       playChime(700, 'sine', 0.1);
+      toast.success('Đã sao chép liên kết vào bộ nhớ tạm!');
       setTimeout(() => setCopiedKey(null), 2000);
-    } catch (e) {}
+    } catch (e) {
+      toast.error('Không thể sao chép liên kết.');
+    }
   };
 
   // Trạng thái Đánh giá cộng đồng & Cloud Sync (Khởi tạo sạch từ Google Sheets)
@@ -106,7 +110,10 @@ export default function SurveyTab() {
   // Đồng bộ đánh giá từ Google Sheets / Webhook về máy (Google Sheet là nguồn dữ liệu chuẩn)
   const handleSyncCloud = async (customSheetUrl = sheetUrl, silent = false) => {
     setIsSyncingCloud(true);
-    if (!silent) setCloudSyncMsg('Đang kiểm tra dữ liệu từ Google Sheets...');
+    if (!silent) {
+      setCloudSyncMsg('Đang kiểm tra dữ liệu từ Google Sheets...');
+      toast.loading('Đang kiểm tra dữ liệu từ Google Sheets...', { id: 'gviz-cloud-sync' });
+    }
     try {
       const cloudData = await fetchReviewsFromCloud(customSheetUrl, webhookUrl);
       if (cloudData && Array.isArray(cloudData)) {
@@ -119,16 +126,21 @@ export default function SurveyTab() {
         if (!silent) {
           setCloudSyncMsg(`Đã đồng bộ ${cleanData.length} đánh giá từ Google Sheets!`);
           playCorrectSound();
+          toast.success(`Đã đồng bộ ${cleanData.length} đánh giá từ Google Sheets!`, { id: 'gviz-cloud-sync' });
           setTimeout(() => setCloudSyncMsg(''), 4000);
         }
       } else {
         if (!silent) {
           setCloudSyncMsg('Dữ liệu đã ở trạng thái mới nhất!');
+          toast.info('Dữ liệu từ Google Sheets đã là mới nhất!', { id: 'gviz-cloud-sync' });
           setTimeout(() => setCloudSyncMsg(''), 3000);
         }
       }
     } catch (e) {
-      if (!silent) setCloudSyncMsg('Tạm thời dùng dữ liệu cục bộ.');
+      if (!silent) {
+        setCloudSyncMsg('Tạm thời dùng dữ liệu cục bộ.');
+        toast.error('Không thể đồng bộ từ Google Sheets, tạm thời dùng dữ liệu cục bộ.', { id: 'gviz-cloud-sync' });
+      }
     } finally {
       setIsSyncingCloud(false);
     }
@@ -257,7 +269,7 @@ export default function SurveyTab() {
   const handleSubmitReview = (e) => {
     e.preventDefault();
     if (!newName.trim() || !newComment.trim()) {
-      alert('Vui lòng điền họ tên và nội dung đánh giá của bạn.');
+      toast.warning('Vui lòng điền họ tên và nội dung đánh giá của bạn.');
       return;
     }
 
@@ -284,10 +296,12 @@ export default function SurveyTab() {
     sendReviewToCloud(reviewItem, webhookUrl).then(res => {
       if (res && res.success) {
         setCloudSyncMsg('Đánh giá của bạn đã được gửi thành công lên Google Sheets!');
+        toast.success('Đánh giá đã được lưu vào Google Sheets!');
         setTimeout(() => setCloudSyncMsg(''), 4000);
       }
     });
 
+    toast.success('Cảm ơn bạn đã gửi đánh giá!');
     playVictorySound();
     try {
       confetti({

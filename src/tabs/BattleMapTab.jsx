@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { BATTLES_DATA } from '../data/battlesData';
 import { playChime } from '../utils/audio';
-import Toast from '../components/Toast';
+import { toast } from 'sonner';
 import BackgroundMusic from '../components/BackgroundMusic';
 
 const LUCIDE_ICONS = {
@@ -37,7 +37,6 @@ export default function BattleMapTab() {
   const [activeQuizPhase, setActiveQuizPhase] = useState(null);
   const [quizState, setQuizState] = useState({ selected: null, isSubmitted: false, isCorrect: false });
   const [score, setScore] = useState(0);
-  const [toastMessage, setToastMessage] = useState(null);
 
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -263,7 +262,7 @@ export default function BattleMapTab() {
     updated.add(idx);
     viewedPhasesRef.current = updated;
     if (updated.size >= phases.length) {
-      setToastMessage('🏆 Đã khám phá toàn bộ diễn biến!');
+      toast.success('🏆 Đã khám phá toàn bộ diễn biến!');
     }
   };
 
@@ -592,15 +591,6 @@ export default function BattleMapTab() {
             )}
           </div>
         </div>
-      )}
-
-      {/* Achievement Toast */}
-      {toastMessage && (
-        <Toast 
-          message={toastMessage} 
-          type="success" 
-          onClose={() => setToastMessage(null)} 
-        />
       )}
     </motion.div>
   );

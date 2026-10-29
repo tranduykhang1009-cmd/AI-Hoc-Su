@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AdminKnowledgeModal from './components/AdminKnowledgeModal';
@@ -92,6 +93,7 @@ export default function App() {
 
   return (
     <AdminProvider onOpenAdmin={() => setIsAdminOpen(true)}>
+      <Toaster position="top-right" richColors theme="dark" />
       <div className="app-container">
         {/* Hiệu ứng tàn tro lửa lơ lửng 60fps */}
         <AmbientEmbersCanvas />

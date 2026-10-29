@@ -42,12 +42,9 @@ export default function HomeTab({ onSelectTab }) {
 
       {/* Cinematic Hero Section (Reference: Ornate Golden Dragon & Bronze Drum) */}
       <section className="hero-cinematic" aria-labelledby="hero-title">
-        {/* Nền: gradient + blobs đỏ/amber + canvas hạt tàn tro */}
+        {/* Nền: gradient chiều sâu bảo tàng + canvas hạt tàn tro */}
         <div className="hero-bg-layers" aria-hidden="true">
           <div className="hero-bg-gradient" />
-          <div className="hero-bg-blob-left" />
-          <div className="hero-bg-blob-right" />
-          <div className="hero-bg-blob-center" />
           <EmberCanvas />
         </div>
 
@@ -81,9 +78,12 @@ export default function HomeTab({ onSelectTab }) {
             </div>
 
             <nav className="hero-cta-row" aria-label="Hành động chính">
-              <button 
+              <motion.button 
                 type="button" 
                 className="btn-battle-glow"
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 onClick={() => {
                   playChime(600, 'sine', 0.15);
                   onSelectTab('battle-map');
@@ -92,10 +92,13 @@ export default function HomeTab({ onSelectTab }) {
                 <MapPin size={16} aria-hidden="true" />
                 <span>Khám phá Sa Bàn Trận Đánh</span>
                 <ArrowRight size={16} aria-hidden="true" />
-              </button>
-              <button 
+              </motion.button>
+              <motion.button 
                 type="button" 
                 className="btn-scholar-trans"
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 onClick={() => {
                   playChime(650, 'sine', 0.15);
                   onSelectTab('ai-station');
@@ -103,7 +106,7 @@ export default function HomeTab({ onSelectTab }) {
               >
                 <span>Đàm đạo cùng Sử Quan AI</span>
                 <ArrowRight size={16} aria-hidden="true" />
-              </button>
+              </motion.button>
             </nav>
           </header>
 
@@ -131,6 +134,19 @@ export default function HomeTab({ onSelectTab }) {
           <motion.div 
             className="bento-card bento-card-map"
             variants={itemVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            role="button"
+            tabIndex={0}
+            aria-label="Khám phá sa bàn chiến trận"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                playChime(600, 'sine', 0.15);
+                onSelectTab('battle-map');
+              }
+            }}
             onClick={() => {
               playChime(600, 'sine', 0.15);
               onSelectTab('battle-map');
@@ -164,6 +180,19 @@ export default function HomeTab({ onSelectTab }) {
           <motion.div 
             className="bento-card bento-card-museum"
             variants={itemVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            role="button"
+            tabIndex={0}
+            aria-label="Khám phá bảo tàng hiện vật số"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                playChime(550, 'sine', 0.15);
+                onSelectTab('museum');
+              }
+            }}
             onClick={() => {
               playChime(550, 'sine', 0.15);
               onSelectTab('museum');
@@ -188,6 +217,19 @@ export default function HomeTab({ onSelectTab }) {
           <motion.div 
             className="bento-card bento-card-timeline"
             variants={itemVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            role="button"
+            tabIndex={0}
+            aria-label="Khám phá biên niên sử 1753-1792"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                playChime(580, 'sine', 0.15);
+                onSelectTab('timeline');
+              }
+            }}
             onClick={() => {
               playChime(580, 'sine', 0.15);
               onSelectTab('timeline');
@@ -212,6 +254,19 @@ export default function HomeTab({ onSelectTab }) {
           <motion.div 
             className="bento-card bento-card-ai"
             variants={itemVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            role="button"
+            tabIndex={0}
+            aria-label="Vào trạm sử quan AI"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                playChime(650, 'sine', 0.15);
+                onSelectTab('ai-station');
+              }
+            }}
             onClick={() => {
               playChime(650, 'sine', 0.15);
               onSelectTab('ai-station');
@@ -236,6 +291,19 @@ export default function HomeTab({ onSelectTab }) {
           <motion.div 
             className="bento-card bento-card-quiz"
             variants={itemVariants}
+            whileHover={{ y: -3, scale: 1.01 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            role="button"
+            tabIndex={0}
+            aria-label="Tham gia đấu trường đố vui"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                playChime(700, 'sine', 0.15);
+                onSelectTab('quiz');
+              }
+            }}
             onClick={() => {
               playChime(700, 'sine', 0.15);
               onSelectTab('quiz');

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { X, Mail, MessageCircle, ExternalLink, Copy, Check } from 'lucide-react';
 import { playChime, playCorrectSound } from '../utils/audio';
 
@@ -41,8 +42,11 @@ export default function ContactBubbleWidget() {
       navigator.clipboard.writeText(GMAIL_ADDRESS);
       setCopiedEmail(true);
       playCorrectSound();
+      toast.success('Đã sao chép liên kết vào bộ nhớ tạm!');
       setTimeout(() => setCopiedEmail(false), 2200);
-    } catch (err) {}
+    } catch (err) {
+      toast.error('Không thể sao chép địa chỉ email.');
+    }
   };
 
   return (
@@ -66,10 +70,11 @@ export default function ContactBubbleWidget() {
         {isOpen && (
           <motion.div 
             className="contact-dark-popup"
-            initial={{ opacity: 0, scale: 0.85, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 15 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            style={{ transformOrigin: "bottom right" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Tiêu đề Popup */}
@@ -78,29 +83,35 @@ export default function ContactBubbleWidget() {
                 <div className="header-status-indicator" />
                 <h4 className="header-title-text">Kênh Liên Hệ Tác Giả</h4>
               </div>
-              <button 
+              <motion.button 
                 type="button"
                 className="btn-popup-close"
                 onClick={() => {
                   playChime(420, 'sine', 0.08);
                   setIsOpen(false);
                 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 title="Đóng popup"
                 aria-label="Đóng popup"
               >
                 <X size={15} color="#FFFFFF" />
-              </button>
+              </motion.button>
             </div>
 
             {/* Nội dung 2 Nút liên hệ: Facebook & Gmail */}
             <div className="contact-dark-body">
               {/* Nút 1: Facebook (Màu xanh dương) */}
-              <a 
+              <motion.a 
                 href={FB_URL} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="platform-btn fb-btn"
                 onClick={() => playChime(640, 'triangle', 0.1)}
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 <div className="platform-icon-circle fb-icon-bg">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -112,10 +123,15 @@ export default function ContactBubbleWidget() {
                   <span className="platform-name">Lê Trường Thịnh</span>
                 </div>
                 <ExternalLink size={15} className="platform-arrow-icon" />
-              </a>
+              </motion.a>
 
               {/* Nút 2: Gmail (Màu đỏ) */}
-              <div className="platform-btn gmail-btn">
+              <motion.div 
+                className="platform-btn gmail-btn"
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              >
                 <a 
                   href={`mailto:${GMAIL_ADDRESS}?subject=G%C3%B3p%20%C3%BD%20D%E1%BB%B1%20%C3%A1n%20H%E1%BB%8Dc%20S%E1%BB%AD%20T%C3%A2y%20S%C6%A1n`}
                   className="gmail-link-area"
@@ -129,16 +145,19 @@ export default function ContactBubbleWidget() {
                     <span className="platform-name" title={GMAIL_ADDRESS}>{GMAIL_ADDRESS}</span>
                   </div>
                 </a>
-                <button 
+                <motion.button 
                   type="button"
                   className="btn-copy-email-action" 
                   onClick={handleCopyEmail}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
                   title="Sao chép địa chỉ email"
                   aria-label="Sao chép email"
                 >
                   {copiedEmail ? <Check size={14} color="#10B981" /> : <Copy size={14} color="#FFFFFF" />}
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
           </motion.div>
         )}
@@ -146,10 +165,13 @@ export default function ContactBubbleWidget() {
 
       {/* Bong bóng chat lơ lửng nhẹ nhàng (Floating animation liên tục) */}
       <div className="floating-bubble-bobbing">
-        <button 
+        <motion.button 
           type="button"
           className={`floating-chat-bubble-btn ${isOpen ? 'is-open' : ''}`}
           onClick={handleBubbleClick}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           title={isOpen ? "Đóng liên hệ" : "Liên hệ tác giả (Có thể kéo thả di chuyển)"}
           aria-label={isOpen ? "Đóng liên hệ" : "Liên hệ tác giả"}
         >
@@ -164,7 +186,7 @@ export default function ContactBubbleWidget() {
               <MessageCircle size={26} color="#FFFFFF" strokeWidth={2.2} />
             )}
           </div>
-        </button>
+        </motion.button>
       </div>
     </motion.div>
   );

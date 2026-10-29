@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { 
   ShieldCheck, 
   Plus, 
@@ -95,8 +96,11 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
       navigator.clipboard.writeText(url);
       setAdminCopiedKey(key);
       playChime(700, 'sine', 0.1);
+      toast.success('Đã sao chép liên kết vào bộ nhớ tạm!');
       setTimeout(() => setAdminCopiedKey(null), 2000);
-    } catch (e) {}
+    } catch (e) {
+      toast.error('Không thể sao chép liên kết.');
+    }
   };
 
   const [isSyncingSurvey, setIsSyncingSurvey] = useState(false);
@@ -140,9 +144,10 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
       window.dispatchEvent(new Event('su_config_updated'));
       playCorrectSound();
       setSurveySaveSuccess(true);
+      toast.success('Đã lưu cấu hình khảo sát thành công!');
       setTimeout(() => setSurveySaveSuccess(false), 3000);
     } catch (err) {
-      alert('Không thể lưu cấu hình: ' + err.message);
+      toast.error('Không thể lưu cấu hình: ' + err.message);
     }
   };
 
@@ -157,12 +162,15 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
         localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(cloudData));
         window.dispatchEvent(new Event('su_config_updated'));
         setSurveySyncMsg(`Đã đồng bộ thành công ${cloudData.length} đánh giá từ Google Sheets!`);
+        toast.success(`Đã đồng bộ thành công ${cloudData.length} đánh giá từ Google Sheets!`);
         playVictorySound();
       } else {
         setSurveySyncMsg('Dữ liệu từ Google Sheets đã là mới nhất.');
+        toast.info('Dữ liệu từ Google Sheets đã là mới nhất.');
       }
     } catch (e) {
       setSurveySyncMsg('Lỗi khi kéo dữ liệu từ Google Sheets.');
+      toast.error('Lỗi khi kéo dữ liệu từ Google Sheets.');
     } finally {
       setIsSyncingSurvey(false);
       setTimeout(() => setSurveySyncMsg(''), 4000);
@@ -233,7 +241,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
           const result = await mammoth.extractRawText({ arrayBuffer });
           const text = result.value || '';
           if (!text.trim()) {
-            alert('File Word không có nội dung văn bản.');
+            toast.error('File Word không có nội dung văn bản.');
             return;
           }
           const defaultTitle = fileName.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
@@ -241,10 +249,11 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
           setContent(text.trim());
           setSource(`Tài liệu Word: ${fileName} (Lê Trường Thịnh phê duyệt)`);
           setSuccessMsg(`Đã trích xuất thành công nội dung từ file Word "${fileName}"!`);
+          toast.success(`Đã trích xuất thành công nội dung từ file Word "${fileName}"!`);
           playCorrectSound();
           setTimeout(() => setSuccessMsg(''), 4000);
         } catch (err) {
-          alert('Không thể đọc file Word: ' + err.message);
+          toast.error('Không thể đọc file Word: ' + err.message);
         }
       };
       docxReader.readAsArrayBuffer(file);
@@ -274,12 +283,13 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
             saveKnowledgeBase(combined);
             setKnowledgeList(combined);
             setSuccessMsg(`Đã nhập thành công ${formatted.length} mục từ file ${fileName}!`);
+            toast.success(`Đã nhập thành công ${formatted.length} mục từ file ${fileName}!`);
             playCorrectSound();
             setTimeout(() => setSuccessMsg(''), 4000);
             return;
           }
         } catch (err) {
-          alert('File JSON không đúng định dạng mảng tài liệu.');
+          toast.error('File JSON không đúng định dạng mảng tài liệu.');
           return;
         }
       }
@@ -300,7 +310,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
   const handleAdd = (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) {
-      alert('Vui lòng nhập đầy đủ tiêu đề và nội dung sử liệu.');
+      toast.warning('Vui lòng nhập đầy đủ tiêu đề và nội dung sử liệu.');
       return;
     }
 
@@ -374,7 +384,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('Kích thước ảnh phải nhỏ hơn 5MB');
+      toast.error('Kích thước ảnh phải nhỏ hơn 5MB');
       return;
     }
 
@@ -384,6 +394,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
       if (base64) {
         await saveImage(itemId, base64);
         setCustomMuseumImages(prev => ({ ...prev, [itemId]: base64 }));
+        toast.success('Đã tải ảnh hiện vật lên thành công!');
         playCorrectSound();
       }
     };
@@ -435,11 +446,11 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
         <motion.div 
           className="admin-modal-card card"
           onClick={e => e.stopPropagation()}
-          initial={{ opacity: 0, scale: 0.94 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.94 }}
-          transition={{ duration: 0.2 }}
-          style={{ maxWidth: '980px', width: '96%', maxHeight: '90vh' }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
+          style={{ maxWidth: '980px', width: '96%', maxHeight: '90vh', transformOrigin: 'center' }}
         >
           {/* Header Quản Trị Hệ Thống */}
           <div className="admin-modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: '1px solid rgba(229, 169, 60, 0.25)' }}>
@@ -459,7 +470,7 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {isAdmin && (
-                <button 
+                <motion.button 
                   type="button" 
                   onClick={() => {
                     logoutAdmin();
@@ -467,21 +478,27 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                   }}
                   className="btn btn-secondary"
                   title="Thoát chế độ Admin để kiểm tra giao diện học sinh thông thường"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
                   style={{ fontSize: '0.78rem', padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '5px', borderColor: 'rgba(255,255,255,0.2)' }}
                 >
                   <LogOut size={13} />
                   <span>Thoát Admin</span>
-                </button>
+                </motion.button>
               )}
-              <button 
+              <motion.button 
                 type="button" 
                 className="close-btn" 
                 onClick={handleClose}
                 aria-label="Đóng cửa sổ"
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: '6px' }}
               >
                 <X size={20} />
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -510,13 +527,16 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                       maxLength={12}
                       style={{ flex: 1, padding: '10px 14px', background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(229, 169, 60, 0.35)', borderRadius: '8px', color: '#fff', fontSize: '0.95rem' }}
                     />
-                    <button 
+                    <motion.button 
                       type="submit" 
                       className="login-btn"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.96 }}
+                      transition={{ type: "spring", stiffness: 350, damping: 28 }}
                       style={{ padding: '10px 18px', background: 'var(--accent-gold)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
                     >
                       Mở Khóa
-                    </button>
+                    </motion.button>
                   </div>
                   {pinErrorMsg && <div style={{ color: '#EF4444', fontSize: '0.82rem', marginTop: '6px' }}>{pinErrorMsg}</div>}
                 </form>
@@ -526,38 +546,42 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
               <div>
                 {/* Thanh điều hướng 4 Tab Quản Trị - Modern Segmented Control */}
                 <div className="admin-segmented-nav">
-                  <button 
-                    type="button" 
-                    className={`admin-segmented-tab ${activeTab === 'survey' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('survey')}
-                  >
-                    <Table size={15} />
-                    <span>Khảo Sát &amp; Google Sheets</span>
-                  </button>
-                  <button 
-                    type="button" 
-                    className={`admin-segmented-tab ${activeTab === 'ai' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('ai')}
-                  >
-                    <BookOpen size={15} />
-                    <span>Kho Tri Thức Sử Liệu AI</span>
-                  </button>
-                  <button 
-                    type="button" 
-                    className={`admin-segmented-tab ${activeTab === 'museum' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('museum')}
-                  >
-                    <ImageIcon size={15} />
-                    <span>Bảo Tàng Hiện Vật</span>
-                  </button>
-                  <button 
-                    type="button" 
-                    className={`admin-segmented-tab ${activeTab === 'system' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('system')}
-                  >
-                    <Settings size={15} />
-                    <span>Thông Tin &amp; Hệ Thống</span>
-                  </button>
+                  {[
+                    { id: 'survey', label: 'Khảo Sát & Google Sheets', icon: Table },
+                    { id: 'ai', label: 'Kho Tri Thức Sử Liệu AI', icon: BookOpen },
+                    { id: 'museum', label: 'Bảo Tàng Hiện Vật', icon: ImageIcon },
+                    { id: 'system', label: 'Thông Tin & Hệ Thống', icon: Settings }
+                  ].map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    const IconComponent = tab.icon;
+                    return (
+                      <motion.button 
+                        key={tab.id}
+                        type="button" 
+                        className={`admin-segmented-tab ${isActive ? 'active' : ''}`}
+                        onClick={() => {
+                          playChime(600, 'sine', 0.08);
+                          setActiveTab(tab.id);
+                        }}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                        style={{ position: 'relative' }}
+                      >
+                        {isActive && (
+                          <motion.div
+                            layoutId="admin-active-pill"
+                            className="admin-active-pill"
+                            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                          />
+                        )}
+                        <span className="admin-tab-content" style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                          <IconComponent size={15} />
+                          <span>{tab.label}</span>
+                        </span>
+                      </motion.button>
+                    );
+                  })}
                 </div>
 
                 {/* ======================================================== */}
@@ -567,51 +591,63 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                   <div className="admin-tab-pane">
                     {/* Hàng nút tác vụ nhanh */}
                     <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-                      <a 
+                      <motion.a 
                         href={surveySheetUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="btn btn-secondary"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         style={{ padding: '8px 14px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(229, 169, 60, 0.15)', borderColor: '#E5A93C', color: '#F4D06F', textDecoration: 'none' }}
                       >
                         <Table size={15} />
                         <span>Mở Google Sheets (Tác Giả)</span>
                         <ExternalLink size={13} />
-                      </a>
+                      </motion.a>
 
-                      <a 
+                      <motion.a 
                         href={surveyFormUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="btn btn-secondary"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         style={{ padding: '8px 14px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}
                       >
                         <FileText size={15} />
                         <span>Mở Google Form Khảo Sát</span>
                         <ExternalLink size={13} />
-                      </a>
+                      </motion.a>
 
-                      <button 
+                      <motion.button 
                         type="button"
                         onClick={handleSyncSurveyNow}
                         disabled={isSyncingSurvey}
                         className="btn btn-secondary"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         style={{ padding: '8px 14px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                       >
                         <RefreshCw size={14} className={isSyncingSurvey ? 'animate-spin' : ''} />
                         <span>{isSyncingSurvey ? 'Đang kéo...' : 'Đồng bộ từ Google Sheets'}</span>
-                      </button>
+                      </motion.button>
 
-                      <button 
+                      <motion.button 
                         type="button"
                         onClick={handleClearMockReviews}
                         className="btn btn-secondary"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         style={{ padding: '8px 14px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px', borderColor: 'rgba(239, 68, 68, 0.4)', color: '#FCA5A5' }}
                         title="Xóa cache đánh giá trên máy và chỉ tải dữ liệu chuẩn từ Google Sheets"
                       >
                         <Trash2 size={14} />
                         <span>Làm sạch dữ liệu thử nghiệm</span>
-                      </button>
+                      </motion.button>
                     </div>
 
                     {surveySyncMsg && (
@@ -735,12 +771,15 @@ export default function AdminKnowledgeModal({ isOpen, onClose }) {
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <button 
+                          <motion.button 
                             type="submit"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.96 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 28 }}
                             style={{ padding: '9px 20px', background: 'var(--accent-gold)', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.88rem' }}
                           >
                             Lưu Cấu Hình
-                          </button>
+                          </motion.button>
                           {surveySaveSuccess && (
                             <span style={{ color: '#34D399', fontSize: '0.84rem' }}>✓ Đã lưu cấu hình và đồng bộ toàn hệ thống!</span>
                           )}

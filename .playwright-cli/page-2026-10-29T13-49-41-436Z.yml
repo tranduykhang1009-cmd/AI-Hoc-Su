@@ -1,0 +1,145 @@
+- generic [ref=e2]:
+  - region "Notifications alt+T"
+  - generic [ref=e3]:
+    - dialog "Giới thiệu điện ảnh Hào Khí Tây Sơn" [ref=e4]:
+      - generic [ref=e6]:
+        - img "Tượng đài Hoàng đế Quang Trung" [ref=e9]
+        - generic [ref=e10]: QUANG TRUNG HOÀNG ĐẾ · 1753 - 1792
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: CÔNG TRÌNH SỐ HÓA DI SẢN · TRƯỜNG THCS VÀ THPT NGUYỄN HUỆ
+          - heading "HÀO KHÍ TÂY SƠN" [level=1] [ref=e14]
+          - paragraph [ref=e15]: BẮC BÌNH VƯƠNG · ĐẠI PHÁ QUÂN THANH
+        - generic [ref=e16]:
+          - paragraph [ref=e17]: "\"Đánh cho để dài tóc, đánh cho để đen răng.Đánh cho nó chích luân bất phản, đánh cho nó phiến giáp bất hoàn.Đánh cho sử tri nam quốc anh hùng chi hữu chủ!\""
+          - generic [ref=e18]: — Lời Hiểu Dụ Xuất Quân Thần Tốc (1788)
+        - generic [ref=e19]:
+          - button "BƯỚC VÀO ĐẠI BẢN DOANH" [ref=e20] [cursor=pointer]
+          - button "Bỏ qua giới thiệu (Esc)" [ref=e35] [cursor=pointer]
+        - generic [ref=e37]:
+          - text: "Biên soạn:"
+          - strong [ref=e38]: Lê Trường Thịnh
+          - text: (12A8) &
+          - strong [ref=e39]: Trần Ngọc Anh
+          - text: (11A5) · Trường THCS và THPT Nguyễn Huệ
+      - 'button "Âm thanh: Bật" [ref=e41] [cursor=pointer]'
+    - banner [ref=e47]:
+      - button "Trang chủ Hào Khí Tây Sơn" [ref=e48] [cursor=pointer]: HÀO KHÍ TÂY SƠN
+      - navigation "Điều hướng chính" [ref=e49]:
+        - list [ref=e50]:
+          - listitem [ref=e51]:
+            - button "Trang Chủ" [ref=e52] [cursor=pointer]
+          - listitem [ref=e53]:
+            - button "Dòng Thời Gian" [ref=e54] [cursor=pointer]
+          - listitem [ref=e55]:
+            - button "Sa Bàn" [ref=e56] [cursor=pointer]
+          - listitem [ref=e57]:
+            - button "Bảo Tàng" [ref=e58] [cursor=pointer]
+          - listitem [ref=e59]:
+            - button "Sử Quan AI" [ref=e60] [cursor=pointer]
+          - listitem [ref=e61]:
+            - button "Đố Vui" [ref=e62] [cursor=pointer]
+          - listitem [ref=e63]:
+            - button "Đánh Giá" [ref=e64] [cursor=pointer]
+      - generic [ref=e65]:
+        - button "Mở quản trị" [ref=e66] [cursor=pointer]: Admin
+        - button "Tắt âm thanh" [ref=e67] [cursor=pointer]
+    - main [ref=e72]:
+      - generic [ref=e73]:
+        - region [ref=e74]:
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - paragraph [ref=e77]: CÔNG TRÌNH SỐ HÓA DI SẢN · TRƯỜNG THCS VÀ THPT NGUYỄN HUỆ
+              - heading "HÀO KHÍ TÂY SƠN" [level=1] [ref=e78]
+              - paragraph [ref=e79]: Anh hùng áo vải Quang Trung – Nguyễn Huệ (1753–1792)
+              - paragraph [ref=e80]: Tái hiện không gian sử thi thế kỷ XVIII qua sa bàn tác chiến không gian số, Bảo tàng hiện vật khảo cứu và Trí tuệ nhân tạo đối thoại lịch sử.
+              - generic [ref=e81]:
+                - generic [aria-hidden]: “
+                - blockquote [ref=e82]:
+                  - paragraph [ref=e83]: Đánh cho để dài tóc / Đánh cho để đen răngĐánh cho nó chích luân bất phảnĐánh cho nó phiến giáp bất hoànĐánh cho sử tri nam quốc anh hùng chi hữu chủ!
+                  - generic [ref=e84]: — Lời Hiểu Dụ Xuất Quân Thần Tốc (1788)
+              - navigation "Hành động chính" [ref=e85]:
+                - button "Khám phá Sa Bàn Trận Đánh" [ref=e86] [cursor=pointer]
+                - button "Đàm đạo cùng Sử Quan AI" [ref=e93] [cursor=pointer]
+            - figure [ref=e97]:
+              - generic [ref=e98]:
+                - img "Tượng đài Hoàng đế Quang Trung tại Bảo tàng Quang Trung, Bình Định" [ref=e100]
+                - generic [ref=e102]:
+                  - generic [ref=e103]: QUANG TRUNG HOÀNG ĐẾ
+                  - generic [ref=e104]: 1753 — 1792 · TƯỢNG ĐÀI BẢO TÀNG BÌNH ĐỊNH
+        - generic [ref=e105]:
+          - heading "4 TRẢI NGHIỆM HỌC SỬ TRỰC QUAN" [level=2] [ref=e107]
+          - generic [ref=e108]:
+            - generic [ref=e109] [cursor=pointer]:
+              - img "Lược đồ chiến dịch Tây Sơn" [ref=e110]
+              - generic [ref=e112]:
+                - generic [ref=e113]:
+                  - heading "Sa Bàn Chiến Trận" [level=3] [ref=e118]
+                  - paragraph [ref=e119]: Mô phỏng mũi tên hành quân thần tốc, thế trận mai phục Rạch Gầm – Xoài Mút và đòn vu hồi giải phóng Thăng Long năm 1789.
+                - generic [ref=e120]: Khám phá sa bàn
+            - generic [ref=e124] [cursor=pointer]:
+              - generic [ref=e125]:
+                - heading "Bảo Tàng Hiện Vật Số" [level=3] [ref=e129]
+                - paragraph [ref=e130]: "8 hiện vật quý: súng hỏa hổ, voi chiến, tiền đồng, sắc phong kèm thuyết minh."
+              - generic [ref=e131]: Xem hiện vật
+            - generic [ref=e135] [cursor=pointer]:
+              - generic [ref=e136]:
+                - heading "Biên Niên Sử 1753–1792" [level=3] [ref=e141]
+                - paragraph [ref=e142]: 10 mốc son cuộc đời Hoàng đế Quang Trung từ làng Kiên Mỹ đến đỉnh cao Ngọc Hồi – Đống Đa.
+              - generic [ref=e143]: Khám phá niên biểu
+            - generic [ref=e147] [cursor=pointer]:
+              - generic [ref=e148]:
+                - heading "Trạm Sử Quan AI" [level=3] [ref=e153]
+                - paragraph [ref=e154]: Trò chuyện tự nhiên cùng Gemini AI về cuộc đời Nguyễn Huệ, chiến lược quân sự và trích dẫn sử liệu.
+              - generic [ref=e155]: Vào trạm đàm đạo
+            - generic [ref=e159] [cursor=pointer]:
+              - generic [ref=e160]:
+                - heading "Đấu Trường Đố Vui" [level=3] [ref=e168]
+                - paragraph [ref=e169]: 3 cấp độ thử thách, tích lũy điểm và nhận Giấy Chứng Nhận vinh danh.
+              - generic [ref=e170]: Tham gia thử thách
+        - blockquote [ref=e174]:
+          - text: "\"Dân ta phải biết sử ta / Cho tường gốc tích nước nhà Việt Nam\""
+          - generic [ref=e175]: — Hồ Chí Minh ("Lịch sử nước ta", 1942)
+    - contentinfo [ref=e176]:
+      - generic [ref=e178]:
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - heading "HÀO KHÍ TÂY SƠN" [level=3] [ref=e192]
+            - paragraph [ref=e193]: Nền tảng số hóa di sản và học tập Lịch sử về Hoàng đế Quang Trung – Nguyễn Huệ, hỗ trợ học sinh tiếp cận kiến thức trực quan và sinh động.
+            - generic [ref=e194]: Dự án Học tập Lịch sử – Trường THCS và THPT Nguyễn Huệ
+          - generic [ref=e199]:
+            - heading "Danh Mục Khám Phá" [level=4] [ref=e200]
+            - list [ref=e201]:
+              - listitem [ref=e202]:
+                - button "Biên Niên Sử (1753 - 1792)" [ref=e203] [cursor=pointer]
+              - listitem [ref=e204]:
+                - button "Sa Bàn Trận Đánh Trực Quan" [ref=e205] [cursor=pointer]
+              - listitem [ref=e206]:
+                - button "Bảo Tàng Hiện Vật & Thuyết Minh" [ref=e207] [cursor=pointer]
+              - listitem [ref=e208]:
+                - button "Sử Quan Ảo (Google Gemini)" [ref=e209] [cursor=pointer]
+              - listitem [ref=e210]:
+                - button "Đố Vui Lịch Sử 3 Cấp Độ" [ref=e211] [cursor=pointer]
+              - listitem [ref=e212]:
+                - button "Khảo Sát Đánh Giá Dự Án" [ref=e213] [cursor=pointer]
+          - generic [ref=e214]:
+            - heading "Tác Giả Dự Án" [level=4] [ref=e215]
+            - generic [ref=e216]:
+              - generic [ref=e217]: TT
+              - generic [ref=e218]:
+                - strong [ref=e219]: LÊ TRƯỜNG THỊNH
+                - generic [ref=e220]: Học sinh Lớp 12A8 · Trường THCS và THPT Nguyễn Huệ
+            - generic [ref=e221]:
+              - generic [ref=e222]: NA
+              - generic [ref=e223]:
+                - strong [ref=e224]: TRẦN NGỌC ANH
+                - generic [ref=e225]: Học sinh Lớp 11A5 · Trường THCS và THPT Nguyễn Huệ
+            - paragraph [ref=e226]:
+              - emphasis [ref=e227]: "\"Khơi dậy ngọn lửa tự hào dân tộc và lòng biết ơn tiền nhân trong trái tim thế hệ trẻ bằng sức mạnh của công nghệ số.\""
+        - generic [ref=e229]:
+          - text: © 2026
+          - strong [ref=e230]: "Bản quyền dự án: Lê Trường Thịnh (12A8) & Trần Ngọc Anh (11A5) — Trường THCS và THPT Nguyễn Huệ"
+          - text: .
+    - button "Mở Trạm Sử Quan AI" [ref=e232] [cursor=pointer]:
+      - generic [ref=e241]: Hỏi Sử Quan AI
+    - button "Liên hệ tác giả" [ref=e244] [cursor=pointer]

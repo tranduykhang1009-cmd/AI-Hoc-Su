@@ -39,23 +39,29 @@ export default function FloatingAiWidget({ activeTab, onSelectTab }) {
         {isOpenPopover && (
           <motion.div 
             className="floating-ai-popover card"
-            initial={{ opacity: 0, scale: 0.85, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 15 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            style={{ transformOrigin: "bottom right" }}
           >
             <div className="popover-header">
               <div className="popover-title-row">
                 <div className="ai-status-dot" />
                 <strong>Trạm Sử Quan AI</strong>
               </div>
-              <button 
+              <motion.button 
+                type="button"
                 className="popover-close-btn"
                 onClick={() => setIsOpenPopover(false)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 title="Đóng"
+                aria-label="Đóng"
               >
                 <X size={14} />
-              </button>
+              </motion.button>
             </div>
 
             <p className="popover-intro">
@@ -63,43 +69,61 @@ export default function FloatingAiWidget({ activeTab, onSelectTab }) {
             </p>
 
             <div className="popover-quick-prompts">
-              <button 
+              <motion.button 
+                type="button"
                 className="quick-prompt-btn"
                 onClick={() => handleOpenAiWithPrompt('Kế sách hành quân thần tốc của vua Quang Trung ra sao?')}
+                whileHover={{ scale: 1.02, x: 2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 <span>Hành quân thần tốc ra Thăng Long</span>
-              </button>
-              <button 
+              </motion.button>
+              <motion.button 
+                type="button"
                 className="quick-prompt-btn"
                 onClick={() => handleOpenAiWithPrompt('Voi chiến và súng hỏa hổ Tây Sơn được trang bị thế nào?')}
+                whileHover={{ scale: 1.02, x: 2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 <span>Voi chiến và súng hỏa hổ Tây Sơn</span>
-              </button>
-              <button 
+              </motion.button>
+              <motion.button 
+                type="button"
                 className="quick-prompt-btn"
                 onClick={() => handleOpenAiWithPrompt('Chiến thuật đóng cửa sông Tiền ở Rạch Gầm - Xoài Mút?')}
+                whileHover={{ scale: 1.02, x: 2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 <span>Trận Rạch Gầm - Xoài Mút</span>
-              </button>
+              </motion.button>
             </div>
 
-            <button 
+            <motion.button 
+              type="button"
               className="popover-enter-btn btn-primary"
               onClick={handleClickWidget}
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
             >
               <span>Vào Trạm Trò Chuyện Đầy Đủ</span>
               <ArrowRight size={14} />
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Nút quả cầu trôi nổi với hiệu ứng nhịp thở hào quang */}
       <motion.button 
+        type="button"
         className="floating-ai-bubble-btn"
         onClick={() => setIsOpenPopover(prev => !prev)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
+        whileHover={{ scale: 1.05, y: -2 }}
+        whileTap={{ scale: 0.96 }}
+        transition={{ type: "spring", stiffness: 350, damping: 28 }}
         title="Trò chuyện cùng Sử Quan AI (Google Gemini)"
         aria-label="Mở Trạm Sử Quan AI"
       >

@@ -21,7 +21,7 @@ import {
   deleteImage, 
   migrateFromLocalStorage 
 } from '../utils/museumImageStore';
-import Toast from '../components/Toast';
+import { toast } from 'sonner';
 import BackgroundMusic from '../components/BackgroundMusic';
 
 export function MuseumSkeleton() {
@@ -45,7 +45,6 @@ export default function MuseumTab() {
   const [searchQuery, setSearchQuery] = useState('');
   const [customImages, setCustomImages] = useState({});
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [toastMessage, setToastMessage] = useState(null);
   const [showAdminUploadPanel, setShowAdminUploadPanel] = useState(false);
   const [urlInput, setUrlInput] = useState('');
 
@@ -132,7 +131,7 @@ export default function MuseumTab() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      setToastMessage({ text: 'Dung lượng ảnh vượt quá giới hạn 5MB.', type: 'warning' });
+      toast.warning('Dung lượng ảnh vượt quá giới hạn 5MB.');
       return;
     }
 
@@ -145,15 +144,9 @@ export default function MuseumTab() {
         playChime(700, 'sine', 0.15);
 
         if (!res.ok && res.reason === 'idb-blocked') {
-          setToastMessage({ 
-            text: 'Ảnh lưu tạm trong phiên này và sẽ mất khi tải lại trang (do đang bật Chế độ riêng tư).', 
-            type: 'info' 
-          });
+          toast.info('Ảnh lưu tạm trong phiên này và sẽ mất khi tải lại trang (do đang bật Chế độ riêng tư).');
         } else {
-          setToastMessage({ 
-            text: 'Đã lưu ảnh hiện vật vào bộ nhớ IndexedDB thành công!', 
-            type: 'success' 
-          });
+          toast.success('Đã lưu ảnh hiện vật vào bộ nhớ IndexedDB thành công!');
         }
       }
       e.target.value = '';
@@ -170,15 +163,9 @@ export default function MuseumTab() {
     playChime(700, 'sine', 0.15);
 
     if (!res.ok && res.reason === 'idb-blocked') {
-      setToastMessage({ 
-        text: 'Ảnh lưu tạm trong phiên này và sẽ mất khi tải lại trang (do đang bật Chế độ riêng tư).', 
-        type: 'info' 
-      });
+      toast.info('Ảnh lưu tạm trong phiên này và sẽ mất khi tải lại trang (do đang bật Chế độ riêng tư).');
     } else {
-      setToastMessage({ 
-        text: 'Đã lưu đường dẫn ảnh vào IndexedDB thành công!', 
-        type: 'success' 
-      });
+      toast.success('Đã lưu đường dẫn ảnh vào IndexedDB thành công!');
     }
   };
 
@@ -189,7 +176,7 @@ export default function MuseumTab() {
       delete next[itemId];
       return next;
     });
-    setToastMessage({ text: 'Đã khôi phục ảnh gốc của bảo tàng!', type: 'info' });
+    toast.info('Đã khôi phục ảnh gốc của bảo tàng!');
     playChime(600, 'sine', 0.1);
   };
 
@@ -504,15 +491,6 @@ export default function MuseumTab() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Thông báo Toast */}
-      {toastMessage && (
-        <Toast 
-          message={toastMessage.text} 
-          type={toastMessage.type} 
-          onClose={() => setToastMessage(null)} 
-        />
-      )}
     </motion.div>
   );
 }

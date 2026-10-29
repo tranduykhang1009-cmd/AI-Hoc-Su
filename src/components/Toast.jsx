@@ -1,15 +1,22 @@
 import React, { useEffect } from 'react';
+import { toast } from 'sonner';
 
+/**
+ * @deprecated Legacy Toast component replaced by Sonner.
+ * Kept for backwards-compatibility to prevent broken imports.
+ * Routes directly to `toast` from 'sonner'.
+ */
 export default function Toast({ message, type = 'info', onClose }) {
   useEffect(() => {
-    const timer = setTimeout(onClose, 4000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-  
-  return (
-    <div className={`toast toast-${type}`} role="status" aria-live="polite">
-      <span>{message}</span>
-      <button onClick={onClose} aria-label="Đóng thông báo">×</button>
-    </div>
-  );
+    if (message) {
+      if (typeof toast[type] === 'function') {
+        toast[type](message);
+      } else {
+        toast(message);
+      }
+      if (onClose) onClose();
+    }
+  }, [message, type, onClose]);
+
+  return null;
 }

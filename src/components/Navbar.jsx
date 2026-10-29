@@ -48,51 +48,73 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
     <>
       <header className="navbar">
         {/* Logo text-only Fraunces 900 */}
-        <button
+        <motion.button
           type="button"
           className="navbar-logo"
           onClick={() => handleTabClick('home')}
           aria-label="Trang chủ Hào Khí Tây Sơn"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
         >
           HÀO KHÍ TÂY SƠN
-        </button>
+        </motion.button>
 
         {/* 6 Menu items trên 1 dòng duy nhất */}
         <nav className="navbar-nav" aria-label="Điều hướng chính">
           <ul className="navbar-nav-list">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  className={`nav-link ${activeTab === item.id ? 'active' : ''}`}
-                  onClick={() => handleTabClick(item.id)}
-                  aria-current={activeTab === item.id ? 'page' : undefined}
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeTab === item.id;
+              return (
+                <li key={item.id} style={{ position: 'relative' }}>
+                  <motion.button
+                    type="button"
+                    className={`nav-link ${isActive ? 'active' : ''}`}
+                    onClick={() => handleTabClick(item.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                    whileHover={{ y: -2, scale: 1.01 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="nav-active-pill"
+                        className="nav-active-pill"
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                      />
+                    )}
+                    <span className="nav-link-text">{item.label}</span>
+                  </motion.button>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
         {/* Khu vực Actions bên phải: Nút text Admin + Icon Sound + Hamburger Mobile */}
         <div className="navbar-actions">
           {!isAdmin ? (
-            <button
+            <motion.button
               type="button"
               className="navbar-admin-btn"
               onClick={() => openAdmin('survey')}
               aria-label="Mở quản trị"
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
             >
               Admin
-            </button>
+            </motion.button>
           ) : (
             <div className="navbar-admin-badge-group" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <button
+              <motion.button
                 type="button"
                 className="navbar-admin-btn active-admin"
                 onClick={() => openAdmin('survey')}
                 title="Mở Bảng Điều Khiển Quản Trị Hệ Thống (Lê Trường Thịnh)"
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 style={{
                   background: 'rgba(229, 169, 60, 0.2)',
                   borderColor: '#E5A93C',
@@ -106,8 +128,8 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
               >
                 <ShieldCheck size={14} />
                 <span>Quản Trị</span>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -116,6 +138,9 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
                 }}
                 className="btn-admin-nav-logout"
                 title="Thoát chế độ Admin để kiểm tra góc nhìn học sinh thông thường"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 style={{
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -127,29 +152,35 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
                 }}
               >
                 Thoát
-              </button>
+              </motion.button>
             </div>
           )}
 
-          <button
+          <motion.button
             type="button"
             className="btn-icon"
             onClick={toggleSound}
             aria-label={soundOn ? 'Tắt âm thanh' : 'Bật âm thanh'}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
           >
             {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
             type="button"
             className="mobile-nav-toggle"
             onClick={() => setIsMobileOpen(true)}
             aria-label="Mở menu"
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav-overlay"
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
           >
             <Menu size={20} />
-          </button>
+          </motion.button>
         </div>
       </header>
 
@@ -166,28 +197,33 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
           >
             <div className="mobile-menu-header">
               <span className="navbar-logo">HÀO KHÍ TÂY SƠN</span>
-              <button
+              <motion.button
                 type="button"
                 className="btn-icon"
                 onClick={() => setIsMobileOpen(false)}
                 aria-label="Đóng menu"
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 <X size={20} />
-              </button>
+              </motion.button>
             </div>
 
             <nav aria-label="Điều hướng trên di động">
               <ul className="mobile-nav-list">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.id}>
-                    <button
+                    <motion.button
                       type="button"
                       className={`mobile-nav-link ${activeTab === item.id ? 'active' : ''}`}
                       onClick={() => handleTabClick(item.id)}
                       aria-current={activeTab === item.id ? 'page' : undefined}
+                      whileTap={{ scale: 0.96 }}
+                      transition={{ type: "spring", stiffness: 350, damping: 28 }}
                     >
                       <span>{item.label}</span>
-                    </button>
+                    </motion.button>
                   </li>
                 ))}
               </ul>
@@ -195,7 +231,7 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
 
             <div className="mobile-menu-footer">
               {!isAdmin ? (
-                <button
+                <motion.button
                   type="button"
                   className="navbar-admin-btn"
                   onClick={() => {
@@ -203,18 +239,22 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
                     openAdmin('survey');
                   }}
                   aria-label="Mở quản trị"
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
                 >
                   Admin
-                </button>
+                </motion.button>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <button
+                  <motion.button
                     type="button"
                     className="navbar-admin-btn active-admin"
                     onClick={() => {
                       setIsMobileOpen(false);
                       openAdmin('survey');
                     }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
                     style={{
                       background: 'rgba(229, 169, 60, 0.2)',
                       borderColor: '#E5A93C',
@@ -227,14 +267,16 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
                   >
                     <ShieldCheck size={14} />
                     <span>Quản Trị (Admin)</span>
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     type="button"
                     onClick={() => {
                       setIsMobileOpen(false);
                       logoutAdmin();
                       playChime(400, 'sine', 0.1);
                     }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
                     style={{
                       background: 'rgba(255, 255, 255, 0.08)',
                       border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -246,18 +288,20 @@ export default function Navbar({ activeTab, onSelectTab, onOpenAdmin }) {
                     }}
                   >
                     Thoát
-                  </button>
+                  </motion.button>
                 </div>
               )}
 
-              <button
+              <motion.button
                 type="button"
                 className="btn-icon"
                 onClick={toggleSound}
                 aria-label={soundOn ? 'Tắt âm thanh' : 'Bật âm thanh'}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 350, damping: 28 }}
               >
                 {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         )}
