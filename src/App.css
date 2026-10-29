@@ -5099,7 +5099,8 @@ h3 {
   height: clamp(750px, 58vw, 1050px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.1;
+  opacity: 0.22;
+  filter: drop-shadow(0 0 50px rgba(245, 158, 11, 0.22));
 }
 
 .drum-solar-corona {
@@ -5109,21 +5110,23 @@ h3 {
   background: conic-gradient(
     from 35deg at 50% 50%,
     transparent 0deg,
-    rgba(212, 175, 55, 0.12) 60deg,
-    rgba(255, 242, 178, 0.18) 105deg,
-    rgba(234, 88, 12, 0.1) 155deg,
+    rgba(212, 175, 55, 0.18) 60deg,
+    rgba(255, 242, 178, 0.28) 105deg,
+    rgba(234, 88, 12, 0.16) 155deg,
     transparent 210deg,
     transparent 360deg
   );
   filter: blur(36px);
-  opacity: 0.4;
-  animation: rotateDrum 140s linear infinite;
+  opacity: 0.65;
+  animation: rotateDrum 60s linear infinite;
 }
 
 .drum-svg {
   width: 100%; height: 100%;
-  animation: rotateDrum 140s linear infinite;
-  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.8));
+  transform-origin: 50% 50%;
+  animation: rotateDrum 42s linear infinite;
+  filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.3));
+  will-change: transform;
 }
 
 @keyframes rotateDrum {
@@ -5678,7 +5681,7 @@ h3 {
   }
   .drum-bg-wrapper {
     width: 600px; height: 600px;
-    opacity: 0.08;
+    opacity: 0.18;
   }
 }
 
