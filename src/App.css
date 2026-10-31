@@ -5680,8 +5680,16 @@ h3 {
     font-size: 2.8rem;
   }
   .drum-bg-wrapper {
-    width: 600px; height: 600px;
-    opacity: 0.18;
+    width: min(480px, 90vw);
+    height: min(480px, 90vw);
+    opacity: 0.16;
+    contain: layout style paint;
+  }
+  .drum-solar-corona {
+    filter: blur(18px);
+  }
+  .drum-svg {
+    filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.2));
   }
 }
 

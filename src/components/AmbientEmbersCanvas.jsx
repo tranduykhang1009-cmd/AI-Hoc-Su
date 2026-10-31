@@ -34,8 +34,11 @@ export default function AmbientEmbersCanvas() {
       'rgba(158, 42, 43, '    // Đỏ trầm
     ];
 
-    // Số lượng hạt vừa phải (35 hạt) bảo đảm không che khuất chữ và 60fps mượt mà
-    const particleCount = Math.min(Math.floor(width / 35), 40);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Tối ưu hóa số lượng hạt: trên mobile chỉ dùng 14 hạt nhẹ mượt, desktop tối đa 35 hạt
+    const isMobile = width < 768;
+    const particleCount = isMobile ? 14 : Math.min(Math.floor(width / 35), 35);
     const particles = [];
 
     class EmberParticle {

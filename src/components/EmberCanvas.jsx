@@ -21,7 +21,10 @@ export default function EmberCanvas() {
 
     window.addEventListener('resize', handleResize);
 
-    const PARTICLE_COUNT = 75;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const isMobile = width < 768;
+    const PARTICLE_COUNT = isMobile ? 12 : 36;
     const particles = [];
 
     const createParticle = (initialY = null) => {

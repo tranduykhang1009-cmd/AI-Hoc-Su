@@ -11,10 +11,12 @@ import {
   ExternalLink,
   ChevronRight,
   Flame,
-  ShieldCheck
+  ShieldCheck,
+  Copy
 } from 'lucide-react';
 import { TIMELINE_EVENTS } from '../data/timelineData';
 import { playChime } from '../utils/audio';
+import { toast } from 'sonner';
 import BackgroundMusic from '../components/BackgroundMusic';
 
 // 4 phân kỳ lịch sử trực quan
@@ -69,6 +71,9 @@ export default function TimelineTab({ onSelectTab }) {
     try {
       sessionStorage.setItem('su_quick_ai_prompt', prompt);
     } catch (e) {}
+    toast.info(`Đã nạp mốc sử "${event.title}" vào Sử Quan AI`, {
+      description: `Năm ${event.year} · Chuyển hướng sang trạm đàm đạo...`
+    });
     if (onSelectTab) {
       onSelectTab('ai-station');
     } else {
@@ -78,6 +83,9 @@ export default function TimelineTab({ onSelectTab }) {
 
   const handleExploreBattle = (year) => {
     playChime(600, 'triangle', 0.15);
+    toast.info(`Mở sa bàn trận đánh chiến dịch ${year}`, {
+      description: 'Đang chuyển đến Sa bàn tác chiến số...'
+    });
     if (onSelectTab) {
       onSelectTab('battle-map');
     } else {
@@ -119,16 +127,19 @@ export default function TimelineTab({ onSelectTab }) {
           const count = era.id === 'all' ? TIMELINE_EVENTS.length : (era.endIdx - era.startIdx + 1);
           const isActive = activeEra === era.id;
           return (
-            <button
+            <motion.button
               key={era.id}
               role="tab"
               aria-selected={isActive}
               className={`timeline-era-btn ${isActive ? 'active' : ''}`}
+              whileHover={{ y: -1, scale: 1.02 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
               onClick={() => handleEraChange(era.id)}
             >
               <span>{era.label}</span>
               <span className="timeline-era-count">{count}</span>
-            </button>
+            </motion.button>
           );
         })}
       </div>
@@ -240,37 +251,46 @@ export default function TimelineTab({ onSelectTab }) {
 
                     {/* Các hành động tương tác */}
                     <footer className="timeline-card-actions-row">
-                      <button 
+                      <motion.button 
                         type="button"
                         className="timeline-btn-gold-outline"
+                        whileHover={{ y: -1, scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         onClick={() => handleOpenDetail(event)}
                         title="Xem sâu bối cảnh và phân tích lịch sử"
                       >
                         <BookOpen size={14} aria-hidden="true" />
                         <span>Khảo Cứu Sử Tích</span>
-                      </button>
+                      </motion.button>
 
                       {hasBattleMap && (
-                        <button 
+                        <motion.button 
                           type="button"
                           className="timeline-btn-gold-solid"
+                          whileHover={{ y: -1, scale: 1.02 }}
+                          whileTap={{ scale: 0.96 }}
+                          transition={{ type: "spring", stiffness: 350, damping: 28 }}
                           onClick={() => handleExploreBattle(event.year)}
                           title="Mở sa bàn tác chiến số trận đánh tương ứng"
                         >
                           <Swords size={14} aria-hidden="true" />
                           <span>Sa Bàn Trận Đánh</span>
-                        </button>
+                        </motion.button>
                       )}
 
-                      <button 
+                      <motion.button 
                         type="button"
                         className="timeline-btn-ghost"
+                        whileHover={{ y: -1, scale: 1.02 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
                         onClick={() => handleAskAi(event)}
                         title="Đối thoại với Sử Quan AI về sự kiện này"
                       >
                         <Bot size={14} aria-hidden="true" />
                         <span>Hỏi AI</span>
-                      </button>
+                      </motion.button>
                     </footer>
                   </div>
                 </article>
@@ -295,7 +315,7 @@ export default function TimelineTab({ onSelectTab }) {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.25 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
@@ -358,22 +378,42 @@ export default function TimelineTab({ onSelectTab }) {
                 </div>
 
                 <div className="timeline-modal-footer">
-                  <button 
+                  <motion.button 
                     className="timeline-btn-gold-solid"
+                    whileHover={{ y: -1, scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
                     onClick={() => {
                       const ev = selectedEvent;
                       setSelectedEvent(null);
                       handleAskAi(ev);
                     }}
                   >
-                    <Bot size={16} /> Đàm Đạo Sử Quan AI Về Mốc Sử Này
-                  </button>
-                  <button 
+                    <Bot size={16} /> Đàm Đạo Sử Quan AI
+                  </motion.button>
+                  <motion.button 
                     className="timeline-btn-gold-outline"
+                    whileHover={{ y: -1, scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                    onClick={() => {
+                      const textToCopy = `${selectedEvent.title} (${selectedEvent.year})\nKhảo cứu: ${selectedEvent.detailStory || selectedEvent.desc}\nTác động: ${selectedEvent.impact}`;
+                      navigator.clipboard.writeText(textToCopy);
+                      playChime(700, 'sine', 0.1);
+                      toast.success(`Đã sao chép tư liệu "${selectedEvent.title}"!`);
+                    }}
+                  >
+                    <Copy size={15} /> Sao Chép Trích Dẫn
+                  </motion.button>
+                  <motion.button 
+                    className="timeline-btn-ghost"
+                    whileHover={{ y: -1, scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 28 }}
                     onClick={() => setSelectedEvent(null)}
                   >
                     Đóng Khảo Cứu
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>

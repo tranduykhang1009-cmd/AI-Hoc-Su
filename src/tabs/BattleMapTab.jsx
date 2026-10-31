@@ -147,6 +147,12 @@ export default function BattleMapTab() {
     if (mapInstanceRef.current) {
       updateTileLayer(mapInstanceRef.current, type);
     }
+    const names = {
+      'google-hybrid': 'Google Maps Vệ Tinh Trực Tuyến',
+      'google-roadmap': 'Google Maps Bản Đồ Giao Thông',
+      'google-terrain': 'Google Maps Địa Hình Đồi Núi'
+    };
+    toast.success(`Đã đổi lớp bản đồ: ${names[type] || type}`);
     playChime(500, 'sine', 0.1);
   };
 
@@ -242,6 +248,12 @@ export default function BattleMapTab() {
     setActiveQuizPhase(null);
     playChime(600, 'sine', 0.15);
     setActiveBattleId(id);
+    const target = BATTLES_DATA[id];
+    if (target) {
+      toast.info(`Sa bàn: ${target.title}`, {
+        description: `${target.time} · Chỉ huy: ${target.commander}`
+      });
+    }
   };
 
   const handleSelectPhase = (tac, idx) => {
@@ -262,7 +274,7 @@ export default function BattleMapTab() {
     updated.add(idx);
     viewedPhasesRef.current = updated;
     if (updated.size >= phases.length) {
-      toast.success('🏆 Đã khám phá toàn bộ diễn biến!');
+      toast.success('🏆 Đã khám phá toàn bộ diễn biến chiến dịch!');
     }
   };
 
@@ -291,8 +303,14 @@ export default function BattleMapTab() {
     if (isCorrect) {
       playChime(750, 'triangle', 0.2);
       setScore(prev => prev + 10);
+      toast.success('Chính xác! (+10 điểm)', {
+        description: quiz.explain || 'Kiến thức tác chiến xuất sắc!'
+      });
     } else {
       playChime(320, 'sine', 0.15);
+      toast.error('Chưa chính xác!', {
+        description: quiz.explain || 'Hãy đối chiếu lại sử liệu bên dưới.'
+      });
     }
   };
 
@@ -316,24 +334,33 @@ export default function BattleMapTab() {
 
       {/* Battle selector - top-left */}
       <div className="battle-selector-bar">
-        <button 
+        <motion.button 
           className={`battle-selector-btn ${activeBattleId === 'rach-gam' ? 'active' : ''}`}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleSwitchBattle('rach-gam')}
         >
           Rạch Gầm – Xoài Mút (1785)
-        </button>
-        <button 
+        </motion.button>
+        <motion.button 
           className={`battle-selector-btn ${activeBattleId === 'phu-xuan-hue' ? 'active' : ''}`}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleSwitchBattle('phu-xuan-hue')}
         >
           Phú Xuân – Núi Bân (1788)
-        </button>
-        <button 
+        </motion.button>
+        <motion.button 
           className={`battle-selector-btn ${activeBattleId === 'ngoc-hoi-dong-da' ? 'active' : ''}`}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleSwitchBattle('ngoc-hoi-dong-da')}
         >
           Ngọc Hồi – Đống Đa (1789)
-        </button>
+        </motion.button>
         <div className="battle-gis-pill" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: 'rgba(18, 16, 14, 0.85)', border: '1px solid rgba(229, 169, 60, 0.4)', borderRadius: '20px', color: '#F4D06F', fontSize: '0.75rem', fontWeight: 500, backdropFilter: 'blur(8px)', boxShadow: '0 2px 10px rgba(0,0,0,0.4)' }}>
           <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10B981', display: 'inline-block', boxShadow: '0 0 6px #10B981' }}></span>
           <span>Google Maps Trực Tuyến · Địa Giới Mới Nhất</span>
@@ -373,44 +400,56 @@ export default function BattleMapTab() {
       {/* Phase selector pills - bottom center */}
       <div className="battle-phase-pills" role="tablist" aria-label="Giai đoạn trận đánh">
         {phasesList.map((tac, idx) => (
-          <button
+          <motion.button
             key={idx}
             type="button"
             className={`battle-phase-pill ${activePhaseIndex === idx ? 'active' : ''}`}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
             onClick={() => handleSelectPhase(tac, idx)}
             aria-selected={activePhaseIndex === idx}
           >
             {tac.label || `Giai đoạn ${idx + 1}`}
-          </button>
+          </motion.button>
         ))}
       </div>
 
       {/* Layer control - bottom right */}
       <div className="battle-layer-control" role="group" aria-label="Tùy chọn bản đồ">
-        <button 
+        <motion.button 
           type="button"
           className={`battle-layer-btn ${mapLayerType === 'google-hybrid' ? 'active' : ''}`}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleLayerChange('google-hybrid')}
           title="Google Maps ảnh vệ tinh trực tiếp kèm địa danh và đường bộ"
         >
           🛰️ Google Vệ Tinh
-        </button>
-        <button 
+        </motion.button>
+        <motion.button 
           type="button"
           className={`battle-layer-btn ${mapLayerType === 'google-roadmap' ? 'active' : ''}`}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleLayerChange('google-roadmap')}
           title="Google Maps bản đồ giao thông và địa giới hành chính mới"
         >
           🗺️ Google Bản Đồ
-        </button>
-        <button 
+        </motion.button>
+        <motion.button 
           type="button"
           className={`battle-layer-btn ${mapLayerType === 'google-terrain' ? 'active' : ''}`}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           onClick={() => handleLayerChange('google-terrain')}
           title="Google Maps địa hình đồi núi"
         >
           ⛰️ Địa Hình
-        </button>
+        </motion.button>
       </div>
 
       {/* Drawer backdrop (mobile) */}
@@ -548,50 +587,68 @@ export default function BattleMapTab() {
       </div>
 
       {/* Mini Quiz Modal Popup */}
-      {activeQuizPhase && activeQuizPhase.miniQuiz && (
-        <div className="battle-quiz-modal-backdrop" onClick={() => setActiveQuizPhase(null)}>
-          <div className="battle-quiz-modal" onClick={e => e.stopPropagation()}>
-            <button 
-              className="battle-quiz-close" 
-              onClick={() => setActiveQuizPhase(null)}
-              aria-label="Đóng câu hỏi"
+      <AnimatePresence>
+        {activeQuizPhase && activeQuizPhase.miniQuiz && (
+          <motion.div 
+            className="battle-quiz-modal-backdrop" 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveQuizPhase(null)}
+          >
+            <motion.div 
+              className="battle-quiz-modal" 
+              initial={{ opacity: 0, scale: 0.92, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 15 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              onClick={e => e.stopPropagation()}
             >
-              <X size={18} />
-            </button>
-            <div className="battle-quiz-title">
-              <Trophy size={16} />
-              <span>Thử Thách Sa Bàn · Điểm: {score}</span>
-            </div>
-            <p className="battle-quiz-question">{activeQuizPhase.miniQuiz.question}</p>
-            <div className="battle-quiz-options">
-              {activeQuizPhase.miniQuiz.options.map((opt, oIdx) => {
-                let btnClass = 'battle-quiz-option-btn';
-                if (quizState.isSubmitted) {
-                  if (oIdx === activeQuizPhase.miniQuiz.correct) btnClass += ' correct';
-                  else if (oIdx === quizState.selected) btnClass += ' wrong';
-                }
-                return (
-                  <button
-                    key={oIdx}
-                    type="button"
-                    className={btnClass}
-                    disabled={quizState.isSubmitted}
-                    onClick={() => handleSelectOption(oIdx, activeQuizPhase.miniQuiz)}
-                  >
-                    <strong>{String.fromCharCode(65 + oIdx)}.</strong> {opt}
-                  </button>
-                );
-              })}
-            </div>
-            {quizState.isSubmitted && (
-              <div className="battle-quiz-feedback">
-                <strong>{quizState.isCorrect ? '✅ Chính xác! (+10 điểm)' : '❌ Chưa chính xác!'}</strong>
-                <p style={{ marginTop: '4px', margin: 0 }}>{activeQuizPhase.miniQuiz.explain}</p>
+              <button 
+                className="battle-quiz-close" 
+                onClick={() => setActiveQuizPhase(null)}
+                aria-label="Đóng câu hỏi"
+              >
+                <X size={18} />
+              </button>
+              <div className="battle-quiz-title">
+                <Trophy size={16} />
+                <span>Thử Thách Sa Bàn · Điểm: {score}</span>
               </div>
-            )}
-          </div>
-        </div>
-      )}
+              <p className="battle-quiz-question">{activeQuizPhase.miniQuiz.question}</p>
+              <div className="battle-quiz-options">
+                {activeQuizPhase.miniQuiz.options.map((opt, oIdx) => {
+                  let btnClass = 'battle-quiz-option-btn';
+                  if (quizState.isSubmitted) {
+                    if (oIdx === activeQuizPhase.miniQuiz.correct) btnClass += ' correct';
+                    else if (oIdx === quizState.selected) btnClass += ' wrong';
+                  }
+                  return (
+                    <motion.button
+                      key={oIdx}
+                      type="button"
+                      className={btnClass}
+                      disabled={quizState.isSubmitted}
+                      whileHover={!quizState.isSubmitted ? { scale: 1.015, x: 2 } : {}}
+                      whileTap={!quizState.isSubmitted ? { scale: 0.97 } : {}}
+                      transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                      onClick={() => handleSelectOption(oIdx, activeQuizPhase.miniQuiz)}
+                    >
+                      <strong>{String.fromCharCode(65 + oIdx)}.</strong> {opt}
+                    </motion.button>
+                  );
+                })}
+              </div>
+              {quizState.isSubmitted && (
+                <div className="battle-quiz-feedback">
+                  <strong>{quizState.isCorrect ? '✅ Chính xác! (+10 điểm)' : '❌ Chưa chính xác!'}</strong>
+                  <p style={{ marginTop: '4px', margin: 0 }}>{activeQuizPhase.miniQuiz.explain}</p>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

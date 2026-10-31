@@ -10,7 +10,10 @@ import {
   ArrowRight,
   Sparkles,
   MapPin,
-  Eye
+  Eye,
+  Copy,
+  Bookmark,
+  Bot
 } from 'lucide-react';
 import { MUSEUM_ITEMS } from '../data/museumData';
 import { useAdmin } from '../context/AdminContext';
@@ -38,7 +41,7 @@ export function MuseumSkeleton() {
   );
 }
 
-export default function MuseumTab() {
+export default function MuseumTab({ onSelectTab }) {
   const { isAdmin } = useAdmin();
   const [selectedItem, setSelectedItem] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');

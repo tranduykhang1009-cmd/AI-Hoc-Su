@@ -28,7 +28,31 @@ export default defineConfig({
   ],
   base: './',
   server: {
+    host: true, // Mở cổng truy cập từ điện thoại qua mạng LAN / Wi-Fi
     port: 3000,
     open: true
+  },
+  build: {
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('scheduler/')) {
+              return 'vendor-react';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('leaflet')) {
+              return 'vendor-leaflet';
+            }
+            if (id.includes('lucide-react') || id.includes('sonner') || id.includes('canvas-confetti')) {
+              return 'vendor-ui';
+            }
+          }
+        }
+      }
+    }
   }
 });
